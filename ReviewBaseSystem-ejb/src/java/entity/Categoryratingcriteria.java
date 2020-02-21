@@ -25,14 +25,15 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author hi
+ * @author admin
  */
 @Entity
 @Table(name = "categoryratingcriteria")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Categoryratingcriteria.findAll", query = "SELECT c FROM Categoryratingcriteria c"),
-    @NamedQuery(name = "Categoryratingcriteria.findByCategoryRatingCriteriaId", query = "SELECT c FROM Categoryratingcriteria c WHERE c.categoryRatingCriteriaId = :categoryRatingCriteriaId")})
+    @NamedQuery(name = "Categoryratingcriteria.findByCategoryRatingCriteriaId", query = "SELECT c FROM Categoryratingcriteria c WHERE c.categoryRatingCriteriaId = :categoryRatingCriteriaId"),
+    @NamedQuery(name = "Categoryratingcriteria.getCategoryRatingCriteriaByCategoryId", query = "SELECT c FROM Categoryratingcriteria c WHERE c.categoryId = :categoryId")})
 public class Categoryratingcriteria implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -114,5 +115,5 @@ public class Categoryratingcriteria implements Serializable {
     public String toString() {
         return "entity.Categoryratingcriteria[ categoryRatingCriteriaId=" + categoryRatingCriteriaId + " ]";
     }
-    
+
 }

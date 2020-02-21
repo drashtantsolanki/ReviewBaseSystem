@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author hi
+ * @author admin
  */
 @Entity
 @Table(name = "reviews")
@@ -36,7 +36,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Reviews.findAll", query = "SELECT r FROM Reviews r"),
     @NamedQuery(name = "Reviews.findByReviewId", query = "SELECT r FROM Reviews r WHERE r.reviewId = :reviewId"),
-    @NamedQuery(name = "Reviews.findByDate", query = "SELECT r FROM Reviews r WHERE r.date = :date")})
+    @NamedQuery(name = "Reviews.findByDate", query = "SELECT r FROM Reviews r WHERE r.date = :date"),
+    @NamedQuery(name = "Reviews.findByUserId", query = "SELECT r FROM Reviews r WHERE r.userId = :userId"),
+    @NamedQuery(name = "Reviews.findByProductId", query = "SELECT r FROM Reviews r WHERE r.productId = :productId")})
 public class Reviews implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -135,5 +137,5 @@ public class Reviews implements Serializable {
     public String toString() {
         return "entity.Reviews[ reviewId=" + reviewId + " ]";
     }
-    
+
 }

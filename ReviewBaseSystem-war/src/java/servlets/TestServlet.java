@@ -5,8 +5,15 @@
  */
 package servlets;
 
+import ejb.adminejbLocal;
+import entity.Category;
+import entity.Categoryratingcriteria;
+import entity.Product;
+import entity.Ratingcriterias;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +24,9 @@ import javax.servlet.http.HttpServletResponse;
  * @author hi
  */
 public class TestServlet extends HttpServlet {
+
+    @EJB
+    adminejbLocal admin;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,10 +45,16 @@ public class TestServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet TestServlet</title>");            
+            out.println("<title>Servlet TestServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet TestServlet at " + request.getContextPath() + "</h1>");
+
+            Collection<Ratingcriterias> ratingcriteriases = admin.getAllRatingCriteria();
+
+            for (Ratingcriterias ratingcriteriase : ratingcriteriases) {
+                out.println(ratingcriteriase.getCriteriaName());
+            }
+
             out.println("</body>");
             out.println("</html>");
         }

@@ -61,7 +61,7 @@ public class TestServlet extends HttpServlet {
             out.println("<head>");
             out.println("<title>Servlet TestServlet</title>");
             out.println("</head>");
-
+            out.println("<body>");
             //==============================================================================
             //==============================================================================
             //----------Role--------------------Role------------Role--------------------------------
@@ -208,7 +208,6 @@ public class TestServlet extends HttpServlet {
 //            for (Advertise a : lst) {
 //                out.println("ID="+a.getAdvertiseId()+" Strat Date="+a.getStartDate()+" End Date="+a.getEndDate()+" ProductId="+a.getProductId());
 //            }
-            out.println("<body>");
 
             Collection<Ratingcriterias> ratingcriteriases = admin.getAllRatingCriteria();
 
@@ -236,7 +235,7 @@ public class TestServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ParseException ex) {
-            
+
         }
     }
 
@@ -254,7 +253,7 @@ public class TestServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ParseException ex) {
-            
+
         }
     }
 

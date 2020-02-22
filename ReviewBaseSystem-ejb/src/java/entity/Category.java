@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author hi
+ * @author admin
  */
 @Entity
 @Table(name = "category")
@@ -53,6 +53,10 @@ public class Category implements Serializable {
 
     public Category(Integer categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public Category(Integer categoryId, String categoryName) {
@@ -118,5 +122,5 @@ public class Category implements Serializable {
     public String toString() {
         return "entity.Category[ categoryId=" + categoryId + " ]";
     }
-    
+
 }

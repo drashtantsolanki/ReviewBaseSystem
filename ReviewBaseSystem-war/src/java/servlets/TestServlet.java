@@ -8,20 +8,15 @@ package servlets;
 import ejb.adminejbLocal;
 import ejb.clientejbLocal;
 import ejb.commanejbLocal;
-import entity.Advertise;
-import entity.Permission;
+import entity.Category;
+import entity.Categoryratingcriteria;
 import entity.Product;
-import entity.Role;
-import entity.Rolepermission;
-import entity.Users;
+import entity.Ratingcriterias;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -36,12 +31,17 @@ import javax.xml.registry.infomodel.User;
 public class TestServlet extends HttpServlet {
 
     @EJB
+    adminejbLocal admin;
+
+    @EJB
     private commanejbLocal commanejb;
 
     @EJB
     private clientejbLocal clientejb;
 
-    @EJB adminejbLocal al;
+    @EJB
+    adminejbLocal al;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -59,18 +59,14 @@ public class TestServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet TestServlet</title>");            
+            out.println("<title>Servlet TestServlet</title>");
             out.println("</head>");
-            
-            
-            
+
             //==============================================================================
             //==============================================================================
             //----------Role--------------------Role------------Role--------------------------------
             //==============================================================================
             //==============================================================================
-            
-            
 //            Role role=new Role("User");
 //            Role role1=new Role("Rakesh");
 //            
@@ -94,26 +90,17 @@ public class TestServlet extends HttpServlet {
 //            for (Role r : lstrole) {
 //                out.println("Role ID "+r.getRoleId() + " RoleName "+r.getRoleName()+"<br>");
 //            }
-            
-            
-            
             //==============================================================================
             //==============================================================================
             //----------Permission--------------------permission------------Permission--------------------------------
             //==============================================================================
             //==============================================================================
-            
-            
 //            Permission permission=new Permission("See Review");
 //            al.addPermission(permission);
-            
 //            Permission permissionForUpdate=new Permission();
 //            permissionForUpdate.setPermissionName("remove Review");
 //            al.updatePermission(2, permissionForUpdate);
-            
-            
 //            al.removePermission(1);
-
 //            Permission permissionGetById=al.getPermissionById(2);
 //            out.println("Method getPermissionById <h3> Permission ID "+ permissionGetById.getPermissionId() +" Permission name "+permissionGetById.getPermissionName()+"</h3>");
 //
@@ -126,31 +113,20 @@ public class TestServlet extends HttpServlet {
 //            for (Permission p : lstpermission) {
 //                out.println("Permission ID= "+p.getPermissionId() + " Permission name= "+p.getPermissionName()+"<br>");
 //            }
-
-
-
-
-
-
             //==============================================================================
             //==============================================================================
             //----------Permission--------------------permission------------Permission--------------------------------
             //==============================================================================
             //==============================================================================
-            
-            
 //            Rolepermission rp=new Rolepermission();
 //            rp.setRoleId(new Role(2));
 //            rp.setPermissionId(new Permission(3));
 //            al.addRolePermission(rp);
-            
 //            Rolepermission rpForUpdate=new Rolepermission(2);
 //            rpForUpdate.setRoleId(new Role(1));
 //            rpForUpdate.setPermissionId(new Permission(3));
 //            al.updateRolePermission(rpForUpdate);
-            
 //            al.removeRolePermission(3);
-            
 //            Rolepermission rpById=al.getRolePermissionById(2);
 //            out.println("get rolePermissionByid "+rpById.getPermissionId()+"  role= "+rpById.getRoleId()+" permission "+rpById.getPermissionId()+"<br>");
 //            
@@ -165,15 +141,11 @@ public class TestServlet extends HttpServlet {
 //            for (Rolepermission obj : lstRp) {
 //                out.println("RolePermissionId ID= "+obj.getRolePermissionId() + " Role ID= "+obj.getRoleId()+" Permission id"+ obj.getPermissionId() +" <br>");
 //            }
-            
-            
             //==============================================================================
             //==============================================================================
             //----------users--------------------users------------users--------------------------------
             //==============================================================================
             //==============================================================================
-
-            
 //            Users userForInsert=new Users();
 //            userForInsert.setName("john Robinson");
 //            userForInsert.setEmail("john@gmail.com");
@@ -185,8 +157,6 @@ public class TestServlet extends HttpServlet {
 //            userForInsert.setCity("NewYork");
 //            userForInsert.setPassword(clientejb.getEncryptedPassword("john451245"));
 //            clientejb.addUser(userForInsert);
-            
-
 //            Users userForUpdate=new Users(2);
 //            userForUpdate.setName("Penny Robinson");
 //            userForUpdate.setEmail("penny@yahoo.com");
@@ -198,11 +168,7 @@ public class TestServlet extends HttpServlet {
 //            userForUpdate.setCity("NewYork");
 //            userForUpdate.setPassword(clientejb.getEncryptedPassword("penny1223456789"));
 //            clientejb.updateUser(userForUpdate);
-            
-
 //            clientejb.removeUser(3);
-            
-
 //            Users findByName=clientejb.getUserByName("Will Robinson");
 //            out.println("Method FindByName "+"<h1> Name="+findByName.getName()+" interset="+findByName.getInterest()+"</h1>");
 //
@@ -226,14 +192,11 @@ public class TestServlet extends HttpServlet {
 //                out.println("Name= "+u.getName()+" Email= "+u.getEmail()+" Phno= "+u.getPhoneNumber()+" Interest= "+u.getInterest()+" gender= "+u.getGender()+" Birthdate= "+u.getBirthdate()+" city= "+u.getCity()+" Password= "+u.getPassword()+"<br>");
 //                out.println("<hr>");
 //            }
-            
             //==============================================================================
             //==============================================================================
             //----------Advertise--------------------Advertise------------Advertise--------------------------------
             //==============================================================================
             //==============================================================================
-
-            
 //            Advertise objAdForInsert=new Advertise();
 //            String sd="22/2/2020";
 //            String ed="25/2/2020";
@@ -245,10 +208,14 @@ public class TestServlet extends HttpServlet {
 //            for (Advertise a : lst) {
 //                out.println("ID="+a.getAdvertiseId()+" Strat Date="+a.getStartDate()+" End Date="+a.getEndDate()+" ProductId="+a.getProductId());
 //            }
-
-
             out.println("<body>");
-            out.println("<h1>Servlet TestServlet at " + request.getContextPath() + "</h1>");
+
+            Collection<Ratingcriterias> ratingcriteriases = admin.getAllRatingCriteria();
+
+            for (Ratingcriterias ratingcriteriase : ratingcriteriases) {
+                out.println(ratingcriteriase.getCriteriaName());
+            }
+
             out.println("</body>");
             out.println("</html>");
         }
@@ -267,9 +234,9 @@ public class TestServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            processRequest(request,response);
+            processRequest(request, response);
         } catch (ParseException ex) {
-            Logger.getLogger(TestServlet.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }
 
@@ -287,7 +254,7 @@ public class TestServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ParseException ex) {
-            Logger.getLogger(TestServlet.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }
 

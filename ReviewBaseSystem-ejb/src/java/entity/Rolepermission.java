@@ -28,7 +28,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Rolepermission.findAll", query = "SELECT r FROM Rolepermission r"),
-    @NamedQuery(name = "Rolepermission.findByRolePermissionId", query = "SELECT r FROM Rolepermission r WHERE r.rolePermissionId = :rolePermissionId")})
+    @NamedQuery(name = "Rolepermission.findByRolePermissionId", query = "SELECT r FROM Rolepermission r WHERE r.rolePermissionId = :rolePermissionId"),
+    @NamedQuery(name = "Rolepermission.findAllByName", query = "SELECT r.rolePermissionId,r1.roleName,p.permissionName FROM Rolepermission r, Role r1,Permission p WHERE r1.roleId=r.roleId AND p.permissionId=r.permissionId ")
+})
 public class Rolepermission implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,12 +42,14 @@ public class Rolepermission implements Serializable {
     @JoinColumn(name = "RoleId", referencedColumnName = "RoleId")
     @ManyToOne(optional = false)
     private Role roleId;
-    @JoinColumn(name = "PermissionId", referencedColumnName = "PermissionId")
+    @JoinColumn(name = "PermissionId",referencedColumnName = "PermissionId")
     @ManyToOne(optional = false)
     private Permission permissionId;
 
     public Rolepermission() {
     }
+    
+    
 
     public Rolepermission(Integer rolePermissionId) {
         this.rolePermissionId = rolePermissionId;

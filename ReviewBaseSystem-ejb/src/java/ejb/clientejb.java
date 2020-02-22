@@ -24,10 +24,6 @@ public class clientejb implements clientejbLocal {
     @PersistenceContext(unitName = "MyReview")
     private EntityManager em;
 
-    
-    
-    
-    
     @Override
     public Collection<Users> getAllUsers() {
         return em.createNamedQuery("Users.findAll").getResultList();
@@ -35,7 +31,7 @@ public class clientejb implements clientejbLocal {
 
     @Override
     public Users getUserById(int userId) {
-        Users u=em.find(Users.class,userId);
+        Users u = em.find(Users.class, userId);
         return u;
     }
 
@@ -56,7 +52,7 @@ public class clientejb implements clientejbLocal {
 
     @Override
     public void addUser(Users objUser) {
-        Users obj=new Users();
+        Users obj = new Users();
         obj.setName(objUser.getName());
         obj.setEmail(objUser.getEmail());
         obj.setPhoneNumber(objUser.getPhoneNumber());
@@ -70,7 +66,7 @@ public class clientejb implements clientejbLocal {
 
     @Override
     public void updateUser(Users objUser) {
-        Users u=em.find(Users.class,objUser.getUserId());
+        Users u = em.find(Users.class, objUser.getUserId());
         u.setName(objUser.getName());
         u.setEmail(objUser.getEmail());
         u.setPhoneNumber(objUser.getPhoneNumber());
@@ -80,18 +76,18 @@ public class clientejb implements clientejbLocal {
         u.setCity(objUser.getCity());
         u.setPassword(objUser.getPassword());
         em.merge(u);
-        
+
     }
 
     @Override
     public void removeUser(int userId) {
-        Users u=em.find(Users.class,userId);
+        Users u = em.find(Users.class, userId);
         em.remove(u);
     }
-    
+
     @Override
-    public String getEncryptedPassword(String Password){
-        String encrypedPassword=null;
+    public String getEncryptedPassword(String Password) {
+        String encrypedPassword = null;
         try {
             // Create MessageDigest instance for MD5
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -102,8 +98,7 @@ public class clientejb implements clientejbLocal {
             //This bytes[] has bytes in decimal format;
             //Convert it to hexadecimal format
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i< bytes.length ;i++)
-            {
+            for (int i = 0; i < bytes.length; i++) {
                 sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
             }
             //Get complete hashed password in hex format
@@ -112,15 +107,8 @@ public class clientejb implements clientejbLocal {
         }
         return encrypedPassword;
     }
-    
-    
-    
+
     //===============================Advertise==================================
-    
-    
-    
-    
-    
     @Override
     public Collection<Advertise> getAllAdvertise() {
         return em.createNamedQuery("Advertise.findAll").getResultList();
@@ -143,7 +131,7 @@ public class clientejb implements clientejbLocal {
 
     @Override
     public void addAdvertise(Advertise advertise) {
-        em.persist(advertise); 
+        em.persist(advertise);
     }
 
     @Override
@@ -158,7 +146,6 @@ public class clientejb implements clientejbLocal {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-
     public void persist(Object object) {
         em.persist(object);
     }

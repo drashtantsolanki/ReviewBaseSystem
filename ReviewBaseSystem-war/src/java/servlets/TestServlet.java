@@ -31,16 +31,13 @@ import javax.xml.registry.infomodel.User;
 public class TestServlet extends HttpServlet {
 
     @EJB
-    adminejbLocal admin;
-
-    @EJB
     private commanejbLocal commanejb;
 
     @EJB
     private clientejbLocal clientejb;
 
     @EJB
-    adminejbLocal al;
+    private adminejbLocal al;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -208,12 +205,6 @@ public class TestServlet extends HttpServlet {
 //            for (Advertise a : lst) {
 //                out.println("ID="+a.getAdvertiseId()+" Strat Date="+a.getStartDate()+" End Date="+a.getEndDate()+" ProductId="+a.getProductId());
 //            }
-
-            Collection<Ratingcriterias> ratingcriteriases = admin.getAllRatingCriteria();
-
-            for (Ratingcriterias ratingcriteriase : ratingcriteriases) {
-                out.println(ratingcriteriase.getCriteriaName());
-            }
 
             out.println("</body>");
             out.println("</html>");

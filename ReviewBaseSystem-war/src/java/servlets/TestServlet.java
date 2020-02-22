@@ -206,6 +206,12 @@ public class TestServlet extends HttpServlet {
 //                out.println("ID="+a.getAdvertiseId()+" Strat Date="+a.getStartDate()+" End Date="+a.getEndDate()+" ProductId="+a.getProductId());
 //            }
 
+            Collection<Category> categorys = al.getAllCategory();
+
+            for (Category category : categorys) {
+                out.println("<h2>" + category.getCategoryName() + "</h2>");
+            }
+
             out.println("</body>");
             out.println("</html>");
         }

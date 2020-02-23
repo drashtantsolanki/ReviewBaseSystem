@@ -14,10 +14,7 @@ import entity.Category;
 import entity.Categoryratingcriteria;
 import entity.Product;
 import entity.Ratingcriterias;
-import entity.Reviews;
-import entity.Reviewxcriteria;
 import java.util.Collection;
-import java.util.Date;
 import javax.ejb.Local;
 
 /**
@@ -83,57 +80,13 @@ public interface adminejbLocal {
 
     void removeRatingCriteria(int ratingCriteriaId);
 
-    //Reviews
-    Collection<Reviews> getAllReviews();
-
-    Reviews getReviewById(int reviewId);
-
-    Collection<Reviews> getReviewByProductID(int productId);
-
-    Collection<Reviews> getReviewByDate(Date date);
-
-    Collection<Reviews> getReviewsByUserId(int userId);
-
-    void addReview(Reviews reviews);
-
-    void updateReview(int reviewId, Reviews reviews);
-
-    void removeReview(int reviewId);
-
-    //ReviewxCriteria
-    Collection<Reviewxcriteria> getAllReviewxCriteria();
-
-    Reviewxcriteria getReviewxCriteriaById(int reviewXcriteriaId);
-
-    Collection<Reviewxcriteria> getReviewxCriteriaByRate(float rate);
-
-    Reviewxcriteria getReviewxCriteriaByCategoryRatingCriteriaId(int categoryRatingCriteriaId);
-
-    Reviewxcriteria getReviewxCriteriaByReviewId(int reviewId);
-
-    void addReviewxCriteria(Reviewxcriteria reviewxcriteria);
-
-    void updateReviewxCriteria(int reviewXcriteriaId, Reviewxcriteria reviewxcriteria);
-
-    void removeReviewxCriteria(int reviewXcriteriaId);
-
-    Role getRoleById(int roleId);
-
-    Role getRoleByName(String roleName);
-
-    void addRole(Role role);
-
-    void updateRole(int roleId,Role role);
-
-    void removeRole(int roleId);
-
     //RolePermission 
     Collection<Rolepermission> getAllRolePermission();
-    
+
     Collection<Rolepermission> getAllRolePermissionByname();
-    
+
     Collection<Rolepermission> getAllRolePermissionWithName();
-    
+
     Rolepermission getRolePermissionById(int rolePermissionId);
 
     Rolepermission getRolePermissionByRoleId(int roleId);
@@ -170,7 +123,7 @@ public interface adminejbLocal {
 
     void addPermission(Permission permission);
 
-    void updatePermission(int permissionId,Permission permission);
+    void updatePermission(int permissionId, Permission permission);
 
     void removePermission(int permissionId);
 
@@ -191,5 +144,15 @@ public interface adminejbLocal {
 
     void removeUser(int userId);
 
-    
+    //Role
+    Role getRoleById(int roleId);
+
+    Role getRoleByName(String roleName);
+
+    void addRole(Role role);
+
+    void updateRole(int roleId, Role role);
+
+    void removeRole(int roleId);
+
 }

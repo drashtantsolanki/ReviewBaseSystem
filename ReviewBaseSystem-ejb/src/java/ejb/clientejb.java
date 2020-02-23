@@ -6,6 +6,8 @@
 package ejb;
 
 import entity.Advertise;
+import entity.Reviews;
+import entity.Reviewxcriteria;
 import entity.Users;
 import java.security.MessageDigest;
 import java.util.Collection;
@@ -144,9 +146,116 @@ public class clientejb implements clientejbLocal {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
     public void persist(Object object) {
         em.persist(object);
+    }
+
+    //============================Reviews=============================
+    @Override
+    public Collection<Reviews> getAllReviews() {
+        return em.createNamedQuery("Reviews.findAll").getResultList();
+    }
+
+    @Override
+    public Reviews getReviewById(int reviewId) {
+        return (Reviews) em.find(Reviews.class, reviewId);
+    }
+
+    @Override
+    public Collection<Reviews> getReviewByProductID(int productId) {
+        Collection<Reviews> reviewses = em.createNamedQuery("Reviews.findByProductId")
+                .setParameter("productId", productId)
+                .getResultList();
+
+        return reviewses;
+    }
+
+    @Override
+    public Collection<Reviews> getReviewByDate(Date date) {
+        Collection<Reviews> reviewses = em.createNamedQuery("Reviews.findByDate")
+                .setParameter("date", date)
+                .getResultList();
+
+        return reviewses;
+    }
+
+    @Override
+    public Collection<Reviews> getReviewsByUserId(int userId) {
+        Collection<Reviews> reviewses = em.createNamedQuery("Reviews.findByUserId")
+                .setParameter("userId", userId)
+                .getResultList();
+
+        return reviewses;
+    }
+
+    @Override
+    public void addReview(Reviews reviews) {
+        em.persist(reviews);
+    }
+
+    @Override
+    public void updateReview(int reviewId, Reviews reviews) {
+        Reviews objReviews = (Reviews) em.find(Reviews.class, reviewId);
+        objReviews.setProductId(reviews.getProductId());
+        objReviews.setDate(reviews.getDate());
+        objReviews.setUserId(reviews.getUserId());
+        em.merge(objReviews);
+    }
+
+    @Override
+    public void removeReview(int reviewId) {
+        Reviews reviews = (Reviews) em.find(Reviews.class, reviewId);
+        em.remove(reviews);
+    }
+
+    //============================ReviewxCriteria=============================
+    @Override
+    public Collection<Reviewxcriteria> getAllReviewxCriteria() {
+        return em.createNamedQuery("Reviewxcriteria.findAll").getResultList();
+    }
+
+    @Override
+    public Reviewxcriteria getReviewxCriteriaById(int reviewXcriteriaId) {
+        return (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
+    }
+
+    @Override
+    public Collection<Reviewxcriteria> getReviewxCriteriaByRate(float rate) {
+        Collection<Reviewxcriteria> reviewxcriterias = em.createNamedQuery("Reviewxcriteria.findByRate")
+                .setParameter("rate", rate)
+                .getResultList();
+
+        return reviewxcriterias;
+    }
+
+    @Override
+    public Reviewxcriteria getReviewxCriteriaByCategoryRatingCriteriaId(int categoryRatingCriteriaId) {
+        return (Reviewxcriteria) em.find(Reviewxcriteria.class, categoryRatingCriteriaId);
+    }
+
+    @Override
+    public Reviewxcriteria getReviewxCriteriaByReviewId(int reviewId) {
+        return (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewId);
+    }
+
+    @Override
+    public void addReviewxCriteria(Reviewxcriteria reviewxcriteria) {
+        em.persist(reviewxcriteria);
+    }
+
+    @Override
+    public void updateReviewxCriteria(int reviewXcriteriaId, Reviewxcriteria reviewxcriteria) {
+        Reviewxcriteria objReviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
+        objReviewxcriteria.setRate(reviewxcriteria.getRate());
+        objReviewxcriteria.setDescription(reviewxcriteria.getDescription());
+        objReviewxcriteria.setCategoryRatingCriteriaId(reviewxcriteria.getCategoryRatingCriteriaId());
+        objReviewxcriteria.setReviewId(reviewxcriteria.getReviewId());
+        em.merge(objReviewxcriteria);
+    }
+
+    @Override
+    public void removeReviewxCriteria(int reviewXcriteriaId) {
+        Reviewxcriteria reviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
+        em.remove(reviewxcriteria);
     }
 }

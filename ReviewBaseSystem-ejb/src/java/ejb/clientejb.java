@@ -6,6 +6,8 @@
 package ejb;
 
 import entity.Advertise;
+import entity.Categoryratingcriteria;
+import entity.Product;
 import entity.Reviews;
 import entity.Reviewxcriteria;
 import entity.Users;
@@ -150,7 +152,7 @@ public class clientejb implements clientejbLocal {
         em.persist(object);
     }
 
-    //============================Reviews=============================
+    // <editor-fold defaultstate="collapsed" desc="Reviews">
     @Override
     public Collection<Reviews> getAllReviews() {
         return em.createNamedQuery("Reviews.findAll").getResultList();
@@ -189,26 +191,79 @@ public class clientejb implements clientejbLocal {
     }
 
     @Override
-    public void addReview(Reviews reviews) {
+    public void addReview(int productId, Date date, int userId) {
+        Product product = (Product) em.find(Product.class, productId);
+        Users users = (Users) em.find(Users.class, userId);
+
+        Collection<Reviews> reviewses = product.getReviewsCollection();
+        Collection<Reviews> reviewses1 = users.getReviewsCollection();
+
+        Reviews reviews = new Reviews();
+        reviews.setProductId(product);
+        reviews.setDate(date);
+        reviews.setUserId(users);
+
+        reviewses.add(reviews);
+        reviewses1.add(reviews);
+        product.setReviewsCollection(reviewses);
+        users.setReviewsCollection(reviewses1);
+
         em.persist(reviews);
+        em.merge(product);
+        em.merge(users);
     }
 
     @Override
-    public void updateReview(int reviewId, Reviews reviews) {
-        Reviews objReviews = (Reviews) em.find(Reviews.class, reviewId);
-        objReviews.setProductId(reviews.getProductId());
-        objReviews.setDate(reviews.getDate());
-        objReviews.setUserId(reviews.getUserId());
-        em.merge(objReviews);
-    }
-
-    @Override
-    public void removeReview(int reviewId) {
+    public void updateReview(int reviewId, int productId, Date date, int userId) {
         Reviews reviews = (Reviews) em.find(Reviews.class, reviewId);
-        em.remove(reviews);
+        Product product = (Product) em.find(Product.class, productId);
+        Users users = (Users) em.find(Users.class, userId);
+
+        Collection<Reviews> reviewses = product.getReviewsCollection();
+        Collection<Reviews> reviewses1 = users.getReviewsCollection();
+
+        if (reviewses.contains(reviews)) {
+            reviewses.remove(reviews);
+        }
+
+        if (reviewses1.contains(reviews)) {
+            reviewses1.remove(reviews);
+        }
+
+        reviews.setProductId(product);
+        reviews.setDate(date);
+        reviews.setUserId(users);
+
+        reviewses.add(reviews);
+        reviewses1.add(reviews);
+
+        em.merge(product);
+        em.merge(users);
     }
 
-    //============================ReviewxCriteria=============================
+    @Override
+    public void removeReview(int reviewId, int productId, int userId) {
+        Reviews reviews = (Reviews) em.find(Reviews.class, reviewId);
+        Product product = (Product) em.find(Product.class, productId);
+        Users users = (Users) em.find(Users.class, userId);
+
+        Collection<Reviews> reviewses = product.getReviewsCollection();
+        Collection<Reviews> reviewses1 = users.getReviewsCollection();
+
+        if (reviewses.contains(reviews)) {
+            reviewses.remove(reviews);
+            product.setReviewsCollection(reviewses);
+        }
+
+        if (reviewses1.contains(reviews)) {
+            reviewses1.remove(reviews);
+            users.setReviewsCollection(reviewses1);
+            em.remove(reviews);
+        }
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="ReviewxCriteria">
     @Override
     public Collection<Reviewxcriteria> getAllReviewxCriteria() {
         return em.createNamedQuery("Reviewxcriteria.findAll").getResultList();
@@ -239,23 +294,79 @@ public class clientejb implements clientejbLocal {
     }
 
     @Override
-    public void addReviewxCriteria(Reviewxcriteria reviewxcriteria) {
+    public void addReviewxCriteria(float rate, String description, int categoryRatingCriteriaId, int reviewId) {
+        Categoryratingcriteria categoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
+        Reviews reviews = (Reviews) em.find(Reviews.class, reviewId);
+
+        Collection<Reviewxcriteria> reviewxcriterias = categoryratingcriteria.getReviewxcriteriaCollection();
+        Collection<Reviewxcriteria> reviewxcriterias1 = reviews.getReviewxcriteriaCollection();
+
+        Reviewxcriteria reviewxcriteria = new Reviewxcriteria();
+        reviewxcriteria.setRate(rate);
+        reviewxcriteria.setDescription(description);
+        reviewxcriteria.setCategoryRatingCriteriaId(categoryratingcriteria);
+        reviewxcriteria.setReviewId(reviews);
+
+        reviewxcriterias.add(reviewxcriteria);
+        reviewxcriterias1.add(reviewxcriteria);
+        categoryratingcriteria.setReviewxcriteriaCollection(reviewxcriterias);
+        reviews.setReviewxcriteriaCollection(reviewxcriterias1);
+
         em.persist(reviewxcriteria);
+        em.merge(categoryratingcriteria);
+        em.merge(reviews);
     }
 
     @Override
-    public void updateReviewxCriteria(int reviewXcriteriaId, Reviewxcriteria reviewxcriteria) {
-        Reviewxcriteria objReviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
-        objReviewxcriteria.setRate(reviewxcriteria.getRate());
-        objReviewxcriteria.setDescription(reviewxcriteria.getDescription());
-        objReviewxcriteria.setCategoryRatingCriteriaId(reviewxcriteria.getCategoryRatingCriteriaId());
-        objReviewxcriteria.setReviewId(reviewxcriteria.getReviewId());
-        em.merge(objReviewxcriteria);
-    }
-
-    @Override
-    public void removeReviewxCriteria(int reviewXcriteriaId) {
+    public void updateReviewxCriteria(int reviewXcriteriaId, float rate, String description, int categoryRatingCriteriaId, int reviewId) {
         Reviewxcriteria reviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
-        em.remove(reviewxcriteria);
+        Categoryratingcriteria categoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
+        Reviews reviews = (Reviews) em.find(Reviews.class, reviewId);
+
+        Collection<Reviewxcriteria> reviewxcriterias = categoryratingcriteria.getReviewxcriteriaCollection();
+        Collection<Reviewxcriteria> reviewxcriterias1 = reviews.getReviewxcriteriaCollection();
+
+        if (reviewxcriterias.contains(reviewxcriteria)) {
+            reviewxcriterias.remove(reviewxcriteria);
+        }
+
+        if (reviewxcriterias1.contains(reviewxcriteria)) {
+            reviewxcriterias1.remove(reviewxcriteria);
+        }
+
+        reviewxcriteria.setRate(rate);
+        reviewxcriteria.setDescription(description);
+        reviewxcriteria.setCategoryRatingCriteriaId(categoryratingcriteria);
+        reviewxcriteria.setReviewId(reviews);
+
+        reviewxcriterias.add(reviewxcriteria);
+        reviewxcriterias1.add(reviewxcriteria);
+        categoryratingcriteria.setReviewxcriteriaCollection(reviewxcriterias);
+        reviews.setReviewxcriteriaCollection(reviewxcriterias1);
+
+        em.merge(categoryratingcriteria);
+        em.merge(reviews);
     }
+
+    @Override
+    public void removeReviewxCriteria(int reviewXcriteriaId, int categoryRatingCriteriaId, int reviewId) {
+        Reviewxcriteria reviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
+        Categoryratingcriteria categoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
+        Reviews reviews = (Reviews) em.find(Reviews.class, reviewId);
+
+        Collection<Reviewxcriteria> reviewxcriterias = categoryratingcriteria.getReviewxcriteriaCollection();
+        Collection<Reviewxcriteria> reviewxcriterias1 = reviews.getReviewxcriteriaCollection();
+
+        if (reviewxcriterias.contains(reviewxcriteria)) {
+            reviewxcriterias.remove(reviewxcriteria);
+            categoryratingcriteria.setReviewxcriteriaCollection(reviewxcriterias);
+        }
+
+        if (reviewxcriterias1.contains(reviewxcriteria)) {
+            reviewxcriterias1.remove(reviewxcriteria);
+            reviews.setReviewxcriteriaCollection(reviewxcriterias1);
+            em.remove(reviewxcriteria);
+        }
+    }
+    // </editor-fold>
 }

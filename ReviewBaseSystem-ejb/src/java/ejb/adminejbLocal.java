@@ -31,9 +31,9 @@ public interface adminejbLocal {
 
     Collection<Category> getCategoryByName(String categoryName);
 
-    void AddCategory(Category category);
+    void AddCategory(String categoryName);
 
-    void updateCategory(int categoryId, Category category);
+    void updateCategory(int categoryId, String categoryName);
 
     void removeCategory(int categoryId);
 
@@ -46,11 +46,11 @@ public interface adminejbLocal {
 
     Categoryratingcriteria getCategoryRatingCriteriaByRatingCriteriaId(int ratingCriteriaId);
 
-    void addCategoryRatingCriteria(Categoryratingcriteria categoryratingcriteria);
+    void addCategoryRatingCriteria(int categoryId, int ratingCriteriaId);
 
-    void updateCategoryRatingCriteria(int categoryRatingCriteriaId, Categoryratingcriteria categoryratingcriteria);
+    void updateCategoryRatingCriteria(int categoryRatingCriteriaId, int categoryId, int ratingCriteriaId);
 
-    void removeCategoryRatingCriteria(int categoryRatingCriteriaId);
+    void removeCategoryRatingCriteria(int categoryRatingCriteriaId, int categoryId, int ratingCriteriaId);
 
     //Product
     Collection<Product> getAllProduct();
@@ -61,11 +61,11 @@ public interface adminejbLocal {
 
     Collection<Product> getProductByCategoryId(int categoryId);
 
-    void addProductToCategory(Product product);
+    void addProductToCategory(int categoryId, String productName, String productImage, String referenceLink, int authorId, int genreId, int publisherId, int companyId);
 
-    void updateProductToCategory(int productId, Product product);
+    void updateProductToCategory(int productId, int categoryId, String productName, String productImage, String referenceLink, int authorId, int genreId, int publisherId, int companyId);
 
-    void removeProductFromCategory(int productId);
+    void removeProductFromCategory(int productId, int categoryId);
 
     //RatingCriteria
     Collection<Ratingcriterias> getAllRatingCriteria();
@@ -74,9 +74,9 @@ public interface adminejbLocal {
 
     Collection<Ratingcriterias> getRatingCriteriaByCriteriaName(String criteriaName);
 
-    void addRatingCriteria(Ratingcriterias ratingcriterias);
+    void addRatingCriteria(String criteriaName);
 
-    void updateRatingCriteria(int ratingCriteriaId, Ratingcriterias ratingcriterias);
+    void updateRatingCriteria(int ratingCriteriaId, String criteriaName);
 
     void removeRatingCriteria(int ratingCriteriaId);
 

@@ -5,6 +5,7 @@
  */
 package ejb;
 
+import entity.Author;
 import entity.Permission;
 import entity.Role;
 import entity.Rolepermission;
@@ -12,12 +13,12 @@ import entity.Userrole;
 import entity.Users;
 import entity.Category;
 import entity.Categoryratingcriteria;
+import entity.Company;
+import entity.Genre;
 import entity.Product;
+import entity.Publisher;
 import entity.Ratingcriterias;
-import entity.Reviews;
-import entity.Reviewxcriteria;
 import java.util.Collection;
-import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -237,7 +238,7 @@ public class adminejb implements adminejbLocal {
         em.persist(object);
     }
 
-    //============================Category=============================
+    // <editor-fold defaultstate="collapsed" desc="Category">
     @Override
     public Collection<Category> getAllCategory() {
         return em.createNamedQuery("Category.findAll").getResultList();
@@ -258,15 +259,17 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void AddCategory(Category category) {
+    public void AddCategory(String categoryName) {
+        Category category = new Category();
+        category.setCategoryName(categoryName);
         em.persist(category);
     }
 
     @Override
-    public void updateCategory(int categoryId, Category category) {
-        Category objCategory = (Category) em.find(Category.class, categoryId);
-        objCategory.setCategoryName(category.getCategoryName());
-        em.merge(objCategory);
+    public void updateCategory(int categoryId, String categoryName) {
+        Category category = (Category) em.find(Category.class, categoryId);
+        category.setCategoryName(categoryName);
+        em.merge(category);
     }
 
     @Override
@@ -274,8 +277,9 @@ public class adminejb implements adminejbLocal {
         Category category = (Category) em.find(Category.class, categoryId);
         em.remove(category);
     }
+    // </editor-fold>
 
-    //============================CategoryRatingCriteria=============================
+    // <editor-fold defaultstate="collapsed" desc="CategoryRatingCriteria">
     @Override
     public Collection<Categoryratingcriteria> getAllCategoryRatingCriteria() {
         return em.createNamedQuery("Categoryratingcriteria.findAll").getResultList();
@@ -302,25 +306,80 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void addCategoryRatingCriteria(Categoryratingcriteria categoryratingcriteria) {
-        em.persist(categoryratingcriteria);
+    public void addCategoryRatingCriteria(int categoryId, int ratingCriteriaId) {
+        Category category = (Category) em.find(Category.class, categoryId);
+        Ratingcriterias ratingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
+
+        Collection<Categoryratingcriteria> categoryratingcriterias = category.getCategoryratingcriteriaCollection();
+        Collection<Categoryratingcriteria> categoryratingcriterias1 = ratingcriterias.getCategoryratingcriteriaCollection();
+
+        Categoryratingcriteria c = new Categoryratingcriteria();
+        c.setCategoryId(category);
+        c.setRatingCriteriaId(ratingcriterias);
+
+        categoryratingcriterias.add(c);
+        categoryratingcriterias1.add(c);
+        category.setCategoryratingcriteriaCollection(categoryratingcriterias);
+        ratingcriterias.setCategoryratingcriteriaCollection(categoryratingcriterias1);
+
+        em.persist(c);
+        em.merge(category);
+        em.merge(ratingcriterias);
+
     }
 
     @Override
-    public void updateCategoryRatingCriteria(int categoryRatingCriteriaId, Categoryratingcriteria categoryratingcriteria) {
-        Categoryratingcriteria objCategoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
-        objCategoryratingcriteria.setCategoryId(categoryratingcriteria.getCategoryId());
-        objCategoryratingcriteria.setRatingCriteriaId(categoryratingcriteria.getRatingCriteriaId());
-        em.merge(objCategoryratingcriteria);
-    }
-
-    @Override
-    public void removeCategoryRatingCriteria(int categoryRatingCriteriaId) {
+    public void updateCategoryRatingCriteria(int categoryRatingCriteriaId, int categoryId, int ratingCriteriaId) {
         Categoryratingcriteria categoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
-        em.remove(categoryratingcriteria);
+        Category category = (Category) em.find(Category.class, categoryId);
+        Ratingcriterias ratingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
+
+        Collection<Categoryratingcriteria> categoryratingcriterias = category.getCategoryratingcriteriaCollection();
+        Collection<Categoryratingcriteria> categoryratingcriterias1 = ratingcriterias.getCategoryratingcriteriaCollection();
+
+        if (categoryratingcriterias.contains(categoryratingcriteria)) {
+            categoryratingcriterias.remove(categoryratingcriteria);
+        }
+
+        if (categoryratingcriterias1.contains(categoryratingcriteria)) {
+            categoryratingcriterias1.remove(categoryratingcriteria);
+        }
+
+        categoryratingcriteria.setCategoryId(category);
+        categoryratingcriteria.setRatingCriteriaId(ratingcriterias);
+
+        categoryratingcriterias.add(categoryratingcriteria);
+        categoryratingcriterias1.add(categoryratingcriteria);
+        category.setCategoryratingcriteriaCollection(categoryratingcriterias);
+        ratingcriterias.setCategoryratingcriteriaCollection(categoryratingcriterias1);
+
+        em.merge(category);
+        em.merge(ratingcriterias);
     }
 
-    //============================Product=============================
+    @Override
+    public void removeCategoryRatingCriteria(int categoryRatingCriteriaId, int categoryId, int ratingCriteriaId) {
+        Categoryratingcriteria categoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
+        Category category = (Category) em.find(Category.class, categoryId);
+        Ratingcriterias ratingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
+
+        Collection<Categoryratingcriteria> categoryratingcriterias = category.getCategoryratingcriteriaCollection();
+        Collection<Categoryratingcriteria> categoryratingcriterias1 = ratingcriterias.getCategoryratingcriteriaCollection();
+
+        if (categoryratingcriterias.contains(categoryratingcriteria)) {
+            categoryratingcriterias.remove(categoryratingcriteria);
+            category.setCategoryratingcriteriaCollection(categoryratingcriterias);
+        }
+
+        if (categoryratingcriterias1.contains(categoryratingcriteria)) {
+            categoryratingcriterias1.remove(categoryratingcriteria);
+            ratingcriterias.setCategoryratingcriteriaCollection(categoryratingcriterias);
+            em.remove(categoryratingcriteria);
+        }
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Product">
     @Override
     public Collection<Product> getAllProduct() {
         return em.createNamedQuery("Product.findAll").getResultList();
@@ -351,37 +410,120 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void addProductToCategory(Product product) {
+    public void addProductToCategory(int categoryId, String productName, String productImage, String referenceLink, int authorId, int genreId, int publisherId, int companyId) {
+        Category category = em.find(Category.class, categoryId);
+        Collection<Product> products = category.getProductCollection();
+
+        Product product = new Product();
+        product.setCategoryId(category);
+        product.setProductName(productName);
+        product.setProductImage(productImage);
+        product.setReferenceLink(referenceLink);
+
+        if (authorId == 0) {
+            product.setAuthorId(null);
+        } else {
+            Author author = em.find(Author.class, authorId);
+            product.setAuthorId(author);
+        }
+
+        if (genreId == 0) {
+            product.setGenreId(null);
+        } else {
+            Genre genre = em.find(Genre.class, genreId);
+            product.setGenreId(genre);
+        }
+
+        if (publisherId == 0) {
+            product.setPublisherId(null);
+        } else {
+            Publisher publisher = em.find(Publisher.class, publisherId);
+            product.setPublisherId(publisher);
+        }
+
+        if (companyId == 0) {
+            product.setCompanyId(null);
+        } else {
+            Company company = em.find(Company.class, companyId);
+            product.setCompanyId(company);
+        }
+
+        products.add(product);
+        category.setProductCollection(products);
+
         em.persist(product);
+        em.merge(category);
     }
 
     @Override
-    public void updateProductToCategory(int productId, Product product) {
-        Product objProduct = (Product) em.find(Product.class, productId);
-        objProduct.setCategoryId(product.getCategoryId());
-        objProduct.setProductName(product.getProductName());
-        objProduct.setProductImage(product.getProductImage());
-        objProduct.setReferenceLink(product.getReferenceLink());
-        objProduct.setAuthorId(product.getAuthorId());
-        objProduct.setGenreId(product.getGenreId());
-        objProduct.setPublisherId(product.getPublisherId());
-        objProduct.setCompanyId(product.getCompanyId());
-        em.merge(objProduct);
+    public void updateProductToCategory(int productId, int categoryId, String productName, String productImage, String referenceLink, int authorId, int genreId, int publisherId, int companyId) {
+        Product product = em.find(Product.class, productId);
+        Category category = em.find(Category.class, categoryId);
+        Collection<Product> products = category.getProductCollection();
+
+        if (products.contains(product)) {
+            products.remove(product);
+        }
+
+        product.setCategoryId(category);
+        product.setProductName(productName);
+        product.setProductImage(productImage);
+        product.setReferenceLink(referenceLink);
+
+        if (authorId == 0) {
+            product.setAuthorId(null);
+        } else {
+            Author author = em.find(Author.class, authorId);
+            product.setAuthorId(author);
+        }
+
+        if (genreId == 0) {
+            product.setGenreId(null);
+        } else {
+            Genre genre = em.find(Genre.class, genreId);
+            product.setGenreId(genre);
+        }
+
+        if (publisherId == 0) {
+            product.setPublisherId(null);
+        } else {
+            Publisher publisher = em.find(Publisher.class, publisherId);
+            product.setPublisherId(publisher);
+        }
+
+        if (companyId == 0) {
+            product.setCompanyId(null);
+        } else {
+            Company company = em.find(Company.class, companyId);
+            product.setCompanyId(company);
+        }
+
+        products.add(product);
+        category.setProductCollection(products);
+
+        em.merge(category);
     }
 
     @Override
-    public void removeProductFromCategory(int productId) {
+    public void removeProductFromCategory(int productId, int categoryId) {
         Product product = (Product) em.find(Product.class, productId);
-        em.remove(product);
-    }
+        Category category = (Category) em.find(Category.class, categoryId);
 
-    //============================RatingCriteria=============================
+        Collection<Product> products = category.getProductCollection();
+        if (products.contains(product)) {
+            products.remove(product);
+            category.setProductCollection(products);
+            em.remove(product);
+        }
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="RatingCriteria">
     @Override
     public Collection<Ratingcriterias> getAllRatingCriteria() {
         return em.createNamedQuery("Ratingcriterias.findAll").getResultList();
     }
 
-    //---------------------------------------------------------------------------------------------------------------------
     @Override
     public Ratingcriterias getRatingCriteriaById(int ratingCriteriaId) {
         return (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
@@ -397,15 +539,17 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void addRatingCriteria(Ratingcriterias ratingcriterias) {
+    public void addRatingCriteria(String criteriaName) {
+        Ratingcriterias ratingcriterias = new Ratingcriterias();
+        ratingcriterias.setCriteriaName(criteriaName);
         em.persist(ratingcriterias);
     }
 
     @Override
-    public void updateRatingCriteria(int ratingCriteriaId, Ratingcriterias ratingCriteria) {
-        Ratingcriterias objRatingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
-        objRatingcriterias.setCriteriaName(ratingCriteria.getCriteriaName());
-        em.merge(objRatingcriterias);
+    public void updateRatingCriteria(int ratingCriteriaId, String criteriaName) {
+        Ratingcriterias ratingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
+        ratingcriterias.setCriteriaName(criteriaName);
+        em.merge(ratingcriterias);
     }
 
     @Override
@@ -413,4 +557,5 @@ public class adminejb implements adminejbLocal {
         Ratingcriterias ratingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
         em.remove(ratingcriterias);
     }
+    // </editor-fold>
 }

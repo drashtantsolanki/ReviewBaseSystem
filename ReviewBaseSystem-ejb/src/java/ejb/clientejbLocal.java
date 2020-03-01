@@ -66,11 +66,11 @@ public interface clientejbLocal {
 
     Collection<Reviews> getReviewsByUserId(int userId);
 
-    void addReview(Reviews reviews);
+    void addReview(int productId, Date date, int userId);
 
-    void updateReview(int reviewId, Reviews reviews);
+    void updateReview(int reviewId, int productId, Date date, int userId);
 
-    void removeReview(int reviewId);
+    void removeReview(int reviewId, int productId, int userId);
 
     //ReviewxCriteria
     Collection<Reviewxcriteria> getAllReviewxCriteria();
@@ -83,9 +83,9 @@ public interface clientejbLocal {
 
     Reviewxcriteria getReviewxCriteriaByReviewId(int reviewId);
 
-    void addReviewxCriteria(Reviewxcriteria reviewxcriteria);
+    void addReviewxCriteria(float rate, String description, int categoryRatingCriteriaId, int reviewId);
 
-    void updateReviewxCriteria(int reviewXcriteriaId, Reviewxcriteria reviewxcriteria);
+    void updateReviewxCriteria(int reviewXcriteriaId, float rate, String description, int categoryRatingCriteriaId, int reviewId);
 
-    void removeReviewxCriteria(int reviewXcriteriaId);
+    void removeReviewxCriteria(int reviewXcriteriaId, int categoryRatingCriteriaId, int reviewId);
 }

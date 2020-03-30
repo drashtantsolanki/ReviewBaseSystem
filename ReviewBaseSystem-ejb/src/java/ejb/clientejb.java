@@ -6,6 +6,7 @@
 package ejb;
 
 import entity.Advertise;
+import entity.Product;
 import entity.Users;
 import java.security.MessageDigest;
 import java.util.Collection;
@@ -24,9 +25,6 @@ public class clientejb implements clientejbLocal {
     @PersistenceContext(unitName = "MyReview")
     private EntityManager em;
 
-    
-    
-    
     
     @Override
     public Collection<Users> getAllUsers() {
@@ -128,32 +126,58 @@ public class clientejb implements clientejbLocal {
 
     @Override
     public Advertise getAdvertiseById(int advertiseId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (Advertise) em.createNamedQuery("Advertise.findByAdvertiseId").getSingleResult();
     }
 
     @Override
     public Advertise getAdvertiseByProductId(int productId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.find(Advertise.class, productId);
     }
 
     @Override
-    public Advertise getAdvertiseByDate(Date date) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Collection<Advertise> getAdvertiseByDate(Date date) {
+        Collection<Advertise> lstAd=em.createNamedQuery("Advertise.findByDate").setParameter("tdate", date).getResultList();
+        return lstAd;
     }
 
     @Override
-    public void addAdvertise(Advertise advertise) {
-        em.persist(advertise); 
+    public void addAdvertise(Date startDate,Date endDate,int productId) {
+        Advertise ad=new Advertise();
+        Product p=em.find(Product.class, productId);
+        Collection<Advertise> lstad=p.getAdvertiseCollection();
+        
+        ad.setStartDate(startDate);
+        ad.setEndDate(endDate);
+        ad.setProductId(p);
+        
+        lstad.add(ad);
+        p.setAdvertiseCollection(lstad);
+        em.merge(p);
+        em.persist(ad); 
     }
 
     @Override
-    public void updateAdvertise(int advertiseId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void updateAdvertise(int advertiseId,Date startDate,Date endDate,int productId) {
+        
+        Advertise ad=em.find(Advertise.class, advertiseId);
+        
+        Product p=em.find(Product.class, productId);
+        Collection<Advertise> lstad=p.getAdvertiseCollection();
+        
+        ad.setStartDate(startDate);
+        ad.setEndDate(endDate);
+        ad.setProductId(p);
+        
+        lstad.add(ad);
+        p.setAdvertiseCollection(lstad);
+        em.merge(p);
+        em.merge(ad); 
     }
 
     @Override
     public void removeAdvertise(int advertiseId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Advertise objAddvertise=em.find(Advertise.class,advertiseId);
+        em.remove(objAddvertise);
     }
 
     // Add business logic below. (Right-click in editor and choose
@@ -161,5 +185,10 @@ public class clientejb implements clientejbLocal {
 
     public void persist(Object object) {
         em.persist(object);
+    }
+
+    @Override
+    public Collection<Advertise> getAdvertiseByDate(String tdate) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

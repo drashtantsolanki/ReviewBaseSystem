@@ -33,7 +33,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Advertise.findAll", query = "SELECT a FROM Advertise a"),
     @NamedQuery(name = "Advertise.findByAdvertiseId", query = "SELECT a FROM Advertise a WHERE a.advertiseId = :advertiseId"),
     @NamedQuery(name = "Advertise.findByStartDate", query = "SELECT a FROM Advertise a WHERE a.startDate = :startDate"),
-    @NamedQuery(name = "Advertise.findByEndDate", query = "SELECT a FROM Advertise a WHERE a.endDate = :endDate")})
+    @NamedQuery(name = "Advertise.findByEndDate", query = "SELECT a FROM Advertise a WHERE a.endDate = :endDate"),
+    @NamedQuery(name = "Advertise.findByDate",query = "SELECT a FROM Advertise a WHERE :tdate BETWEEN a.startDate AND a.endDate")
+})
 public class Advertise implements Serializable {
 
     private static final long serialVersionUID = 1L;

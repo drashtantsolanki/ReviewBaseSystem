@@ -215,15 +215,42 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void addRolePermission(Rolepermission rolePermission) 
+    public void addRolePermission(int roleId,int permissionId) 
     {
-        em.persist(rolePermission);
+       Rolepermission rp=new Rolepermission();
+       
+       Role role=em.find(Role.class,roleId);
+       Permission permission=em.find(Permission.class,permissionId);
+       
+       Collection<Rolepermission> lstrp1=role.getRolepermissionCollection();
+       Collection<Rolepermission> lstrp2=permission.getRolepermissionCollection();
+       rp.setRoleId(role);
+       rp.setPermissionId(permission);
+       lstrp1.add(rp);
+       lstrp2.add(rp);
+       em.merge(role);
+       em.merge(permission);
+       em.persist(rp);
     }
 
     @Override
-    public void updateRolePermission(Rolepermission rolePermission) {
-        Rolepermission rp=em.find(Rolepermission.class,rolePermission.getRolePermissionId());
-        em.merge(rolePermission);
+    public void updateRolePermission(int roleId,int permissionId,int rolePermissionId) {
+        Rolepermission rp=em.find(Rolepermission.class,rolePermissionId);
+        
+        Role role=em.find(Role.class,roleId);
+        Permission permission=em.find(Permission.class,permissionId);
+        
+        Collection<Rolepermission> lstrp1=role.getRolepermissionCollection();
+        Collection<Rolepermission> lstrp2=permission.getRolepermissionCollection();
+        
+        rp.setRoleId(role);
+        rp.setPermissionId(permission);
+        lstrp1.add(rp);
+        lstrp2.add(rp);
+        
+        em.merge(role);
+        em.merge(permission);
+        em.merge(rp);
     }
 
     @Override
@@ -240,37 +267,76 @@ public class adminejb implements adminejbLocal {
     
     @Override
     public Collection<Userrole> getAllUserRole() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createNamedQuery("Userrole.findAll").getResultList();
     }
 
     @Override
     public Userrole getUserRoleById(int userRoleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (Userrole) em.createNamedQuery("Userrole.findByUserRoleId").getSingleResult();
     }
 
     @Override
     public Userrole getUserRoleByUserId(int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.find(Userrole.class, userId);
     }
 
     @Override
     public Userrole getUserRoleByRoleId(int roleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return em.find(Userrole.class, roleId);
     }
 
     @Override
-    public void addUserRole(Userrole userRole) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addUserRole(int userId,int roleId) {
+        Userrole ur=new Userrole();
+        
+        Users users =em.find(Users.class,userId);
+        Role role=em.find(Role.class,roleId);
+        
+        Collection<Userrole> lstur1=users.getUserroleCollection();
+        Collection<Userrole> lstur2=role.getUserroleCollection();
+        
+        ur.setRoleId(role);
+        ur.setUserId(users);
+        lstur1.add(ur);
+        lstur2.add(ur);
+        
+        users.setUserroleCollection(lstur1);
+        role.setUserroleCollection(lstur2);
+        
+        em.merge(role);
+        em.merge(users);
+        em.persist(ur);
+        
     }
 
     @Override
-    public void updateUserRole(int userRoleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void updateUserRole(int userId,int roleId,int userRoleId) {
+        Userrole ur=em.find(Userrole.class, userRoleId);
+        
+        Role role=em.find(Role.class, roleId);
+        Users users=em.find(Users.class, userId);
+        
+        Collection<Userrole> lstur1=role.getUserroleCollection();
+        Collection<Userrole> lstur2=users.getUserroleCollection();
+        
+        ur.setRoleId(role);
+        ur.setUserId(users);
+        lstur1.add(ur);
+        lstur2.add(ur);
+        
+        role.setUserroleCollection(lstur1);
+        users.setUserroleCollection(lstur2);
+        
+        em.merge(role);
+        em.merge(users);
+        em.merge(ur);
+        
     }
 
     @Override
     public void removeUserRole(int userRoleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Userrole obj=em.find(Userrole.class, userRoleId);
+        em.remove(obj);
     }
 
     
@@ -278,52 +344,8 @@ public class adminejb implements adminejbLocal {
     
     
     
+    //============================USERS=================================
     
-    @Override
-    public Collection<Users> getAllUsers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Users getUserById(int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Users getUserByName(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Users getUserByEmail(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Users getUserByCity(String city) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void addUser(Users objUser) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void updateUser(int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void removeUser(int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Collection<Rolepermission> getAllRolePermissionWithName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public void persist(Object object) {
         em.persist(object);
     }
@@ -547,4 +569,5 @@ public class adminejb implements adminejbLocal {
         Reviewxcriteria reviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
         em.remove(reviewxcriteria);
     }
+
 }

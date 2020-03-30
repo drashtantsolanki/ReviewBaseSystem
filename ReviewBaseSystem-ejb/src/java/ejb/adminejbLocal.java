@@ -132,7 +132,6 @@ public interface adminejbLocal {
     
     Collection<Rolepermission> getAllRolePermissionByname();
     
-    Collection<Rolepermission> getAllRolePermissionWithName();
     
     Rolepermission getRolePermissionById(int rolePermissionId);
 
@@ -140,9 +139,9 @@ public interface adminejbLocal {
 
     Rolepermission getRolePermissionByPermissionId(int permissionId);
 
-    void addRolePermission(Rolepermission rolePermission);
+    void addRolePermission(int roleId,int permissionId);
 
-    void updateRolePermission(Rolepermission rolePermission);
+    void updateRolePermission(int roleId,int permissionId,int rolePermissionId);
 
     void removeRolePermission(int rolePermissionId);
 
@@ -155,9 +154,9 @@ public interface adminejbLocal {
 
     Userrole getUserRoleByRoleId(int roleId);
 
-    void addUserRole(Userrole userRole);
+    void addUserRole(int userId,int roleId);
 
-    void updateUserRole(int userRoleId);
+    void updateUserRole(int userId,int roleId,int userRoleId);
 
     void removeUserRole(int userRoleId);
 
@@ -174,22 +173,4 @@ public interface adminejbLocal {
 
     void removePermission(int permissionId);
 
-    //user    
-    Collection<Users> getAllUsers();
-
-    Users getUserById(int userId);
-
-    Users getUserByName(String name);
-
-    Users getUserByEmail(String email);
-
-    Users getUserByCity(String city);
-
-    void addUser(Users objUser);
-
-    void updateUser(int userId);
-
-    void removeUser(int userId);
-
-    
 }

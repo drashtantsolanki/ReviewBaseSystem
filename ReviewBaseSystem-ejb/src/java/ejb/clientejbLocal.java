@@ -34,9 +34,10 @@ public interface clientejbLocal {
     Collection<Advertise> getAllAdvertise();
     Advertise getAdvertiseById(int advertiseId);
     Advertise getAdvertiseByProductId(int productId);
-    Advertise getAdvertiseByDate(Date date); 
+    Collection<Advertise> getAdvertiseByDate(Date date); 
     //(if advertise is exists between start date and end date)
-    void addAdvertise(Advertise advertise);
-    void updateAdvertise(int advertiseId);
+    void addAdvertise(Date startDate,Date endDate,int productId);
+    void updateAdvertise(int advertiseId,Date startDate,Date endDate,int productId);
     void removeAdvertise(int advertiseId);
+    public Collection<Advertise> getAdvertiseByDate(String tdate);
 }

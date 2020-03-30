@@ -8,15 +8,24 @@ package servlets;
 import ejb.adminejbLocal;
 import ejb.clientejbLocal;
 import ejb.commanejbLocal;
+import entity.Advertise;
 import entity.Category;
 import entity.Categoryratingcriteria;
 import entity.Product;
 import entity.Ratingcriterias;
+import entity.Role;
+import entity.Rolepermission;
+import entity.Userrole;
+import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.logging.Level;
+import javafx.geometry.Side;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -115,32 +124,29 @@ public class TestServlet extends HttpServlet {
 //            }
             //==============================================================================
             //==============================================================================
-            //----------Permission--------------------permission------------Permission--------------------------------
+            //----------Role Permission--------------------Role permission------------Role Permission--------------------------------
             //==============================================================================
             //==============================================================================
-//            Rolepermission rp=new Rolepermission();
-//            rp.setRoleId(new Role(2));
-//            rp.setPermissionId(new Permission(3));
-//            al.addRolePermission(rp);
-//            Rolepermission rpForUpdate=new Rolepermission(2);
-//            rpForUpdate.setRoleId(new Role(1));
-//            rpForUpdate.setPermissionId(new Permission(3));
-//            al.updateRolePermission(rpForUpdate);
-//            al.removeRolePermission(3);
+            //--------------add---------------
+//            al.addRolePermission(1,2);
+            //-------------------update----------------
+//            al.updateRolePermission(1, 2, 2);
+//            al.removeRolePermission(5);
 //            Rolepermission rpById=al.getRolePermissionById(2);
 //            out.println("get rolePermissionByid "+rpById.getPermissionId()+"  role= "+rpById.getRoleId()+" permission "+rpById.getPermissionId()+"<br>");
-//            
+            
 //            Rolepermission rpByPid=al.getRolePermissionByPermissionId(2);
 //            out.println("get rolePermissionByPermissionid "+rpByPid.getPermissionId()+"  role= "+rpByPid.getRoleId()+" permission "+rpByPid.getPermissionId()+"<br>");    
-//
+
 //            Rolepermission rpByRid=al.getRolePermissionByRoleId(1);
 //            out.println("get rolePermissionByRoleid "+rpByRid.getPermissionId()+"  role= "+rpByRid.getRoleId()+" permission "+rpByRid.getPermissionId()+"<br>");    
-//
-//            
+
+            
 //            Collection<Rolepermission> lstRp = al.getAllRolePermission();
 //            for (Rolepermission obj : lstRp) {
-//                out.println("RolePermissionId ID= "+obj.getRolePermissionId() + " Role ID= "+obj.getRoleId()+" Permission id"+ obj.getPermissionId() +" <br>");
+//                out.println("RolePermissionId ID= "+obj.getRolePermissionId() + " Role ID= "+obj.getRoleId().getRoleName()+" Permission id "+ obj.getPermissionId().getPermissionName() +" <br>");
 //            }
+
             //==============================================================================
             //==============================================================================
             //----------users--------------------users------------users--------------------------------
@@ -197,24 +203,78 @@ public class TestServlet extends HttpServlet {
             //----------Advertise--------------------Advertise------------Advertise--------------------------------
             //==============================================================================
             //==============================================================================
-//            Advertise objAdForInsert=new Advertise();
-//            String sd="22/2/2020";
-//            String ed="25/2/2020";
-//            objAdForInsert.setStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(sd));
-//            objAdForInsert.setEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(ed));
-//            objAdForInsert.setProductId(new Product(2));
-//            clientejb.addAdvertise(objAdForInsert);
-//            Collection<Advertise> lst=clientejb.getAllAdvertise();
-//            for (Advertise a : lst) {
-//                out.println("ID="+a.getAdvertiseId()+" Strat Date="+a.getStartDate()+" End Date="+a.getEndDate()+" ProductId="+a.getProductId());
+            
+            
+//            String sd="14/2/2020";
+//            String ed="19/2/2020";
+//            clientejb.addAdvertise(new SimpleDateFormat("dd/MM/yyyy").parse(sd),new SimpleDateFormat("dd/MM/yyyy").parse(ed),2);
+
+//            Advertise objAdForUpdate=new Advertise(4);
+            String sd="15/3/2020";
+            String ed="20/3/2020";
+//            objAdForUpdate.setStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(sd));
+//            objAdForUpdate.setEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(ed));
+//            objAdForUpdate.setProductId(new Product(2));
+//            clientejb.updateAdvertise(6,new SimpleDateFormat("dd/MM/yyyy").parse(sd),new SimpleDateFormat("dd/MM/yyyy").parse(ed),3);
+
+
+//            clientejb.removeAdvertise(2);
+
+//            String tdate="16/3/2020";
+//            Collection<Advertise> getAdFromDate=clientejb.getAdvertiseByDate(new SimpleDateFormat("dd/MM/yyyy").parse(tdate));
+//            out.println("<h3>Folling ad will display on "+tdate+"</h3><br>");
+//            for (Advertise advertise : getAdFromDate) {
+//                DateFormat df=new SimpleDateFormat("dd MMM,yyyy");
+//                String  tempSdate = df.format(advertise.getStartDate());
+//                String  tempEedate = df.format(advertise.getEndDate());
+//                out.println("AdId "+advertise.getAdvertiseId()+"| AdStart "+tempSdate+"| AdEnd "+tempEedate+"| Product "+advertise.getProductId().getProductName()+"<br>");
+//                
 //            }
+//            out.println("<hr>");
+//            
+//            Collection<Advertise> lst=clientejb.getAllAdvertise();
+//           
+//            for (Advertise a : lst) 
+//            {
+//                DateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy");  
+//                String  sdate = dateFormat.format(a.getStartDate());
+//                String  edate = dateFormat.format(a.getEndDate());
+//                out.println("ID="+a.getAdvertiseId()+"| Strat Date="+sdate+
+//                        "| End Date="+edate+"| Product="
+//                        +a.getProductId().getProductName()+"<br>");
+//            }
+
+            //==============================================================================
+            //==============================================================================
+            //----------userrole--------------------userrole------------userrole--------------------------------
+            //==============================================================================
+            //==============================================================================
+
+            
+                //-----------------------------add userrole---------------------
+//            al.addUserRole(4,6);
+            
+//            Userrole userRoleForUpdate=new Userrole(2);
+//            userRoleForUpdate.setRoleId(new Role(1));
+//            userRoleForUpdate.setUserId(new Users(1));
+
+//            al.updateUserRole(4,2,3);
+
+//            al.removeUserRole(4);
+            
+//            Collection<Userrole> lst=al.getAllUserRole();
+//            for (Userrole ur : lst) {
+//                out.println("UserRole ID="+ur.getUserRoleId()+" | Role="+ur.getRoleId().getRoleName()+" | user="+ur.getUserId().getName()+"<br>");
+//            }
+            
+            
             out.println("<body>");
 
-            Collection<Ratingcriterias> ratingcriteriases = admin.getAllRatingCriteria();
+//            Collection<Ratingcriterias> ratingcriteriases = admin.getAllRatingCriteria();
 
-            for (Ratingcriterias ratingcriteriase : ratingcriteriases) {
-                out.println(ratingcriteriase.getCriteriaName());
-            }
+//            for (Ratingcriterias ratingcriteriase : ratingcriteriases) {
+//                out.println(ratingcriteriase.getCriteriaName());
+//            }
 
             out.println("</body>");
             out.println("</html>");

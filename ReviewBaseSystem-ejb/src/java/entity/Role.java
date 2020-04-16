@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "role")
-@XmlRootElement
+//@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
     @NamedQuery(name = "Role.findByRoleId", query = "SELECT r FROM Role r WHERE r.roleId = :roleId"),
@@ -76,7 +77,7 @@ public class Role implements Serializable {
         this.roleName = roleName;
     }
 
-    @XmlTransient
+    @JsonbTransient
     public Collection<Rolepermission> getRolepermissionCollection() {
         return rolepermissionCollection;
     }
@@ -85,7 +86,7 @@ public class Role implements Serializable {
         this.rolepermissionCollection = rolepermissionCollection;
     }
 
-    @XmlTransient
+    @JsonbTransient
     public Collection<Userrole> getUserroleCollection() {
         return userroleCollection;
     }

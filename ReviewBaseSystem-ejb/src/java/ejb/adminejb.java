@@ -21,6 +21,7 @@ import entity.Ratingcriterias;
 import java.util.Collection;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 /**
@@ -31,9 +32,9 @@ import javax.persistence.PersistenceContext;
 public class adminejb implements adminejbLocal {
 
     @PersistenceContext(unitName = "MyReview")
-    private EntityManager em;
+    EntityManager em;
 
-    //=======================Role=====================================
+    // <editor-fold defaultstate="collapsed" desc="Role">
     @Override
     public Role getRoleById(int roleId) {
         Role role = em.find(Role.class, roleId);
@@ -66,8 +67,9 @@ public class adminejb implements adminejbLocal {
         Role objrole = em.find(Role.class, roleId);
         em.remove(objrole);
     }
+    // </editor-fold>
 
-    //=======================permission=====================================
+    // <editor-fold defaultstate="collapsed" desc="Permission">
     @Override
     public Collection<Permission> getAllPermissions() {
         return em.createNamedQuery("Permission.findAll").getResultList();
@@ -105,8 +107,9 @@ public class adminejb implements adminejbLocal {
         Permission objpermission = em.find(Permission.class, permissionId);
         em.remove(objpermission);
     }
+    // </editor-fold>
 
-    //=================================Role Permission===========================================
+    // <editor-fold defaultstate="collapsed" desc="RolePermission">
     @Override
     public Collection<Rolepermission> getAllRolePermission() {
         return em.createNamedQuery("Rolepermission.findAll").getResultList();
@@ -153,7 +156,13 @@ public class adminejb implements adminejbLocal {
         em.remove(rp);
     }
 
-    //============================user Role=============================
+    @Override
+    public Collection<Rolepermission> getAllRolePermissionWithName() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="UserRole">
     @Override
     public Collection<Userrole> getAllUserRole() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -188,7 +197,9 @@ public class adminejb implements adminejbLocal {
     public void removeUserRole(int userRoleId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="User">
     @Override
     public Collection<Users> getAllUsers() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -228,15 +239,7 @@ public class adminejb implements adminejbLocal {
     public void removeUser(int userId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public Collection<Rolepermission> getAllRolePermissionWithName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void persist(Object object) {
-        em.persist(object);
-    }
+    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Category">
     @Override

@@ -8,6 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -31,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "users")
-@XmlRootElement
+//@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
     @NamedQuery(name = "Users.findByUserId", query = "SELECT u FROM Users u WHERE u.userId = :userId"),
@@ -98,8 +99,6 @@ public class Users implements Serializable {
         this.city = city;
         this.password = password;
     }
-    
-    
 
     public Users(Integer userId, String name, String email, String phoneNumber, String interest, String gender, Date birthdate, String city, String password) {
         this.userId = userId;
@@ -185,7 +184,7 @@ public class Users implements Serializable {
         this.password = password;
     }
 
-    @XmlTransient
+    @JsonbTransient
     public Collection<Userrole> getUserroleCollection() {
         return userroleCollection;
     }
@@ -194,7 +193,7 @@ public class Users implements Serializable {
         this.userroleCollection = userroleCollection;
     }
 
-    @XmlTransient
+    @JsonbTransient
     public Collection<Reviews> getReviewsCollection() {
         return reviewsCollection;
     }
@@ -227,5 +226,5 @@ public class Users implements Serializable {
     public String toString() {
         return "entity.Users[ userId=" + userId + " ]";
     }
-    
+
 }

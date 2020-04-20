@@ -5,6 +5,7 @@
  */
 package ejb;
 
+import entity.Author;
 import entity.Permission;
 import entity.Role;
 import entity.Rolepermission;
@@ -12,14 +13,21 @@ import entity.Userrole;
 import entity.Users;
 import entity.Category;
 import entity.Categoryratingcriteria;
+import entity.Company;
+import entity.Genre;
 import entity.Product;
+import entity.Publisher;
 import entity.Ratingcriterias;
 import entity.Reviews;
 import entity.Reviewxcriteria;
+
+
 import java.util.Collection;
 import java.util.Date;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 /**
@@ -30,115 +38,44 @@ import javax.persistence.PersistenceContext;
 public class adminejb implements adminejbLocal {
 
     @PersistenceContext(unitName = "MyReview")
-    private EntityManager em;
+    EntityManager em;
 
-    //@PersistenceContext(unitName = "MyReview")
-    //EntityManager em;
-    
-    
-    //------------------------------------Role------------------------------------------
-    
-    @Override
-    public Collection<Category> getAllCategory() {
-        return em.createNamedQuery("Category.findAll").getResultList();
-    }
-
-    @Override
-    public Category getCategoryById(int categoryId) {
-        return (Category) em.find(Category.class, categoryId);
-    }
-
-    @Override
-    public Collection<Category> getCategoryByName(String categoryName) {
-        Collection<Category> categorys = em.createNamedQuery("Category.findByCategoryName")
-                .setParameter("categoryName", categoryName)
-                .getResultList();
-
-        return categorys;
-    }
-
-    @Override
-    public void AddCategory(Category category) {
-        em.persist(category);
-    }
-
-    @Override
-    public void updateCategory(int categoryId, Category category) {
-        Category objCategory = (Category) em.find(Category.class, categoryId);
-        objCategory.setCategoryName(category.getCategoryName());
-        em.merge(objCategory);
-    }
-
-    @Override
-    public void removeCategory(int categoryId) {
-        Category category = (Category) em.find(Category.class, categoryId);
-        em.remove(category);
-    }
-
-    @Override
-    public Collection<Categoryratingcriteria> getAllCategoryRatingCriteria() {
-        return em.createNamedQuery("Categoryratingcriteria.findAll").getResultList();
-    }
-
-    @Override
-    public Categoryratingcriteria getCategoryRatingCriteriaById(int categoryratingcriteriaId) {
-        return (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryratingcriteriaId);
-    }
-
-    //test baki
-    @Override
-    public Collection<Categoryratingcriteria> getCategoryRatingCriteriaByCategoryId(int categoryId) {
-        Collection<Categoryratingcriteria> categoryratingcriterias = em.createNamedQuery("Categoryratingcriteria.getCategoryRatingCriteriaByCategoryId")
-                .setParameter("categoryId", categoryId)
-                .getResultList();
-
-        return categoryratingcriterias;
-    }
-
-    @Override
-    public Categoryratingcriteria getCategoryRatingCriteriaByRatingCriteriaId(int ratingCriteriaId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-
+    // <editor-fold defaultstate="collapsed" desc="Role">
     @Override
     public Role getRoleById(int roleId) {
-        Role role=em.find(Role.class, roleId);
+        Role role = em.find(Role.class, roleId);
         return role;
     }
 
     @Override
     public Role getRoleByName(String roleName) {
-        Role role=(Role) em.createNamedQuery("Role.findByRoleName").setParameter("roleName",roleName);
+        Role role = (Role) em.createNamedQuery("Role.findByRoleName").setParameter("roleName", roleName);
         return role;
     }
 
     @Override
     public void addRole(Role role) {
-        Role objrole=new Role();
+        Role objrole = new Role();
         objrole.setRoleName(role.getRoleName());
         em.persist(objrole);
     }
 
     @Override
-    public void updateRole(int roleId,Role role) {
-        Role objrole=em.find(Role.class, roleId);
+    public void updateRole(int roleId, Role role) {
+        Role objrole = em.find(Role.class, roleId);
         objrole.setRoleName(role.getRoleName());
         em.merge(objrole);
-        
+
     }
 
     @Override
     public void removeRole(int roleId) {
-        Role objrole=em.find(Role.class, roleId);
+        Role objrole = em.find(Role.class, roleId);
         em.remove(objrole);
     }
-    
+    // </editor-fold>
 
-    //=======================permission=====================================
-    
+    // <editor-fold defaultstate="collapsed" desc="Permission">
     @Override
     public Collection<Permission> getAllPermissions() {
         return em.createNamedQuery("Permission.findAll").getResultList();
@@ -146,139 +83,209 @@ public class adminejb implements adminejbLocal {
 
     @Override
     public Permission getPermissionById(int permissionId) {
-        Permission objPermission=em.find(Permission.class, permissionId);
+        Permission objPermission = em.find(Permission.class, permissionId);
         return objPermission;
     }
 
     @Override
     public Permission getPermissionByName(String permissionName) {
-        Permission objPermission=(Permission) em.createNamedQuery("Permission.findByPermissionName").setParameter("permissionName", permissionName).getSingleResult();
+        Permission objPermission = (Permission) em.createNamedQuery("Permission.findByPermissionName").setParameter("permissionName", permissionName).getSingleResult();
         return objPermission;
     }
 
     @Override
     public void addPermission(Permission permission) {
-        Permission objPermission=new Permission();
+        Permission objPermission = new Permission();
         objPermission.setPermissionName(permission.getPermissionName());
         em.persist(objPermission);
     }
 
     @Override
-    public void updatePermission(int permissionId,Permission permission) {
-        
-        Permission objPermission=em.find(Permission.class,permission.getPermissionId());
+    public void updatePermission(int permissionId, Permission permission) {
+
+        Permission objPermission = em.find(Permission.class, permission.getPermissionId());
         //objPermission.setPermissionName(permission.getPermissionName());
         em.merge(objPermission);
     }
 
     @Override
     public void removePermission(int permissionId) {
-        Permission objpermission=em.find(Permission.class,permissionId);
+        Permission objpermission = em.find(Permission.class, permissionId);
         em.remove(objpermission);
     }
+    // </editor-fold>
 
-    
-    
-    
-    
-    
-    //=================================Role Permission===========================================
-    
+    // <editor-fold defaultstate="collapsed" desc="RolePermission">
     @Override
     public Collection<Rolepermission> getAllRolePermission() {
         return em.createNamedQuery("Rolepermission.findAll").getResultList();
     }
-    
+
     @Override
-    public Collection<Rolepermission> getAllRolePermissionByname(){
-        Collection<Rolepermission> lst =em.createNamedQuery("Rolepermission.findAllByName").getResultList();
+    public Collection<Rolepermission> getAllRolePermissionByname() {
+        Collection<Rolepermission> lst = em.createNamedQuery("Rolepermission.findAllByName").getResultList();
         return lst;
     }
-    
+
     
     @Override
     public Rolepermission getRolePermissionById(int rolePermissionId) {
-        Rolepermission rp=em.find(Rolepermission.class,rolePermissionId);
+        Rolepermission rp = em.find(Rolepermission.class, rolePermissionId);
         return rp;
     }
 
     @Override
     public Rolepermission getRolePermissionByRoleId(int roleId) {
-        Rolepermission rp=em.find(Rolepermission.class,roleId);
+        Rolepermission rp = em.find(Rolepermission.class, roleId);
         return rp;
     }
 
     @Override
     public Rolepermission getRolePermissionByPermissionId(int permissionId) {
-        Rolepermission rp=em.find(Rolepermission.class,permissionId);
+        Rolepermission rp = em.find(Rolepermission.class, permissionId);
         return rp;
     }
 
     @Override
-    public void addRolePermission(Rolepermission rolePermission) 
+    public void addRolePermission(int roleId,int permissionId) 
     {
-        em.persist(rolePermission);
+       Rolepermission rp=new Rolepermission();
+       
+       Role role=em.find(Role.class,roleId);
+       Permission permission=em.find(Permission.class,permissionId);
+       
+       Collection<Rolepermission> lstrp1=role.getRolepermissionCollection();
+       Collection<Rolepermission> lstrp2=permission.getRolepermissionCollection();
+       rp.setRoleId(role);
+       rp.setPermissionId(permission);
+       lstrp1.add(rp);
+       lstrp2.add(rp);
+       em.merge(role);
+       em.merge(permission);
+       em.persist(rp);
     }
 
     @Override
-    public void updateRolePermission(Rolepermission rolePermission) {
-        Rolepermission rp=em.find(Rolepermission.class,rolePermission.getRolePermissionId());
-        em.merge(rolePermission);
+    public void updateRolePermission(int roleId,int permissionId,int rolePermissionId) {
+        Rolepermission rp=em.find(Rolepermission.class,rolePermissionId);
+        
+        Role role=em.find(Role.class,roleId);
+        Permission permission=em.find(Permission.class,permissionId);
+        
+        Collection<Rolepermission> lstrp1=role.getRolepermissionCollection();
+        Collection<Rolepermission> lstrp2=permission.getRolepermissionCollection();
+        
+        rp.setRoleId(role);
+        rp.setPermissionId(permission);
+        lstrp1.add(rp);
+        lstrp2.add(rp);
+        
+        em.merge(role);
+        em.merge(permission);
+        em.merge(rp);
     }
 
     @Override
     public void removeRolePermission(int rolePermissionId) {
-        Rolepermission rp=em.find(Rolepermission.class,rolePermissionId);
+        Rolepermission rp = em.find(Rolepermission.class, rolePermissionId);
         em.remove(rp);
     }
 
-    
-    
-    //============================user Role=============================
-    
-    
-    
+    @Override
+    public Collection<Rolepermission> getAllRolePermissionWithName() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="UserRole">
     @Override
     public Collection<Userrole> getAllUserRole() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createNamedQuery("Userrole.findAll").getResultList();
     }
 
     @Override
     public Userrole getUserRoleById(int userRoleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (Userrole) em.createNamedQuery("Userrole.findByUserRoleId").getSingleResult();
     }
 
     @Override
     public Userrole getUserRoleByUserId(int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.find(Userrole.class, userId);
     }
 
     @Override
     public Userrole getUserRoleByRoleId(int roleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return em.find(Userrole.class, roleId);
     }
 
     @Override
-    public void addUserRole(Userrole userRole) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addUserRole(int userId,int roleId) {
+        Userrole ur=new Userrole();
+        
+        Users users =em.find(Users.class,userId);
+        Role role=em.find(Role.class,roleId);
+        
+        Collection<Userrole> lstur1=users.getUserroleCollection();
+        Collection<Userrole> lstur2=role.getUserroleCollection();
+        
+        ur.setRoleId(role);
+        ur.setUserId(users);
+        lstur1.add(ur);
+        lstur2.add(ur);
+        
+        users.setUserroleCollection(lstur1);
+        role.setUserroleCollection(lstur2);
+        
+        em.merge(role);
+        em.merge(users);
+        em.persist(ur);
+        
     }
 
     @Override
-    public void updateUserRole(int userRoleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void updateUserRole(int userId,int roleId,int userRoleId) {
+        Userrole ur=em.find(Userrole.class, userRoleId);
+        
+        Role role=em.find(Role.class, roleId);
+        Users users=em.find(Users.class, userId);
+        
+        Collection<Userrole> lstur1=role.getUserroleCollection();
+        Collection<Userrole> lstur2=users.getUserroleCollection();
+        
+        ur.setRoleId(role);
+        ur.setUserId(users);
+        lstur1.add(ur);
+        lstur2.add(ur);
+        
+        role.setUserroleCollection(lstur1);
+        users.setUserroleCollection(lstur2);
+        
+        em.merge(role);
+        em.merge(users);
+        em.merge(ur);
+        
     }
 
     @Override
     public void removeUserRole(int userRoleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Userrole obj=em.find(Userrole.class, userRoleId);
+        em.remove(obj);
     }
+    // </editor-fold>
 
     
     
     
     
     
+    //============================USERS=================================
     
+    public void persist(Object object) {
+        em.persist(object);
+    }
+
+    
+    // <editor-fold defaultstate="collapsed" desc="User">
     @Override
     public Collection<Users> getAllUsers() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -318,36 +325,150 @@ public class adminejb implements adminejbLocal {
     public void removeUser(int userId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Category">
+    @Override
+    public Collection<Category> getAllCategory() {
+        return em.createNamedQuery("Category.findAll").getResultList();
+    }
 
     @Override
-    public Collection<Rolepermission> getAllRolePermissionWithName() {
+    public Category getCategoryById(int categoryId) {
+        return (Category) em.find(Category.class, categoryId);
+    }
+
+    @Override
+    public Collection<Category> getCategoryByName(String categoryName) {
+        Collection<Category> categorys = em.createNamedQuery("Category.findByCategoryName")
+                .setParameter("categoryName", categoryName)
+                .getResultList();
+
+        return categorys;
+    }
+
+    @Override
+    public void AddCategory(String categoryName) {
+        Category category = new Category();
+        category.setCategoryName(categoryName);
+        em.persist(category);
+    }
+
+    @Override
+    public void updateCategory(int categoryId, String categoryName) {
+        Category category = (Category) em.find(Category.class, categoryId);
+        category.setCategoryName(categoryName);
+        em.merge(category);
+    }
+
+    @Override
+    public void removeCategory(int categoryId) {
+        Category category = (Category) em.find(Category.class, categoryId);
+        em.remove(category);
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="CategoryRatingCriteria">
+    @Override
+    public Collection<Categoryratingcriteria> getAllCategoryRatingCriteria() {
+        return em.createNamedQuery("Categoryratingcriteria.findAll").getResultList();
+    }
+
+    @Override
+    public Categoryratingcriteria getCategoryRatingCriteriaById(int categoryratingcriteriaId) {
+        return (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryratingcriteriaId);
+    }
+
+    //test baki
+    @Override
+    public Collection<Categoryratingcriteria> getCategoryRatingCriteriaByCategoryId(int categoryId) {
+        Collection<Categoryratingcriteria> categoryratingcriterias = em.createNamedQuery("Categoryratingcriteria.getCategoryRatingCriteriaByCategoryId")
+                .setParameter("categoryId", categoryId)
+                .getResultList();
+
+        return categoryratingcriterias;
+    }
+
+    @Override
+    public Categoryratingcriteria getCategoryRatingCriteriaByRatingCriteriaId(int ratingCriteriaId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void persist(Object object) {
-        em.persist(object);
+    @Override
+    public void addCategoryRatingCriteria(int categoryId, int ratingCriteriaId) {
+        Category category = (Category) em.find(Category.class, categoryId);
+        Ratingcriterias ratingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
+
+        Collection<Categoryratingcriteria> categoryratingcriterias = category.getCategoryratingcriteriaCollection();
+        Collection<Categoryratingcriteria> categoryratingcriterias1 = ratingcriterias.getCategoryratingcriteriaCollection();
+
+        Categoryratingcriteria c = new Categoryratingcriteria();
+        c.setCategoryId(category);
+        c.setRatingCriteriaId(ratingcriterias);
+
+        categoryratingcriterias.add(c);
+        categoryratingcriterias1.add(c);
+        category.setCategoryratingcriteriaCollection(categoryratingcriterias);
+        ratingcriterias.setCategoryratingcriteriaCollection(categoryratingcriterias1);
+
+        em.persist(c);
+        em.merge(category);
+        em.merge(ratingcriterias);
+
     }
 
-    
     @Override
-    public void addCategoryRatingCriteria(Categoryratingcriteria categoryratingcriteria) {
-        em.persist(categoryratingcriteria);
-    }
-
-    @Override
-    public void updateCategoryRatingCriteria(int categoryRatingCriteriaId, Categoryratingcriteria categoryratingcriteria) {
-        Categoryratingcriteria objCategoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
-        objCategoryratingcriteria.setCategoryId(categoryratingcriteria.getCategoryId());
-        objCategoryratingcriteria.setRatingCriteriaId(categoryratingcriteria.getRatingCriteriaId());
-        em.merge(objCategoryratingcriteria);
-    }
-
-    @Override
-    public void removeCategoryRatingCriteria(int categoryRatingCriteriaId) {
+    public void updateCategoryRatingCriteria(int categoryRatingCriteriaId, int categoryId, int ratingCriteriaId) {
         Categoryratingcriteria categoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
-        em.remove(categoryratingcriteria);
+        Category category = (Category) em.find(Category.class, categoryId);
+        Ratingcriterias ratingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
+
+        Collection<Categoryratingcriteria> categoryratingcriterias = category.getCategoryratingcriteriaCollection();
+        Collection<Categoryratingcriteria> categoryratingcriterias1 = ratingcriterias.getCategoryratingcriteriaCollection();
+
+        if (categoryratingcriterias.contains(categoryratingcriteria)) {
+            categoryratingcriterias.remove(categoryratingcriteria);
+        }
+
+        if (categoryratingcriterias1.contains(categoryratingcriteria)) {
+            categoryratingcriterias1.remove(categoryratingcriteria);
+        }
+
+        categoryratingcriteria.setCategoryId(category);
+        categoryratingcriteria.setRatingCriteriaId(ratingcriterias);
+
+        categoryratingcriterias.add(categoryratingcriteria);
+        categoryratingcriterias1.add(categoryratingcriteria);
+        category.setCategoryratingcriteriaCollection(categoryratingcriterias);
+        ratingcriterias.setCategoryratingcriteriaCollection(categoryratingcriterias1);
+
+        em.merge(category);
+        em.merge(ratingcriterias);
     }
 
+    @Override
+    public void removeCategoryRatingCriteria(int categoryRatingCriteriaId, int categoryId, int ratingCriteriaId) {
+        Categoryratingcriteria categoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
+        Category category = (Category) em.find(Category.class, categoryId);
+        Ratingcriterias ratingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
+
+        Collection<Categoryratingcriteria> categoryratingcriterias = category.getCategoryratingcriteriaCollection();
+        Collection<Categoryratingcriteria> categoryratingcriterias1 = ratingcriterias.getCategoryratingcriteriaCollection();
+
+        if (categoryratingcriterias.contains(categoryratingcriteria)) {
+            categoryratingcriterias.remove(categoryratingcriteria);
+            category.setCategoryratingcriteriaCollection(categoryratingcriterias);
+        }
+
+        if (categoryratingcriterias1.contains(categoryratingcriteria)) {
+            categoryratingcriterias1.remove(categoryratingcriteria);
+            ratingcriterias.setCategoryratingcriteriaCollection(categoryratingcriterias);
+            em.remove(categoryratingcriteria);
+        }
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Product">
     @Override
     public Collection<Product> getAllProduct() {
         return em.createNamedQuery("Product.findAll").getResultList();
@@ -378,36 +499,119 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void addProductToCategory(Product product) {
+    public void addProductToCategory(int categoryId, String productName, String productImage, String referenceLink, int authorId, int genreId, int publisherId, int companyId) {
+        Category category = em.find(Category.class, categoryId);
+        Collection<Product> products = category.getProductCollection();
+
+        Product product = new Product();
+        product.setCategoryId(category);
+        product.setProductName(productName);
+        product.setProductImage(productImage);
+        product.setReferenceLink(referenceLink);
+
+        if (authorId == 0) {
+            product.setAuthorId(null);
+        } else {
+            Author author = em.find(Author.class, authorId);
+            product.setAuthorId(author);
+        }
+
+        if (genreId == 0) {
+            product.setGenreId(null);
+        } else {
+            Genre genre = em.find(Genre.class, genreId);
+            product.setGenreId(genre);
+        }
+
+        if (publisherId == 0) {
+            product.setPublisherId(null);
+        } else {
+            Publisher publisher = em.find(Publisher.class, publisherId);
+            product.setPublisherId(publisher);
+        }
+
+        if (companyId == 0) {
+            product.setCompanyId(null);
+        } else {
+            Company company = em.find(Company.class, companyId);
+            product.setCompanyId(company);
+        }
+
+        products.add(product);
+        category.setProductCollection(products);
+
         em.persist(product);
+        em.merge(category);
     }
 
     @Override
-    public void updateProductToCategory(int productId, Product product) {
-        Product objProduct = (Product) em.find(Product.class, productId);
-        objProduct.setCategoryId(product.getCategoryId());
-        objProduct.setProductName(product.getProductName());
-        objProduct.setProductImage(product.getProductImage());
-        objProduct.setReferenceLink(product.getReferenceLink());
-        objProduct.setAuthorId(product.getAuthorId());
-        objProduct.setGenreId(product.getGenreId());
-        objProduct.setPublisherId(product.getPublisherId());
-        objProduct.setCompanyId(product.getCompanyId());
-        em.merge(objProduct);
+    public void updateProductToCategory(int productId, int categoryId, String productName, String productImage, String referenceLink, int authorId, int genreId, int publisherId, int companyId) {
+        Product product = em.find(Product.class, productId);
+        Category category = em.find(Category.class, categoryId);
+        Collection<Product> products = category.getProductCollection();
+
+        if (products.contains(product)) {
+            products.remove(product);
+        }
+
+        product.setCategoryId(category);
+        product.setProductName(productName);
+        product.setProductImage(productImage);
+        product.setReferenceLink(referenceLink);
+
+        if (authorId == 0) {
+            product.setAuthorId(null);
+        } else {
+            Author author = em.find(Author.class, authorId);
+            product.setAuthorId(author);
+        }
+
+        if (genreId == 0) {
+            product.setGenreId(null);
+        } else {
+            Genre genre = em.find(Genre.class, genreId);
+            product.setGenreId(genre);
+        }
+
+        if (publisherId == 0) {
+            product.setPublisherId(null);
+        } else {
+            Publisher publisher = em.find(Publisher.class, publisherId);
+            product.setPublisherId(publisher);
+        }
+
+        if (companyId == 0) {
+            product.setCompanyId(null);
+        } else {
+            Company company = em.find(Company.class, companyId);
+            product.setCompanyId(company);
+        }
+
+        products.add(product);
+        category.setProductCollection(products);
+
+        em.merge(category);
     }
 
     @Override
-    public void removeProductFromCategory(int productId) {
+    public void removeProductFromCategory(int productId, int categoryId) {
         Product product = (Product) em.find(Product.class, productId);
-        em.remove(product);
-    }
+        Category category = (Category) em.find(Category.class, categoryId);
 
+        Collection<Product> products = category.getProductCollection();
+        if (products.contains(product)) {
+            products.remove(product);
+            category.setProductCollection(products);
+            em.remove(product);
+        }
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="RatingCriteria">
     @Override
     public Collection<Ratingcriterias> getAllRatingCriteria() {
         return em.createNamedQuery("Ratingcriterias.findAll").getResultList();
     }
-    
-    //---------------------------------------------------------------------------------------------------------------------
 
     @Override
     public Ratingcriterias getRatingCriteriaById(int ratingCriteriaId) {
@@ -424,15 +628,17 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void addRatingCriteria(Ratingcriterias ratingcriterias) {
+    public void addRatingCriteria(String criteriaName) {
+        Ratingcriterias ratingcriterias = new Ratingcriterias();
+        ratingcriterias.setCriteriaName(criteriaName);
         em.persist(ratingcriterias);
     }
 
     @Override
-    public void updateRatingCriteria(int ratingCriteriaId, Ratingcriterias ratingCriteria) {
-        Ratingcriterias objRatingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
-        objRatingcriterias.setCriteriaName(ratingCriteria.getCriteriaName());
-        em.merge(objRatingcriterias);
+    public void updateRatingCriteria(int ratingCriteriaId, String criteriaName) {
+        Ratingcriterias ratingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
+        ratingcriterias.setCriteriaName(criteriaName);
+        em.merge(ratingcriterias);
     }
 
     @Override
@@ -547,4 +753,6 @@ public class adminejb implements adminejbLocal {
         Reviewxcriteria reviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
         em.remove(reviewxcriteria);
     }
+
+    // </editor-fold>
 }

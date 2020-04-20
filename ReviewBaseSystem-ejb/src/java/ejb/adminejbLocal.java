@@ -34,9 +34,9 @@ public interface adminejbLocal {
 
     Collection<Category> getCategoryByName(String categoryName);
 
-    void AddCategory(Category category);
+    void AddCategory(String categoryName);
 
-    void updateCategory(int categoryId, Category category);
+    void updateCategory(int categoryId, String categoryName);
 
     void removeCategory(int categoryId);
 
@@ -49,11 +49,11 @@ public interface adminejbLocal {
 
     Categoryratingcriteria getCategoryRatingCriteriaByRatingCriteriaId(int ratingCriteriaId);
 
-    void addCategoryRatingCriteria(Categoryratingcriteria categoryratingcriteria);
+    void addCategoryRatingCriteria(int categoryId, int ratingCriteriaId);
 
-    void updateCategoryRatingCriteria(int categoryRatingCriteriaId, Categoryratingcriteria categoryratingcriteria);
+    void updateCategoryRatingCriteria(int categoryRatingCriteriaId, int categoryId, int ratingCriteriaId);
 
-    void removeCategoryRatingCriteria(int categoryRatingCriteriaId);
+    void removeCategoryRatingCriteria(int categoryRatingCriteriaId, int categoryId, int ratingCriteriaId);
 
     //Product
     Collection<Product> getAllProduct();
@@ -64,11 +64,11 @@ public interface adminejbLocal {
 
     Collection<Product> getProductByCategoryId(int categoryId);
 
-    void addProductToCategory(Product product);
+    void addProductToCategory(int categoryId, String productName, String productImage, String referenceLink, int authorId, int genreId, int publisherId, int companyId);
 
-    void updateProductToCategory(int productId, Product product);
+    void updateProductToCategory(int productId, int categoryId, String productName, String productImage, String referenceLink, int authorId, int genreId, int publisherId, int companyId);
 
-    void removeProductFromCategory(int productId);
+    void removeProductFromCategory(int productId, int categoryId);
 
     //RatingCriteria
     Collection<Ratingcriterias> getAllRatingCriteria();
@@ -77,13 +77,88 @@ public interface adminejbLocal {
 
     Collection<Ratingcriterias> getRatingCriteriaByCriteriaName(String criteriaName);
 
-    void addRatingCriteria(Ratingcriterias ratingcriterias);
+    void addRatingCriteria(String criteriaName);
 
-    void updateRatingCriteria(int ratingCriteriaId, Ratingcriterias ratingcriterias);
+    void updateRatingCriteria(int ratingCriteriaId, String criteriaName);
 
     void removeRatingCriteria(int ratingCriteriaId);
 
-    //Reviews
+    //RolePermission 
+    Collection<Rolepermission> getAllRolePermission();
+
+    Collection<Rolepermission> getAllRolePermissionByname();
+
+    Collection<Rolepermission> getAllRolePermissionWithName();
+
+    Rolepermission getRolePermissionById(int rolePermissionId);
+
+    Rolepermission getRolePermissionByRoleId(int roleId);
+
+    Rolepermission getRolePermissionByPermissionId(int permissionId);
+
+    void addRolePermission(int roleId, int permissionId);
+
+    void updateRolePermission(int roleId, int permissionId, int rolePermissionId);
+
+    void removeRolePermission(int rolePermissionId);
+
+    //UserRole
+    Collection<Userrole> getAllUserRole();
+
+    Userrole getUserRoleById(int userRoleId);
+
+    Userrole getUserRoleByUserId(int userId);
+
+    Userrole getUserRoleByRoleId(int roleId);
+
+    void addUserRole(int userId, int roleId);
+
+    void updateUserRole(int userId, int roleId, int userRoleId);
+
+    void removeUserRole(int userRoleId);
+
+    //Permission
+    Collection<Permission> getAllPermissions();
+
+    Permission getPermissionById(int permissionId);
+
+    Permission getPermissionByName(String permissionName);
+
+    void addPermission(Permission permission);
+
+    void updatePermission(int permissionId, Permission permission);
+
+    void removePermission(int permissionId);
+
+    //user    
+    Collection<Users> getAllUsers();
+
+    Users getUserById(int userId);
+
+    Users getUserByName(String name);
+
+    Users getUserByEmail(String email);
+
+    Users getUserByCity(String city);
+
+    void addUser(Users objUser);
+
+    void updateUser(int userId);
+
+    void removeUser(int userId);
+
+    //Role
+    Role getRoleById(int roleId);
+
+    Role getRoleByName(String roleName);
+
+    void addRole(Role role);
+
+    void updateRole(int roleId, Role role);
+
+    void removeRole(int roleId);
+
+    //Review
     Collection<Reviews> getAllReviews();
 
     Reviews getReviewById(int reviewId);
@@ -99,8 +174,9 @@ public interface adminejbLocal {
     void updateReview(int reviewId, Reviews reviews);
 
     void removeReview(int reviewId);
-
-    //ReviewxCriteria
+    
+    
+    //ReviewXCriteria
     Collection<Reviewxcriteria> getAllReviewxCriteria();
 
     Reviewxcriteria getReviewxCriteriaById(int reviewXcriteriaId);
@@ -116,61 +192,4 @@ public interface adminejbLocal {
     void updateReviewxCriteria(int reviewXcriteriaId, Reviewxcriteria reviewxcriteria);
 
     void removeReviewxCriteria(int reviewXcriteriaId);
-
-    Role getRoleById(int roleId);
-
-    Role getRoleByName(String roleName);
-
-    void addRole(Role role);
-
-    void updateRole(int roleId,Role role);
-
-    void removeRole(int roleId);
-
-    //RolePermission 
-    Collection<Rolepermission> getAllRolePermission();
-    
-    Collection<Rolepermission> getAllRolePermissionByname();
-    
-    
-    Rolepermission getRolePermissionById(int rolePermissionId);
-
-    Rolepermission getRolePermissionByRoleId(int roleId);
-
-    Rolepermission getRolePermissionByPermissionId(int permissionId);
-
-    void addRolePermission(int roleId,int permissionId);
-
-    void updateRolePermission(int roleId,int permissionId,int rolePermissionId);
-
-    void removeRolePermission(int rolePermissionId);
-
-    //UserRole
-    Collection<Userrole> getAllUserRole();
-
-    Userrole getUserRoleById(int userRoleId);
-
-    Userrole getUserRoleByUserId(int userId);
-
-    Userrole getUserRoleByRoleId(int roleId);
-
-    void addUserRole(int userId,int roleId);
-
-    void updateUserRole(int userId,int roleId,int userRoleId);
-
-    void removeUserRole(int userRoleId);
-
-    //Permission
-    Collection<Permission> getAllPermissions();
-
-    Permission getPermissionById(int permissionId);
-
-    Permission getPermissionByName(String permissionName);
-
-    void addPermission(Permission permission);
-
-    void updatePermission(int permissionId,Permission permission);
-
-    void removePermission(int permissionId);
-
 }

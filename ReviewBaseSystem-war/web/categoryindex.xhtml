@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+    xmlns:p="http://primefaces.org/ui"
+    xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      >
+
+    <body>
+
+        <ui:composition template="./mainTemplate.xhtml">
+
+            <ui:define name="content">
+     
+                <f:view>
+                    <h:form>
+                        <h1><h:outputText value="Category List"/></h1>
+                        <h2><h:commandLink value="Add Category" action="addcategory.xhtml"/></h2>
+                        <p:dataTable value="#{categoryManagedBean.allCategory}" var="item">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="CategoryId"/>
+                                </f:facet>
+                                <h:outputText value="#{item.categoryId}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="CategoryName"/>
+                                </f:facet>
+                                <h:outputText value="#{item.categoryName}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Edit"/>
+                                </f:facet>
+                                <p:commandLink action="#{categoryManagedBean.getCategory(item.categoryId)}" value="Edit"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Delete"/>
+                                </f:facet>
+                                <p:commandLink action="#{categoryManagedBean.deleteCategory(item.categoryId)}" value="Delete"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </f:view>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

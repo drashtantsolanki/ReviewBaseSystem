@@ -23,22 +23,22 @@ and open the template in the editor.
 }
 
 .content{
-    width: 75%;
-    min-height: 500px;
+    width: auto;
+    height: auto;
     border: 1px solid black;
     padding: 10px;
     box-sizing: border-box;
     float: left;
 }
 
-.sidebar{
+/*.sidebar{
     width: 24%;
     min-height: 500px;
     border: 1px solid black;
     padding: 10px;
     box-sizing: border-box;
     float: right;
-}
+}*/
 
 .footer{
     border: 1px solid black;

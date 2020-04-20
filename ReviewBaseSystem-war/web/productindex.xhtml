@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <f:view>
+            <h:form>
+                <h1><h:outputText value="List"/></h1>
+                <p:dataTable value="#{productManagedBean.allProduct}" var="item">
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="ProductId"/>
+                        </f:facet>
+                        <h:outputText value="#{item.productId}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="ProductName"/>
+                        </f:facet>
+                        <h:outputText value="#{item.productName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="ProductImage"/>
+                        </f:facet>
+                        <h:outputText value="#{item.productImage}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="ReferenceLink"/>
+                        </f:facet>
+                        <h:outputText value="#{item.referenceLink}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="AuthorId"/>
+                        </f:facet>
+                        <h:outputText value="#{item.authorId.authorName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="CompanyId"/>
+                        </f:facet>
+                        <h:outputText value="#{item.companyId.companyName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="GenreId"/>
+                        </f:facet>
+                        <h:outputText value="#{item.genreId.genreName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="PublisherId"/>
+                        </f:facet>
+                        <h:outputText value="#{item.publisherId.publisherName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="CategoryId"/>
+                        </f:facet>
+                        <h:outputText value="#{item.categoryId.categoryName}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </f:view>
+    </h:body>
+</html>
+

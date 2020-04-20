@@ -43,7 +43,7 @@ public class Genre implements Serializable {
     private Integer genreId;
     @Basic(optional = false)
     @Column(name = "GenreName")
-    private int genreName;
+    private String genreName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "genreId")
     private Collection<Product> productCollection;
 
@@ -54,7 +54,7 @@ public class Genre implements Serializable {
         this.genreId = genreId;
     }
 
-    public Genre(Integer genreId, int genreName) {
+    public Genre(Integer genreId, String genreName) {
         this.genreId = genreId;
         this.genreName = genreName;
     }
@@ -67,11 +67,11 @@ public class Genre implements Serializable {
         this.genreId = genreId;
     }
 
-    public int getGenreName() {
+    public String getGenreName() {
         return genreName;
     }
 
-    public void setGenreName(int genreName) {
+    public void setGenreName(String genreName) {
         this.genreName = genreName;
     }
 

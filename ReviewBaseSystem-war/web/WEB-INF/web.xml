@@ -5,18 +5,10 @@
         <param-value>Development</param-value>
     </context-param>
     <servlet>
-        <servlet-name>TestServlet</servlet-name>
-        <servlet-class>servlets.TestServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>TestServlet</servlet-name>
-        <url-pattern>/TestServlet</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>

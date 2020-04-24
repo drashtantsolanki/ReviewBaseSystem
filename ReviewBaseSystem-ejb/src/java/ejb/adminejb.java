@@ -18,7 +18,12 @@ import entity.Genre;
 import entity.Product;
 import entity.Publisher;
 import entity.Ratingcriterias;
+import entity.Reviews;
+import entity.Reviewxcriteria;
+
 import java.util.Collection;
+import java.util.Date;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -140,14 +145,41 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void addRolePermission(Rolepermission rolePermission) {
-        em.persist(rolePermission);
+    public void addRolePermission(int roleId, int permissionId) {
+        Rolepermission rp = new Rolepermission();
+
+        Role role = em.find(Role.class, roleId);
+        Permission permission = em.find(Permission.class, permissionId);
+
+        Collection<Rolepermission> lstrp1 = role.getRolepermissionCollection();
+        Collection<Rolepermission> lstrp2 = permission.getRolepermissionCollection();
+        rp.setRoleId(role);
+        rp.setPermissionId(permission);
+        lstrp1.add(rp);
+        lstrp2.add(rp);
+        em.merge(role);
+        em.merge(permission);
+        em.persist(rp);
     }
 
     @Override
-    public void updateRolePermission(Rolepermission rolePermission) {
-        Rolepermission rp = em.find(Rolepermission.class, rolePermission.getRolePermissionId());
-        em.merge(rolePermission);
+    public void updateRolePermission(int roleId, int permissionId, int rolePermissionId) {
+        Rolepermission rp = em.find(Rolepermission.class, rolePermissionId);
+
+        Role role = em.find(Role.class, roleId);
+        Permission permission = em.find(Permission.class, permissionId);
+
+        Collection<Rolepermission> lstrp1 = role.getRolepermissionCollection();
+        Collection<Rolepermission> lstrp2 = permission.getRolepermissionCollection();
+
+        rp.setRoleId(role);
+        rp.setPermissionId(permission);
+        lstrp1.add(rp);
+        lstrp2.add(rp);
+
+        em.merge(role);
+        em.merge(permission);
+        em.merge(rp);
     }
 
     @Override
@@ -165,39 +197,83 @@ public class adminejb implements adminejbLocal {
     // <editor-fold defaultstate="collapsed" desc="UserRole">
     @Override
     public Collection<Userrole> getAllUserRole() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createNamedQuery("Userrole.findAll").getResultList();
     }
 
     @Override
     public Userrole getUserRoleById(int userRoleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (Userrole) em.createNamedQuery("Userrole.findByUserRoleId").getSingleResult();
     }
 
     @Override
     public Userrole getUserRoleByUserId(int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.find(Userrole.class, userId);
     }
 
     @Override
     public Userrole getUserRoleByRoleId(int roleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.find(Userrole.class, roleId);
     }
 
     @Override
-    public void addUserRole(Userrole userRole) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addUserRole(int userId, int roleId) {
+        Userrole ur = new Userrole();
+
+        Users users = em.find(Users.class, userId);
+        Role role = em.find(Role.class, roleId);
+
+        Collection<Userrole> lstur1 = users.getUserroleCollection();
+        Collection<Userrole> lstur2 = role.getUserroleCollection();
+
+        ur.setRoleId(role);
+        ur.setUserId(users);
+        lstur1.add(ur);
+        lstur2.add(ur);
+
+        users.setUserroleCollection(lstur1);
+        role.setUserroleCollection(lstur2);
+
+        em.merge(role);
+        em.merge(users);
+        em.persist(ur);
+
     }
 
     @Override
-    public void updateUserRole(int userRoleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void updateUserRole(int userId, int roleId, int userRoleId) {
+        Userrole ur = em.find(Userrole.class, userRoleId);
+
+        Role role = em.find(Role.class, roleId);
+        Users users = em.find(Users.class, userId);
+
+        Collection<Userrole> lstur1 = role.getUserroleCollection();
+        Collection<Userrole> lstur2 = users.getUserroleCollection();
+
+        ur.setRoleId(role);
+        ur.setUserId(users);
+        lstur1.add(ur);
+        lstur2.add(ur);
+
+        role.setUserroleCollection(lstur1);
+        users.setUserroleCollection(lstur2);
+
+        em.merge(role);
+        em.merge(users);
+        em.merge(ur);
+
     }
 
     @Override
     public void removeUserRole(int userRoleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Userrole obj = em.find(Userrole.class, userRoleId);
+        em.remove(obj);
     }
     // </editor-fold>
+
+    //============================USERS=================================
+    public void persist(Object object) {
+        em.persist(object);
+    }
 
     // <editor-fold defaultstate="collapsed" desc="User">
     @Override
@@ -459,7 +535,7 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void updateProductToCategory(int productId, int categoryId, String productName, String productImage, String referenceLink, int authorId, int genreId, int publisherId, int companyId) {
+    public void updateProductToCategory(int productId, int categoryId, String productName, String referenceLink, int authorId, int genreId, int publisherId, int companyId) {
         Product product = em.find(Product.class, productId);
         Category category = em.find(Category.class, categoryId);
         Collection<Product> products = category.getProductCollection();
@@ -470,7 +546,6 @@ public class adminejb implements adminejbLocal {
 
         product.setCategoryId(category);
         product.setProductName(productName);
-        product.setProductImage(productImage);
         product.setReferenceLink(referenceLink);
 
         if (authorId == 0) {
@@ -505,6 +580,13 @@ public class adminejb implements adminejbLocal {
         category.setProductCollection(products);
 
         em.merge(category);
+    }
+
+    @Override
+        public void updateImage(int productid, String productimage) {
+        Product product = em.find(Product.class, productid);
+        product.setProductImage(productimage);
+        em.merge(product);
     }
 
     @Override
@@ -560,5 +642,113 @@ public class adminejb implements adminejbLocal {
         Ratingcriterias ratingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
         em.remove(ratingcriterias);
     }
+
+    @Override
+    public Collection<Reviews> getAllReviews() {
+        return em.createNamedQuery("Reviews.findAll").getResultList();
+    }
+
+    @Override
+    public Reviews getReviewById(int reviewId) {
+        return (Reviews) em.find(Reviews.class, reviewId);
+    }
+
+    @Override
+    public Collection<Reviews> getReviewByProductID(int productId) {
+        Collection<Reviews> reviewses = em.createNamedQuery("Reviews.findByProductId")
+                .setParameter("productId", productId)
+                .getResultList();
+
+        return reviewses;
+    }
+
+    @Override
+    public Collection<Reviews> getReviewByDate(Date date) {
+        Collection<Reviews> reviewses = em.createNamedQuery("Reviews.findByDate")
+                .setParameter("date", date)
+                .getResultList();
+
+        return reviewses;
+    }
+
+    @Override
+    public Collection<Reviews> getReviewsByUserId(int userId) {
+        Collection<Reviews> reviewses = em.createNamedQuery("Reviews.findByUserId")
+                .setParameter("userId", userId)
+                .getResultList();
+
+        return reviewses;
+    }
+
+    @Override
+    public void addReview(Reviews reviews) {
+        em.persist(reviews);
+    }
+
+    @Override
+    public void updateReview(int reviewId, Reviews reviews) {
+        Reviews objReviews = (Reviews) em.find(Reviews.class, reviewId);
+        objReviews.setProductId(reviews.getProductId());
+        objReviews.setDate(reviews.getDate());
+        objReviews.setUserId(reviews.getUserId());
+        em.merge(objReviews);
+    }
+
+    @Override
+    public void removeReview(int reviewId) {
+        Reviews reviews = (Reviews) em.find(Reviews.class, reviewId);
+        em.remove(reviews);
+    }
+
+    @Override
+    public Collection<Reviewxcriteria> getAllReviewxCriteria() {
+        return em.createNamedQuery("Reviewxcriteria.findAll").getResultList();
+    }
+
+    @Override
+    public Reviewxcriteria getReviewxCriteriaById(int reviewXcriteriaId) {
+        return (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
+    }
+
+    @Override
+    public Collection<Reviewxcriteria> getReviewxCriteriaByRate(float rate) {
+        Collection<Reviewxcriteria> reviewxcriterias = em.createNamedQuery("Reviewxcriteria.findByRate")
+                .setParameter("rate", rate)
+                .getResultList();
+
+        return reviewxcriterias;
+    }
+
+    @Override
+    public Reviewxcriteria getReviewxCriteriaByCategoryRatingCriteriaId(int categoryRatingCriteriaId) {
+        return (Reviewxcriteria) em.find(Reviewxcriteria.class, categoryRatingCriteriaId);
+    }
+
+    @Override
+    public Reviewxcriteria getReviewxCriteriaByReviewId(int reviewId) {
+        return (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewId);
+    }
+
+    @Override
+    public void addReviewxCriteria(Reviewxcriteria reviewxcriteria) {
+        em.persist(reviewxcriteria);
+    }
+
+    @Override
+    public void updateReviewxCriteria(int reviewXcriteriaId, Reviewxcriteria reviewxcriteria) {
+        Reviewxcriteria objReviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
+        objReviewxcriteria.setRate(reviewxcriteria.getRate());
+        objReviewxcriteria.setDescription(reviewxcriteria.getDescription());
+        objReviewxcriteria.setCategoryRatingCriteriaId(reviewxcriteria.getCategoryRatingCriteriaId());
+        objReviewxcriteria.setReviewId(reviewxcriteria.getReviewId());
+        em.merge(objReviewxcriteria);
+    }
+
+    @Override
+    public void removeReviewxCriteria(int reviewXcriteriaId) {
+        Reviewxcriteria reviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
+        em.remove(reviewxcriteria);
+    }
+
     // </editor-fold>
 }

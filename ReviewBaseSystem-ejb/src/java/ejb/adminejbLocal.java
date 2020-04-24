@@ -14,7 +14,10 @@ import entity.Category;
 import entity.Categoryratingcriteria;
 import entity.Product;
 import entity.Ratingcriterias;
+import entity.Reviews;
+import entity.Reviewxcriteria;
 import java.util.Collection;
+import java.util.Date;
 import javax.ejb.Local;
 
 /**
@@ -63,7 +66,9 @@ public interface adminejbLocal {
 
     void addProductToCategory(int categoryId, String productName, String productImage, String referenceLink, int authorId, int genreId, int publisherId, int companyId);
 
-    void updateProductToCategory(int productId, int categoryId, String productName, String productImage, String referenceLink, int authorId, int genreId, int publisherId, int companyId);
+    void updateProductToCategory(int productId, int categoryId, String productName, String referenceLink, int authorId, int genreId, int publisherId, int companyId);
+
+    void updateImage(int productid, String productimage);
 
     void removeProductFromCategory(int productId, int categoryId);
 
@@ -93,9 +98,9 @@ public interface adminejbLocal {
 
     Rolepermission getRolePermissionByPermissionId(int permissionId);
 
-    void addRolePermission(Rolepermission rolePermission);
+    void addRolePermission(int roleId, int permissionId);
 
-    void updateRolePermission(Rolepermission rolePermission);
+    void updateRolePermission(int roleId, int permissionId, int rolePermissionId);
 
     void removeRolePermission(int rolePermissionId);
 
@@ -108,9 +113,9 @@ public interface adminejbLocal {
 
     Userrole getUserRoleByRoleId(int roleId);
 
-    void addUserRole(Userrole userRole);
+    void addUserRole(int userId, int roleId);
 
-    void updateUserRole(int userRoleId);
+    void updateUserRole(int userId, int roleId, int userRoleId);
 
     void removeUserRole(int userRoleId);
 
@@ -155,4 +160,37 @@ public interface adminejbLocal {
 
     void removeRole(int roleId);
 
+    //Review
+    Collection<Reviews> getAllReviews();
+
+    Reviews getReviewById(int reviewId);
+
+    Collection<Reviews> getReviewByProductID(int productId);
+
+    Collection<Reviews> getReviewByDate(Date date);
+
+    Collection<Reviews> getReviewsByUserId(int userId);
+
+    void addReview(Reviews reviews);
+
+    void updateReview(int reviewId, Reviews reviews);
+
+    void removeReview(int reviewId);
+
+    //ReviewXCriteria
+    Collection<Reviewxcriteria> getAllReviewxCriteria();
+
+    Reviewxcriteria getReviewxCriteriaById(int reviewXcriteriaId);
+
+    Collection<Reviewxcriteria> getReviewxCriteriaByRate(float rate);
+
+    Reviewxcriteria getReviewxCriteriaByCategoryRatingCriteriaId(int categoryRatingCriteriaId);
+
+    Reviewxcriteria getReviewxCriteriaByReviewId(int reviewId);
+
+    void addReviewxCriteria(Reviewxcriteria reviewxcriteria);
+
+    void updateReviewxCriteria(int reviewXcriteriaId, Reviewxcriteria reviewxcriteria);
+
+    void removeReviewxCriteria(int reviewXcriteriaId);
 }

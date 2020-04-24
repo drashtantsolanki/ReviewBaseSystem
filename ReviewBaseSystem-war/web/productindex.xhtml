@@ -3,72 +3,253 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <f:view>
-            <h:form>
-                <h1><h:outputText value="List"/></h1>
-                <p:dataTable value="#{productManagedBean.allProduct}" var="item">
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="ProductId"/>
-                        </f:facet>
-                        <h:outputText value="#{item.productId}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="ProductName"/>
-                        </f:facet>
-                        <h:outputText value="#{item.productName}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="ProductImage"/>
-                        </f:facet>
-                        <h:outputText value="#{item.productImage}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="ReferenceLink"/>
-                        </f:facet>
-                        <h:outputText value="#{item.referenceLink}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="AuthorId"/>
-                        </f:facet>
-                        <h:outputText value="#{item.authorId.authorName}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="CompanyId"/>
-                        </f:facet>
-                        <h:outputText value="#{item.companyId.companyName}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="GenreId"/>
-                        </f:facet>
-                        <h:outputText value="#{item.genreId.genreName}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="PublisherId"/>
-                        </f:facet>
-                        <h:outputText value="#{item.publisherId.publisherName}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="CategoryId"/>
-                        </f:facet>
-                        <h:outputText value="#{item.categoryId.categoryName}"/>
-                    </p:column>
-                </p:dataTable>
-            </h:form>
-        </f:view>
+        <div id="top">
+            <ui:insert name="top">
+                <ui:include src="master/Header.xhtml"/>
+            </ui:insert>
+        </div>
+        <div class="container">
+            <f:view>
+                <h:form>
+                    <h1><h:outputText value="List"/></h1>
+                    <p:dataTable value="#{productManagedBean.allProduct}" var="item">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="ProductId"/>
+                            </f:facet>
+                            <h:outputText value="#{item.productId}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="ProductName"/>
+                            </f:facet>
+                            <h:outputText value="#{item.productName}"/>
+                        </p:column>
+                        <p:column style="width: 20%">
+                            <f:facet name="header">
+                                <h:outputText value="ProductImage"/>
+                            </f:facet>
+                            <p:graphicImage value="images/productimages/#{item.productImage}" height="200px" width="200px"/>
+                            <p:fileUpload value="#{productManagedBean.file}" mode="simple"/>
+                            <p:commandLink action="#{productManagedBean.handleFileUpload(item.productId)}" ajax="false" value="Upload"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="ReferenceLink"/>
+                            </f:facet>
+                            <h:outputText value="#{item.referenceLink}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="AuthorId"/>
+                            </f:facet>
+                            <h:outputText value="#{item.authorId.authorName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="CompanyId"/>
+                            </f:facet>
+                            <h:outputText value="#{item.companyId.companyName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="GenreId"/>
+                            </f:facet>
+                            <h:outputText value="#{item.genreId.genreName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="PublisherId"/>
+                            </f:facet>
+                            <h:outputText value="#{item.publisherId.publisherName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="CategoryId"/>
+                            </f:facet>
+                            <h:outputText value="#{item.categoryId.categoryName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Edit"/>
+                            </f:facet>
+                            <h:commandLink action="#{productManagedBean.getProduct(item.productId)}" value="Edit"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </f:view>
+            <!-- Shop Page Area -->
+            <div class="tm-section shop-page-area bg-white tm-padding-section">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-9 col-12 order-1 order-lg-2">
+                            <form action="#" class="tm-shop-header">
+                                <p class="tm-shop-countview">Showing 1 to 9 of 16 </p>
+                                <select>
+                                    <option value="value">Default Sorting</option>
+                                    <option value="value">Name A-Z</option>
+                                    <option value="value">Date</option>
+                                    <option value="value">Best Sellers</option>
+                                    <option value="value">Trending</option>
+                                </select>
+                            </form>
+                            <div class="tm-shop-products">
+                                <div class="row mt-50-reverse">
+
+                                    <!-- Single Product --> 
+                                    <h:form>
+                                        <c:forEach var="productitem" items="#{productManagedBean.allProduct}">
+
+                                            <div class="col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
+                                                <div class="tm-product">
+                                                    <div class="tm-product-image">
+                                                        <a class="tm-product-imagelink" href="product-details.html">
+                                                            <p:graphicImage value="images/productimages/#{productitem.productImage}"/>
+                                                        </a>
+                                                        <ul class="tm-product-actions">
+                                                            <li><a href="cart.html"><i class="fas fa-shopping-cart"></i></a></li>
+                                                            <li><button type="button" data-toggle="modal" data-target="#tm-product-quickview"><i
+                                                                        class="far fa-eye"></i></button></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="tm-product-content">
+                                                        <h5 class="tm-product-title">
+                                                            <a href="product-details.html">
+                                                                <h:outputText value="#{productitem.productName}"/>
+                                                            </a>
+                                                        </h5>
+                                                        <div class="tm-product-rating">
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                        </div>
+                                                        <h5 class="tm-product-price">$99.99</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </c:forEach>
+                                    </h:form>
+                                    <!--// Single Product -->
+
+                                </div>
+                            </div>
+                            <div class="tm-pagination mt-50">
+                                <ul>
+                                    <li class="is-active"><a href="shop.html">1</a></li>
+                                    <li><a href="shop.html">2</a></li>
+                                    <li><a href="shop.html">3</a></li>
+                                    <li><a href="shop.html">Next Page</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-12 order-2 order-lg-1">
+                            <div class="widgets sidebar-widgets3 sticky-sidebar">
+
+                                <!-- Single Widget -->
+                                <div class="single-widget widget-categories">
+                                    <h5 class="widget-title">Categories</h5>
+                                    <ul>
+                                        <h:form>
+                                            <c:forEach var="item" items="#{categoryManagedBean.allCategory}">
+                                                <li>
+                                                    <p:commandLink value="#{item.categoryName}">
+                                                        <p:ajax event="click" />
+                                                    </p:commandLink>
+                                                </li>
+                                            </c:forEach>
+                                        </h:form>
+                                    </ul>
+                                </div>
+                                <!--// Single Widget -->
+
+                                <!-- Single Widget -->
+                                <div class="single-widget widget-pricefilter">
+                                    <h5 class="widget-title">Filter by Price</h5>
+                                    <div class="widget-pricefilter-inner">
+                                        <div class="tm-rangeslider" data-range_min="0" data-range_max="800"
+                                             data-cur_min="200" data-cur_max="550">
+                                            <div class="tm-rangeslider-bar nst-animating"></div>
+                                            <span class="tm-rangeslider-leftgrip nst-animating" tabindex="0"></span>
+                                            <span class="tm-rangeslider-rightgrip nst-animating" tabindex="0"></span>
+                                        </div>
+                                        <div class="widget-pricefilter-actions">
+                                            <p class="widget-pricefilter-price">Price: $<span class="tm-rangeslider-leftlabel">308</span>
+                                                - $<span class="tm-rangeslider-rightlabel">798</span></p>
+                                            <button class="widget-pricefilter-button">Filter</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--// Single Widget -->
+
+                                <!-- Single Widget -->
+                                <div class="single-widget widget-popularproduct">
+                                    <h5 class="widget-title">Popular Product</h5>
+                                    <ul>
+                                        <li>
+                                            <a href="product-details.html" class="widget-popularproduct-image">
+                                                <img src="assets/images/product/thumbnails/product-thumbnail-1.png" alt="product thumbnail"/>
+                                            </a>
+                                            <div class="widget-popularproduct-content">
+                                                <h6><a href="product-details.html">Corded Headphones</a></h6>
+                                                <span>$20.00</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <a href="product-details.html" class="widget-popularproduct-image">
+                                                <img src="assets/images/product/thumbnails/product-thumbnail-2.png" alt="product thumbnail"/>
+                                            </a>
+                                            <div class="widget-popularproduct-content">
+                                                <h6><a href="product-details.html">Analog Watch</a></h6>
+                                                <span>$35.99</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <a href="product-details.html" class="widget-popularproduct-image">
+                                                <img src="assets/images/product/thumbnails/product-thumbnail-3.png" alt="product thumbnail"/>
+                                            </a>
+                                            <div class="widget-popularproduct-content">
+                                                <h6><a href="product-details.html">Pentax SLR Camera</a></h6>
+                                                <span>$99.99</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!--// Single Widget -->
+
+                                <!-- Single Widget -->
+                                <div class="single-widget widget-size">
+                                    <h5 class="widget-title">Size Options</h5>
+                                    <ul>
+                                        <li><a href="#">Small </a></li>
+                                        <li><a href="#">Medium</a></li>
+                                        <li><a href="#">Large</a></li>
+                                        <li><a href="#">Extra Large </a></li>
+                                    </ul>
+                                </div>
+                                <!--// Single Widget -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--// Shop Page Area -->
+        </div>
+        <div id="bottom">
+            <ui:insert name="bottom">
+                <ui:include src="master/Footer.xhtml" />
+            </ui:insert>
+        </div>
     </h:body>
 </html>
 

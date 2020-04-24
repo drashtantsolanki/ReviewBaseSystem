@@ -12,7 +12,7 @@
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>  
     <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>nova-light</param-value>
@@ -23,6 +23,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/adminhome.xhtml</welcome-file>
+        <welcome-file>productindex.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>

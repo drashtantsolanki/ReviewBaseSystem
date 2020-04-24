@@ -7,14 +7,18 @@ package JSFBeans;
 
 import client.RatingCriteriaJerseyClient;
 import ejb.adminejbLocal;
+import entity.Category;
 import entity.Ratingcriterias;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -82,13 +86,23 @@ public class RatingCriteriaManagedBean {
         } else {
             jerseyClient.addRatingCriteria(ratingcriteriaName);
         }
-        return "ratingcriteriaindex.xhtml";
+        return "ratingcriteriaindex.xhtml?faces-redirect=true";
+    }
+
+    public void onRowEdit(RowEditEvent<Ratingcriterias> event) {
+        FacesMessage msg = new FacesMessage("Edit Successfully", event.getObject().getCriteriaName());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        System.out.println(event.getObject().getCriteriaName());
+    }
+
+    public void onRowCancel(RowEditEvent<Ratingcriterias> event) {
+        FacesMessage msg = new FacesMessage("Edit Cancelled", event.getObject().getCriteriaName());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public String deleteRatingCriteria(String ratingcriteriaId) {
-        System.out.println("in delete" + ratingcriteriaId);
         jerseyClient.deleteRatingCriteria(ratingcriteriaId);
-        return "ratingcriteriaindex.xhtml";
+        return "ratingcriteriaindex.xhtml?faces-redirect=true";
     }
 
     public String getRatingCriteria(String ratingcriteriaId) {

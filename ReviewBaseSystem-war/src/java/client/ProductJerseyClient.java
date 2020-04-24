@@ -42,8 +42,12 @@ public class ProductJerseyClient {
         webTarget.path(java.text.MessageFormat.format("addProduct/{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}", new Object[]{categoryid, productname, productimage, referencelink, authorid, genreid, publisherid, companyid})).request().post(null);
     }
 
-    public void updateProduct(String productid, String categoryid, String productname, String productimage, String referencelink, String authorid, String genreid, String publisherid, String companyid) throws ClientErrorException {
-        webTarget.path(java.text.MessageFormat.format("updateProduct/{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}", new Object[]{productid, categoryid, productname, productimage, referencelink, authorid, genreid, publisherid, companyid})).request().post(null);
+    public void updateImage(String productid, String productimage) throws ClientErrorException {
+        webTarget.path(java.text.MessageFormat.format("updateProductWithImage/{0}/{1}", new Object[]{productid,productimage})).request().post(null);
+    }
+
+    public void updateProduct(String productid, String categoryid, String productname, String referencelink, String authorid, String genreid, String publisherid, String companyid) throws ClientErrorException {
+        webTarget.path(java.text.MessageFormat.format("updateProductWithImage/{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}", new Object[]{productid, categoryid, productname, referencelink, authorid, genreid, publisherid, companyid})).request().post(null);
     }
 
     public <T> T allProduct(Class<T> responseType) throws ClientErrorException {
@@ -58,5 +62,5 @@ public class ProductJerseyClient {
     public void close() {
         client.close();
     }
-    
+
 }

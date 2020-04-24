@@ -6,15 +6,22 @@
 package JSFBeans;
 
 import client.CategoryJerseyClient;
+import com.oracle.wls.shaded.org.apache.bcel.generic.AALOAD;
 import ejb.adminejbLocal;
 import entity.Category;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
+import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -22,7 +29,7 @@ import javax.ws.rs.core.Response;
  */
 @Named(value = "categoryManagedBean")
 @RequestScoped
-public class CategoryManagedBean {
+public class CategoryManagedBean implements Serializable {
 
     @EJB
     private adminejbLocal admin;
@@ -59,6 +66,25 @@ public class CategoryManagedBean {
         this.categoryName = CategoryName;
     }
 
+    public CategoryJerseyClient getJerseyClient() {
+        return jerseyClient;
+    }
+
+    public void setJerseyClient(CategoryJerseyClient jerseyClient) {
+        this.jerseyClient = jerseyClient;
+    }
+
+    public void onRowEdit(RowEditEvent<Category> event) {
+        FacesMessage msg = new FacesMessage("Edit Successfully", event.getObject().getCategoryName());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        System.out.println(event.getObject().getCategoryName());
+    }
+
+    public void onRowCancel(RowEditEvent<Category> event) {
+        FacesMessage msg = new FacesMessage("Edit Cancelled", event.getObject().getCategoryName());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
     public Collection<Category> getAllCategory() {
         Response response = jerseyClient.allCategory(Response.class);
         ArrayList<Category> arrayList = new ArrayList<Category>();
@@ -74,22 +100,23 @@ public class CategoryManagedBean {
         } else {
             jerseyClient.addCategory(categoryName);
         }
-        return "categoryindex.xhtml";
+        return "categoryindex.xhtml?faces-redirect=true";
     }
 
     public String deleteCategory(String categoryId) {
         jerseyClient.deleteCategory(categoryId);
-        return "categoryindex.xhtml";
+        return "categoryindex.xhtml?faces-redirect=true";
     }
 
-    public String getCategory(String categoryId) {
+    public void getCategory(String categoryId) {
+//        RequestContext context = RequestContext.getCurrentInstance();
         Response response = jerseyClient.getCategory(Response.class, categoryId);
         GenericType<Category> genericType = new GenericType<Category>() {
         };
         Category category = response.readEntity(genericType);
         this.categoryId = category.getCategoryId();
         categoryName = category.getCategoryName();
-
-        return "addcategory.xhtml";
+//        System.out.println(this.categoryId+" "+categoryName);
+//        context.execute("PF('dlg1').show();");
     }
 }

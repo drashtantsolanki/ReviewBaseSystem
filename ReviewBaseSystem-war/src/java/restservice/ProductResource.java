@@ -53,9 +53,15 @@ public class ProductResource {
     }
 
     @POST
-    @Path("updateProduct/{productid}/{categoryid}/{productname}/{productimage}/{referencelink}/{authorid}/{genreid}/{publisherid}/{companyid}")
-    public void updateProduct(@PathParam("productid") int productid, @PathParam("categoryid") int categoryid, @PathParam("productname") String productname, @PathParam("productimage") String productimage, @PathParam("referencelink") String referencelink, @PathParam("authorid") int authorid, @PathParam("genreid") int genreid, @PathParam("publisherid") int publisherid, @PathParam("companyid") int companyid) {
-        admin.updateProductToCategory(productid, categoryid, productname, productimage, referencelink, authorid, genreid, publisherid, companyid);
+    @Path("updateImage/{productid}/{productimage}")
+    public void updateImage(@PathParam("productid") int productid, @PathParam("productimage") String productimage) {
+        admin.updateImage(productid,productimage);
+    }
+
+    @POST
+    @Path("updateProduct/{productid}/{categoryid}/{productname}/{referencelink}/{authorid}/{genreid}/{publisherid}/{companyid}")
+    public void updateProduct(@PathParam("productid") int productid, @PathParam("categoryid") int categoryid, @PathParam("productname") String productname, @PathParam("referencelink") String referencelink, @PathParam("authorid") int authorid, @PathParam("genreid") int genreid, @PathParam("publisherid") int publisherid, @PathParam("companyid") int companyid) {
+        admin.updateProductToCategory(productid, categoryid, productname, referencelink, authorid, genreid, publisherid, companyid);
     }
 
     @POST

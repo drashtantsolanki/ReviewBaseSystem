@@ -11,6 +11,8 @@ import entity.Category;
 import entity.Ratingcriterias;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -35,6 +37,7 @@ public class RatingCriteriaManagedBean {
 
     private int ratingcriteriaId;
     private String ratingcriteriaName;
+    private List<Ratingcriterias> ratingcriteriases;
 
     public RatingCriteriaManagedBean() {
     }
@@ -71,21 +74,26 @@ public class RatingCriteriaManagedBean {
         this.ratingcriteriaName = ratingcriteriaName;
     }
 
-    public Collection<Ratingcriterias> getAllRatingCriteria() {
+    public List<Ratingcriterias> getRatingcriteriases() {
+        return ratingcriteriases;
+    }
+
+    public void setRatingcriteriases(List<Ratingcriterias> ratingcriteriases) {
+        this.ratingcriteriases = ratingcriteriases;
+    }
+
+    @PostConstruct
+    public void init() {
         Response response = jerseyClient.allRatingCriteria(Response.class);
         ArrayList<Ratingcriterias> arrayList = new ArrayList<Ratingcriterias>();
         GenericType<Collection<Ratingcriterias>> genericType = new GenericType<Collection<Ratingcriterias>>() {
         };
         arrayList = (ArrayList<Ratingcriterias>) response.readEntity(genericType);
-        return arrayList;
+        ratingcriteriases = arrayList;
     }
 
     public String addRatingCriteria() {
-        if (this.ratingcriteriaId != 0) {
-            jerseyClient.updateRatingCriteria(ratingcriteriaId + "", ratingcriteriaName);
-        } else {
-            jerseyClient.addRatingCriteria(ratingcriteriaName);
-        }
+        jerseyClient.addRatingCriteria(ratingcriteriaName);
         return "ratingcriteriaindex.xhtml?faces-redirect=true";
     }
 
@@ -93,6 +101,7 @@ public class RatingCriteriaManagedBean {
         FacesMessage msg = new FacesMessage("Edit Successfully", event.getObject().getCriteriaName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
         System.out.println(event.getObject().getCriteriaName());
+        jerseyClient.updateRatingCriteria(event.getObject().getRatingCriteriaId() + "", event.getObject().getCriteriaName());
     }
 
     public void onRowCancel(RowEditEvent<Ratingcriterias> event) {

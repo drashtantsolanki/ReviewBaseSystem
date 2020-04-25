@@ -11,6 +11,8 @@ import entity.Category;
 import entity.Product;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -34,6 +36,7 @@ public class ProductManagedBean {
 
     ProductJerseyClient jerseyClient = new ProductJerseyClient();
 
+    private List<Product> products;
     private int productId, categoryId, authorId, genreId, publisherId, companyId;
     private String productName, referencelink, productImage;
     private UploadedFile file;
@@ -137,13 +140,22 @@ public class ProductManagedBean {
         this.file = file;
     }
 
-    public Collection<Product> getAllProduct() {
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    @PostConstruct
+    public void init() {
         Response response = jerseyClient.allProduct(Response.class);
         ArrayList<Product> arrayList = new ArrayList<Product>();
         GenericType<Collection<Product>> genericType = new GenericType<Collection<Product>>() {
         };
         arrayList = (ArrayList<Product>) response.readEntity(genericType);
-        return arrayList;
+        products = arrayList;
     }
 
     public String addProduct() {

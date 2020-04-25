@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -38,6 +39,7 @@ public class CategoryManagedBean implements Serializable {
 
     private int categoryId;
     private String categoryName;
+    private List<Category> categorys;
 
     public CategoryManagedBean() {
     }
@@ -74,10 +76,28 @@ public class CategoryManagedBean implements Serializable {
         this.jerseyClient = jerseyClient;
     }
 
+    public List<Category> getCategorys() {
+        return categorys;
+    }
+
+    public void setCategorys(List<Category> categorys) {
+        this.categorys = categorys;
+    }
+
+    @PostConstruct
+    public void init() {
+        Response response = jerseyClient.allCategory(Response.class);
+        ArrayList<Category> arrayList = new ArrayList<Category>();
+        GenericType<Collection<Category>> genericType = new GenericType<Collection<Category>>() {
+        };
+        arrayList = (ArrayList<Category>) response.readEntity(genericType);
+        categorys = arrayList;
+    }
+
     public void onRowEdit(RowEditEvent<Category> event) {
         FacesMessage msg = new FacesMessage("Edit Successfully", event.getObject().getCategoryName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        System.out.println(event.getObject().getCategoryName());
+        jerseyClient.updateCategory(event.getObject().getCategoryId() + "", event.getObject().getCategoryName());
     }
 
     public void onRowCancel(RowEditEvent<Category> event) {
@@ -85,21 +105,8 @@ public class CategoryManagedBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public Collection<Category> getAllCategory() {
-        Response response = jerseyClient.allCategory(Response.class);
-        ArrayList<Category> arrayList = new ArrayList<Category>();
-        GenericType<Collection<Category>> genericType = new GenericType<Collection<Category>>() {
-        };
-        arrayList = (ArrayList<Category>) response.readEntity(genericType);
-        return arrayList;
-    }
-
     public String addCategory() {
-        if (this.categoryId != 0) {
-            jerseyClient.updateCategory(categoryId + "", categoryName);
-        } else {
-            jerseyClient.addCategory(categoryName);
-        }
+        jerseyClient.addCategory(categoryName);
         return "categoryindex.xhtml?faces-redirect=true";
     }
 
@@ -109,14 +116,11 @@ public class CategoryManagedBean implements Serializable {
     }
 
     public void getCategory(String categoryId) {
-//        RequestContext context = RequestContext.getCurrentInstance();
         Response response = jerseyClient.getCategory(Response.class, categoryId);
         GenericType<Category> genericType = new GenericType<Category>() {
         };
         Category category = response.readEntity(genericType);
         this.categoryId = category.getCategoryId();
         categoryName = category.getCategoryName();
-//        System.out.println(this.categoryId+" "+categoryName);
-//        context.execute("PF('dlg1').show();");
     }
 }

@@ -9,6 +9,11 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
+        <div id="top">
+            <ui:insert name="top">
+                <ui:include src="masterTemplate.xhtml"/>
+            </ui:insert>
+        </div>
         <style type="text/css">
             .ui-row-editor .ui-row-editor-pencil {
                 margin-left:8px;
@@ -31,12 +36,12 @@
             <h:form id="form">
                 <p:growl id="msgs" showDetail="true"/>
 
-                <h1><h:outputText value="List"/></h1>
+                <h1><h:outputText value="Category List"/></h1>
 
                 <p:commandButton value="Add Category" type="button" onclick="PF('dlg1').show();" />                           
 
 
-                <p:dataTable value="#{categoryManagedBean.allCategory}" var="item" editable="true" style="margin-bottom: 20px" paginator="true" rows="10">
+                <p:dataTable id="allCategory" value="#{categoryManagedBean.categorys}" var="item" editable="true" style="margin-bottom: 20px" paginator="true" rows="10">
 
                     <p:ajax event="rowEdit" listener="#{categoryManagedBean.onRowEdit}" update=":form:msgs" />
                     <p:ajax event="rowEditCancel" listener="#{categoryManagedBean.onRowCancel}" update=":form:msgs" />

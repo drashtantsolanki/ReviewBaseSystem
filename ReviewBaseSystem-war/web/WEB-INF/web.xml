@@ -9,14 +9,22 @@
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>test</servlet-name>
+        <servlet-class>servlets.test</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
-    </servlet-mapping>  
+    </servlet-mapping>
     <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>nova-light</param-value>
     </context-param>
+    <servlet-mapping>
+        <servlet-name>test</servlet-name>
+        <url-pattern>/test</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

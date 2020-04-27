@@ -10,6 +10,8 @@ import ejb.commanejbLocal;
 import entity.Genre;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -31,6 +33,7 @@ public class GenreManagedBean {
 
     private int genreId;
     private String genreName;
+    private List<Genre> genres;
 
     public GenreManagedBean() {
     }
@@ -67,13 +70,22 @@ public class GenreManagedBean {
         this.genreName = genreName;
     }
 
-    public Collection<Genre> getAllGenres() {
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
+    }
+
+    @PostConstruct
+    public void init() {
         Response response = jerseyClient.allGenre(Response.class);
         ArrayList<Genre> arrayList = new ArrayList<Genre>();
         GenericType<Collection<Genre>> genericType = new GenericType<Collection<Genre>>() {
         };
         arrayList = (ArrayList<Genre>) response.readEntity(genericType);
-        return arrayList;
+        genres = arrayList;
     }
 
     public String addGenre() {

@@ -7,17 +7,25 @@ package JSFBeans;
 
 import client.ProductJerseyClient;
 import ejb.adminejbLocal;
+import entity.Author;
 import entity.Category;
 import entity.Product;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.ConverterException;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import org.primefaces.event.RowEditEvent;
@@ -40,6 +48,7 @@ public class ProductManagedBean {
     private int productId, categoryId, authorId, genreId, publisherId, companyId;
     private String productName, referencelink, productImage;
     private UploadedFile file;
+    private Collection<Product> productsbycateogry;
 
     public ProductManagedBean() {
     }
@@ -148,6 +157,14 @@ public class ProductManagedBean {
         this.products = products;
     }
 
+    public Collection<Product> getProductsbycateogry() {
+        return productsbycateogry;
+    }
+
+    public void setProductsbycateogry(Collection<Product> productsbycateogry) {
+        this.productsbycateogry = productsbycateogry;
+    }
+
     @PostConstruct
     public void init() {
         Response response = jerseyClient.allProduct(Response.class);
@@ -158,18 +175,28 @@ public class ProductManagedBean {
         products = arrayList;
     }
 
-    public String addProduct() {
-        if (productId != 0) {
-            System.out.println(productId + " " + categoryId + " " + productName + " " + referencelink + " " + authorId + " " + genreId + " " + publisherId + " " + companyId);
-            admin.updateProductToCategory(productId, categoryId, productName, referencelink, authorId, genreId, publisherId, companyId);
-        } else {
+    public String addProduct() throws IOException {
+        if (file != null) {
+            System.out.println(file.getFileName());
+            InputStream input = file.getInputStream();
+            String path = "F:\\Project\\ReviewBaseSystem\\ReviewBaseSystem\\ReviewBaseSystem-war\\web\\images\\productimages";
+            Random random = new Random();
+            StringBuilder sb = new StringBuilder();
+
+            sb.append(random.nextInt(9) + 1);
+            for (int i = 0; i < 11; i++) {
+                sb.append(random.nextInt(10));
+            }
+            String temp = sb.toString();
+            productImage = temp + file.getFileName();
+            Files.copy(input, new File(path, productImage).toPath());
             jerseyClient.addProduct(categoryId + "", productName, productImage, referencelink, authorId + "", genreId + "", publisherId + "", companyId + "");
         }
-        return "productindex.xhtml";
+        return "productindex.xhtml?faces-redirect=true";
     }
 
-    public String deleteProduct(String productId, String categoryId) {
-        jerseyClient.deleteProduct(productId, categoryId);
+    public String deleteProduct(int productid) {
+        admin.removeProduct(productid);
         return "productindex.xhtml?faces-redirect=true";
     }
 
@@ -193,28 +220,26 @@ public class ProductManagedBean {
         return "addproduct.xhtml?faces-redirect=true";
     }
 
-    public String handleFileUpload(String productId) {
-        System.out.println(productId);
-        System.out.println(file);
-//        InputStream input = file.getInputStream();
-//        String path = "F:\\Project\\ReviewBaseSystem\\ReviewBaseSystem\\ReviewBaseSystem-war\\web\\images\\productimages";
-//        Random random = new Random();
-//        StringBuilder sb = new StringBuilder();
-//
-//        sb.append(random.nextInt(9) + 1);
-//        for (int i = 0; i < 11; i++) {
-//            sb.append(random.nextInt(10));
-//        }
-//        String temp = sb.toString();
-//        productImage = temp + file.getSubmittedFileName();
-//        Files.copy(input, new File(path, productImage).toPath());
-//        System.out.println("pid" + productId + " " + productImage);
-//        admin.updateImage(Integer.parseInt(productId), productImage);
-        return "productindex.xhtml?faces-redirect=true";
+    public void handleFileUpload() {
+//        System.out.println(productId);
+        System.out.println(file.getFileName());
+//        return "productindex.xhtml?faces-redirect=true";
     }
 
-    public void onRowEdit(RowEditEvent<Category> event) {
-        FacesMessage msg = new FacesMessage("Category Edited", event.getObject().getCategoryName());
+    public void onRowEdit(RowEditEvent<Product> event) {
+        FacesMessage msg = new FacesMessage("Product Edited", event.getObject().getAuthorId().getAuthorName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        admin.updateProductToCategory(event.getObject().getProductId(), event.getObject().getCategoryId().getCategoryId(), event.getObject().getProductName(), event.getObject().getReferenceLink(), event.getObject().getAuthorId().getAuthorId(), event.getObject().getGenreId().getGenreId(), event.getObject().getPublisherId().getPublisherId(), event.getObject().getCompanyId().getCompanyId());
+    }
+
+    public void onRowCancel(RowEditEvent<Product> event) {
+        FacesMessage msg = new FacesMessage("Edit Cancelled", event.getObject().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void productByCategory(int categoryid) {
+        System.out.println(categoryid);
+        productsbycateogry = admin.getProductByCategoryId(categoryid);
+        System.out.println(productsbycateogry);
     }
 }

@@ -40,8 +40,7 @@
 
                 <p:commandButton value="Add Category" type="button" onclick="PF('dlg1').show();" />                           
 
-
-                <p:dataTable id="allCategory" value="#{categoryManagedBean.categorys}" var="item" editable="true" style="margin-bottom: 20px" paginator="true" rows="10">
+                <p:dataTable id="categorys" value="#{categoryManagedBean.categorys}" var="item" editable="true" style="margin-bottom: 20px" paginator="true" rows="10">
 
                     <p:ajax event="rowEdit" listener="#{categoryManagedBean.onRowEdit}" update=":form:msgs" />
                     <p:ajax event="rowEditCancel" listener="#{categoryManagedBean.onRowCancel}" update=":form:msgs" />
@@ -49,7 +48,7 @@
                     <p:column headerText="CategoryName">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{item.categoryName}"/></f:facet>
-                            <f:facet name="input"><h:inputText id="modelInput" value="${item.categoryName}" style="width: 100%" label="CategoryName"/></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput" value="${item.categoryName}" style="width: 100%" label="CategoryName"/></f:facet>
                         </p:cellEditor>
                     </p:column>
                     <p:column style="width:35px">

@@ -8,8 +8,11 @@ package JSFBeans;
 import client.AuthorJerseyClient;
 import ejb.commanejbLocal;
 import entity.Author;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -22,7 +25,7 @@ import javax.ws.rs.core.Response;
  */
 @Named(value = "authorManagedBean")
 @RequestScoped
-public class AuthorManagedBean {
+public class AuthorManagedBean implements Serializable {
 
     @EJB
     private commanejbLocal comman;
@@ -31,6 +34,7 @@ public class AuthorManagedBean {
 
     private int authorId;
     private String authorName;
+    private List<Author> authors;
 
     public AuthorManagedBean() {
     }
@@ -67,13 +71,22 @@ public class AuthorManagedBean {
         this.authorName = authorName;
     }
 
-    public Collection<Author> getAllAuthors() {
+    public List<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
+    }
+
+    @PostConstruct
+    public void init() {
         Response response = jerseyClient.allAuthor(Response.class);
         ArrayList<Author> arrayList = new ArrayList<Author>();
         GenericType<Collection<Author>> genericType = new GenericType<Collection<Author>>() {
         };
         arrayList = (ArrayList<Author>) response.readEntity(genericType);
-        return arrayList;
+        authors = arrayList;
     }
 
     public String addAuthor() {

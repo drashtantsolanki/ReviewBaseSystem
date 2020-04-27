@@ -10,6 +10,8 @@ import ejb.commanejbLocal;
 import entity.Publisher;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -31,6 +33,7 @@ public class PublisherManagedBean {
 
     private int publisherId;
     private String publisherName;
+    private List<Publisher> publishers;
 
     public PublisherManagedBean() {
     }
@@ -67,13 +70,22 @@ public class PublisherManagedBean {
         this.publisherName = publisherName;
     }
 
-    public Collection<Publisher> getAllPublisher() {
+    public List<Publisher> getPublishers() {
+        return publishers;
+    }
+
+    public void setPublishers(List<Publisher> publishers) {
+        this.publishers = publishers;
+    }
+
+    @PostConstruct
+    public void init() {
         Response response = jerseyClient.allPublisher(Response.class);
         ArrayList<Publisher> arrayList = new ArrayList<Publisher>();
         GenericType<Collection<Publisher>> genericType = new GenericType<Collection<Publisher>>() {
         };
         arrayList = (ArrayList<Publisher>) response.readEntity(genericType);
-        return arrayList;
+        publishers = arrayList;
     }
 
     public String addPublisher() {

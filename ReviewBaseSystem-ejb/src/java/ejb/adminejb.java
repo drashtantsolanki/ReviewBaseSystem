@@ -481,8 +481,10 @@ public class adminejb implements adminejbLocal {
     //test baki
     @Override
     public Collection<Product> getProductByCategoryId(int categoryId) {
+
+        Category c = em.find(Category.class, categoryId);
         Collection<Product> products = em.createNamedQuery("Product.findByCategoryId")
-                .setParameter("categoryId", categoryId)
+                .setParameter("categoryId", c)
                 .getResultList();
 
         return products;
@@ -583,7 +585,7 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-        public void updateImage(int productid, String productimage) {
+    public void updateImage(int productid, String productimage) {
         Product product = em.find(Product.class, productid);
         product.setProductImage(productimage);
         em.merge(product);
@@ -600,6 +602,12 @@ public class adminejb implements adminejbLocal {
             category.setProductCollection(products);
             em.remove(product);
         }
+    }
+
+    @Override
+    public void removeProduct(int productId) {
+        Product product = (Product) em.find(Product.class, productId);
+        em.remove(product);
     }
     // </editor-fold>
 

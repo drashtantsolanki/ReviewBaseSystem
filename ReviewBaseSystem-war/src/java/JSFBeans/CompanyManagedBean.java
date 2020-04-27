@@ -10,6 +10,8 @@ import ejb.commanejbLocal;
 import entity.Company;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -31,6 +33,7 @@ public class CompanyManagedBean {
 
     private int companyId;
     private String companyName;
+    private List<Company> companys;
 
     public CompanyManagedBean() {
     }
@@ -67,13 +70,22 @@ public class CompanyManagedBean {
         this.companyName = companyName;
     }
 
-    public Collection<Company> getAllCompany() {
+    public List<Company> getCompanys() {
+        return companys;
+    }
+
+    public void setCompanys(List<Company> companys) {
+        this.companys = companys;
+    }
+
+    @PostConstruct
+    public void init() {
         Response response = jerseyClient.allCompany(Response.class);
         ArrayList<Company> arrayList = new ArrayList<Company>();
         GenericType<Collection<Company>> genericType = new GenericType<Collection<Company>>() {
         };
         arrayList = (ArrayList<Company>) response.readEntity(genericType);
-        return arrayList;
+        companys = arrayList;
     }
 
     public String addCompany() {

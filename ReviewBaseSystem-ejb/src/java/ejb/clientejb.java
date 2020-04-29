@@ -11,6 +11,8 @@ import entity.Product;
 import entity.Reviews;
 import entity.Reviewxcriteria;
 import entity.Product;
+import entity.Role;
+import entity.Userrole;
 import entity.Users;
 import java.security.MessageDigest;
 import java.util.Collection;
@@ -18,6 +20,7 @@ import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.glassfish.soteria.identitystores.hash.Pbkdf2PasswordHashImpl;
 
 /**
  *
@@ -68,6 +71,12 @@ public class clientejb implements clientejbLocal {
         String epass=getEncryptedPassword(pass);
         obj.setPassword(epass);
         em.persist(obj);
+        em.flush();
+        int uid=obj.getUserId();
+        Userrole ur=new Userrole();
+        ur.setRoleId(new Role(2));
+        ur.setUserId(new Users(uid));
+        em.persist(ur);
     }
 
     @Override
@@ -93,23 +102,25 @@ public class clientejb implements clientejbLocal {
     @Override
     public String getEncryptedPassword(String Password) {
         String encrypedPassword = null;
-        try {
-            // Create MessageDigest instance for MD5
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            //Add password bytes to digest
-            md.update(Password.getBytes());
-            //Get the hash's bytes 
-            byte[] bytes = md.digest();
-            //This bytes[] has bytes in decimal format;
-            //Convert it to hexadecimal format
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < bytes.length; i++) {
-                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-            }
-            //Get complete hashed password in hex format
-            encrypedPassword = sb.toString();
-        } catch (Exception e) {
-        }
+//        try {
+//            // Create MessageDigest instance for MD5
+//            MessageDigest md = MessageDigest.getInstance("MD5");
+//            //Add password bytes to digest
+//            md.update(Password.getBytes());
+//            //Get the hash's bytes 
+//            byte[] bytes = md.digest();
+//            //This bytes[] has bytes in decimal format;
+//            //Convert it to hexadecimal format
+//            StringBuilder sb = new StringBuilder();
+//            for (int i = 0; i < bytes.length; i++) {
+//                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+//            }
+//            //Get complete hashed password in hex format
+//            encrypedPassword = sb.toString();
+//        } catch (Exception e) {
+//        }
+        Pbkdf2PasswordHashImpl encPass=new Pbkdf2PasswordHashImpl();
+        encrypedPassword = encPass.generate(Password.toCharArray());
         return encrypedPassword;
     }
 

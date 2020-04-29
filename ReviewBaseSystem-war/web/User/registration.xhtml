@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <h:head>
+        <title>Facelet Title</title>
+        <!--        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+                <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+                <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>-->
+    </h:head>
+    <h:body>
+
+        <div id="top">
+            <ui:insert name="top">
+                <ui:include src="Include/Header.xhtml"/>
+            </ui:insert>
+        </div>
+        <div id="content">
+            <f:view>
+                <div class="container">
+                    <h:form>
+                        <p:panelGrid columns="2" style="width: 100%;">
+                            <!--<p:outputLabel value="UserId:" for="userId" />-->
+                            <p:inputText id="userId" value="#{usersManagedBean.userid}" title="UserId" readonly="#{facesContext.renderResponse}" type="hidden"/>
+                            <p:outputLabel value="Name:" for="name" />
+                            <p:inputText id="name" value="#{usersManagedBean.name}" title="Name" required="true" requiredMessage="The Name field is required."/>
+                            <p:outputLabel value="Email:" for="email" />
+                            <p:inputText id="email" value="#{usersManagedBean.email}" title="Email" required="true" requiredMessage="The Email field is required."/>
+                            <p:outputLabel value="PhoneNumber:" for="phoneNumber" />
+                            <p:inputText id="phoneNumber" value="#{usersManagedBean.phno}" title="PhoneNumber" required="true" requiredMessage="The PhoneNumber field is required."/>
+                            <p:outputLabel value="Interest:" for="interest" />
+                            <p:inputText id="interest" value="#{usersManagedBean.interest}" title="Interest" required="true" requiredMessage="The Interest field is required."/>
+                            <p:outputLabel value="Gender:" for="gender" />
+                            <p:selectOneRadio id="gender" value="#{usersManagedBean.gender}" >
+                                <f:selectItem itemLabel="MALE" itemValue="male" />
+                                <f:selectItem itemLabel="FEMALE" itemValue="female" />
+                            </p:selectOneRadio>
+                            <p:outputLabel value="Birthdate:"/>
+                            <p:calendar id="inline" value="#{usersManagedBean.birthdate}" pattern="MM-dd-yyyy" maxdate="#{usersManagedBean.today}"/>
+                            <p:outputLabel value="City:" for="city" />
+                            <p:inputText id="city" value="#{usersManagedBean.city}" title="City" required="true" requiredMessage="The City field is required."/>
+                            <p:outputLabel value="Password:" for="password" />
+                            <p:password id="password" value="#{usersManagedBean.password}" title="Password" required="true" requiredMessage="The Password field is required."/>
+                        </p:panelGrid>
+                        <p:commandButton action="#{usersManagedBean.addUser()}" value="Save" />
+                    </h:form>
+                </div>
+            </f:view>
+        </div>
+
+        <div id="bottom">
+            <ui:insert name="bottom">
+                <ui:include src="Include/Footer.xhtml"/>
+            </ui:insert>
+        </div>
+    </h:body>
+</html>
+

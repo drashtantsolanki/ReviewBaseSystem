@@ -60,7 +60,7 @@ public class UsersResource {
     public void addUser(@PathParam("name") String name,@PathParam("phno") String phno,@PathParam("interest") String interest,@PathParam("gender") String gender,@PathParam("email") String email,@PathParam("city") String city,@PathParam("bdate") String bdate,@PathParam("pass") String pass)
     {
         try {
-            Date d1=new SimpleDateFormat("yyyy-mm-dd").parse(bdate);
+            Date d1=new SimpleDateFormat("yyyy-MM-dd").parse(bdate);
             client.addUser(name, email, phno, interest, gender, d1, city, pass);
         } catch (Exception e) {
         }
@@ -69,11 +69,11 @@ public class UsersResource {
     
     
     @POST
-    @Path("updateuser/{uid}/{name}/{phno}/{pass}/{interest}/{gender}/{email}/{city}/{bdate}")
+    @Path("updateuser/{uid}/{name}/{phno}/{interest}/{gender}/{email}/{city}/{bdate}")
     public void updateUser(@PathParam("uid")int uid,@PathParam("name") String name,@PathParam("phno") String phno,@PathParam("interest") String interest,@PathParam("gender") String gender,@PathParam("email") String email,@PathParam("city") String city,@PathParam("bdate") String bdate)
     {
         try {
-            Date d1=new SimpleDateFormat("yyyy-mm-dd").parse(bdate);
+            Date d1=new SimpleDateFormat("yyyy-MM-dd").parse(bdate);
             client.updateUser(uid, name, email, phno, interest, gender, d1, city);
         } catch (Exception e) {
         }

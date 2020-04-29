@@ -1,0 +1,84 @@
+.tm-customizer {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    margin-top: -20px;
+    z-index: 99;
+    transition: all 0.5s ease-out 0s;
+}
+
+.tm-customizer.open {
+    left: 100px;
+}
+
+button.tm-customizer-opener {
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    background: #1cb9c8;
+    border: 0;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    padding: 0;
+    line-height: 40px;
+}
+
+ul.tm-customizer-colorbox {
+    padding-left: 0;
+    list-style: none;
+    font-size: 0;
+    width: 100px;
+    background: #fff;
+    text-align: center;
+    padding: 10px 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0;
+    position: absolute;
+    left: auto;
+    right: 100%;
+    top: 0;
+}
+
+ul.tm-customizer-colorbox li {
+    display: inline-block;
+    height: 25px;
+    width: 25px;
+    border-radius: 100px;
+    background: red;
+    line-height: 25px;
+    margin: 2px;
+    font-size: 0;
+    transition: all 0.3s ease-in-out 0s;
+    vertical-align: middle;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+ul.tm-customizer-colorbox li.active {
+    font-size: 9px;
+}
+
+ul.tm-customizer-colorbox li.color-1 {
+    background: #1cb9c8;
+}
+
+ul.tm-customizer-colorbox li.color-2 {
+    background: #985EFF;
+}
+
+ul.tm-customizer-colorbox li.color-3 {
+    background: #8bc34a;
+}
+
+ul.tm-customizer-colorbox li.color-4 {
+    background: #03a9f4;
+}
+
+ul.tm-customizer-colorbox li.color-5 {
+    background: #2ecc71;
+}
+
+ul.tm-customizer-colorbox li.color-6 {
+    background: #d6b161;
+}

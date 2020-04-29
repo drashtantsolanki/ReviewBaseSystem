@@ -55,8 +55,8 @@ public class UsersJerseyClient {
         webTarget.path(java.text.MessageFormat.format("deleteuser/{0}", new Object[]{uid})).request().delete();
     }
 
-    public void updateUser(String uid, String name, String phno, String pass, String interest, String gender, String email, String city, String bdate) throws ClientErrorException {
-        webTarget.path(java.text.MessageFormat.format("updateuser/{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}", new Object[]{uid, name, phno, pass, interest, gender, email, city, bdate})).request().post(null);
+    public void updateUser(String uid, String name, String phno, String interest, String gender, String email, String city, String bdate) throws ClientErrorException {
+        webTarget.path(java.text.MessageFormat.format("updateuser/{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}", new Object[]{uid, name, phno, interest, gender, email, city, bdate})).request().post(null);
     }
 
     public void close() {

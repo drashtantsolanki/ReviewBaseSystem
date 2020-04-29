@@ -1,0 +1,172 @@
+/* Color Css File 1 */
+
+.header-topinfo ul li a:hover,
+.header-topsocial ul li a:hover,
+.header-icons ul li a:hover,
+.tm-navigation ul li:hover>a,
+.tm-navigation ul li.current>a,
+.tm-navigation .tm-navigation-megamenu>ul>li>a,
+.stylish-list i,
+.tm-videobutton span,
+a.tm-videobutton span,
+button.tm-videobutton span,
+.funfact-headline h2 span,
+.tm-section-title h2::before,
+.tm-section-title h2::after,
+.tm-section-title h3::before,
+.tm-section-title h3::after,
+.tm-tabgroup li a:hover,
+.tm-product-title a:hover,
+.tm-promo-content h2 span,
+.color-theme,
+.tm-blog-content h4 a:hover,
+.tm-blog-meta span a:hover,
+.tm-blog-contentbottom a:hover,
+.tm-blog-contentbottom a:hover,
+.tm-blog-social ul li a:hover,
+.footer-widgets .single-widget a:hover,
+.widget-info-social li a:hover,
+.widget-contact ul li i,
+.footer-widgets .widget-recentpost-content h6 a:hover,
+.footer-copyright a:hover,
+.header-searchbox .search-close:hover,
+.tm-service h5 a:hover,
+.tm-breadcrumb-area ul li a:hover,
+.whychoose-icon,
+.tm-member-social ul li a:hover,
+.tm-portfolio-buttons button:hover,
+.tm-portfolio-buttons button.is-active,
+.tm-portfolio-content h5 a:hover,
+.tm-portfolio-content h6 a:hover,
+.tm-portfoliodetails-share li a:hover,
+.tm-pricebox.is-active .tm-pricebox-price span,
+.widget-contact a:hover,
+.widget-social li a:hover,
+.blogitem-meta span i,
+.blogitem-content h5 a:hover,
+.blogitem-meta a:hover,
+.widget-recentpost-content h6 a:hover,
+.tm-comment-content h6 a:hover,
+.tm-comment-replybutton:hover,
+.tm-comment .tm-rating:hover,
+.widget-popularproduct-content h6 a:hover,
+.tm-prodetails-availability span,
+.tm-prodetails-color ul li a:hover,
+.tm-prodetails-size ul li a:hover,
+.tm-prodetails-categories ul li a:hover,
+.tm-prodetails-tags ul li a:hover,
+.tm-prodetails-share ul li a:hover,
+.tm-tabgroup2 li a.active,
+.tm-myaccount-dashboard p a,
+input[type=checkbox]:checked~label,
+input[type=radio]:checked~label,
+input[type=checkbox]:checked~label:before,
+input[type=radio]:checked~label:before,
+.tm-cart-table .tm-cart-productname:hover,
+.tm-cart-table .tm-cart-removeproduct:hover,
+.tm-checkout-total td+td,
+.tm-checkout-coupon>a span,
+.tm-contact-block p a:hover {
+    color: #8bc34a;
+}
+
+::-moz-selection {
+    background: #8bc34a;
+}
+
+::selection {
+    background: #8bc34a;
+}
+
+.tm-button,
+a.tm-button,
+button.tm-button,
+.tm-navigation .tm-navigation-dropdown ul li:hover,
+.tm-slider-dots ul.slick-dots li.slick-active button,
+.tm-feature2:hover .tm-feature2-icon,
+.tm-service2:hover .tm-service2-icon,
+.tm-tabgroup li a.active,
+.tm-product-actions li a:hover,
+.tm-product-actions li button:hover,
+#scrollUp,
+.tm-preloader,
+.tm-slider-arrow-prev,
+.tm-slider-arrow-next,
+.tm-portfolio-actions li a:hover,
+.widget-title:after,
+.widget-search-form button:hover,
+.widget-search-form input[type="submit"]:hover,
+.blogitem:hover .blogitem-date,
+.blogitem-share-trigger.is-active,
+.blogitem-share-trigger:hover,
+.blogitem-share ul,
+.tm-pagination ul li.is-active a,
+.tm-pagination ul li a:hover,
+.widget-tags ul li a:hover,
+.blogitem-tags ul li a:hover,
+.small-title:after,
+.nice-select .list .option:hover,
+.widget-pricefilter .tm-rangeslider-leftgrip,
+.widget-pricefilter .tm-rangeslider-rightgrip,
+.widget-pricefilter-button:hover,
+.tm-prodetails-largeimage .tm-prodetails-zoomimage,
+.tm-myaccount-address-billing a.edit-button,
+.tm-myaccount-address-shipping a.edit-button,
+button.tm-customizer-opener {
+    background: #8bc34a;
+}
+
+.tm-button,
+a.tm-button,
+button.tm-button,
+.tm-navigation .tm-navigation-megamenu>ul>li>a,
+.tm-slider-dots ul.slick-dots li button,
+.brandlogo a:hover,
+input:focus,
+input:active,
+button:focus,
+button:active,
+select:focus,
+select:active,
+textarea:focus,
+textarea:active,
+#scrollUp,
+.tm-slider-arrow-prev,
+.tm-slider-arrow-next,
+.widget-search-form button:hover,
+.widget-search-form input[type="submit"]:hover,
+.blogitem-share-trigger.is-active,
+.blogitem-share-trigger:hover,
+.blogitem-share ul,
+.tm-pagination ul li.is-active a,
+.tm-pagination ul li a:hover,
+.widget-tags ul li a:hover,
+blockquote,
+.blogitem-tags ul li a:hover,
+.nice-select.open,
+.nice-select:focus,
+.widget-pricefilter-button:hover,
+.tm-prodetails-thumbs a.active,
+input[type=checkbox]:checked~label:before,
+input[type=radio]:checked~label:before,
+.tm-contact-formfield input:focus,
+.tm-contact-formfield input:active,
+.tm-contact-formfield textarea:focus,
+.tm-contact-formfield textarea:active {
+    border-color: #8bc34a;
+}
+
+.tm-checkout-coupon>a {
+    border-left-color: #8bc34a;
+}
+
+
+.tm-videobutton::after,
+a.tm-videobutton::after,
+button.tm-videobutton::after {
+    background: rgba(139, 195, 74, 0.7);
+}
+
+.tm-tabgroup li a.active:hover {
+    color: #ffffff;
+}

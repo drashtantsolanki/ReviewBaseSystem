@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+        <div id="top">
+            <ui:insert name="top">
+
+            </ui:insert>
+        </div>
+
+
+        <f:view>
+            <p:dialog header="Add Role" widgetVar="dlg1" minHeight="40">
+
+
+                <h:form>
+                    <h1><h:outputText value="Create/Edit"/></h1>
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="RoleId:" for="roleId" />
+                        <p:inputText id="roleId" value="#{roleManagedBean.roleid}" title="RoleId" readonly="#{facesContext.renderResponse}"/>
+                        <p:outputLabel value="RoleName:" for="roleName" />
+                        <p:inputText id="roleName" value="#{roleManagedBean.rolename}" title="RoleName" required="true" requiredMessage="The RoleName field is required."/>
+                    </p:panelGrid>
+                    <div align="center">
+                        <p:commandButton value="SAVE" action="#{roleManagedBean.addRole()}" />
+                    </div>
+                </h:form>
+
+            </p:dialog>
+
+
+            <h:form id="form">
+                <p:growl id="msgs" showDetail="true"/>
+                <h:commandLink value="Logout" action="#{roleManagedBean.logout()}"/> &nbsp;&nbsp;
+                <p:commandButton value="Add Role" type="button" onclick="PF('dlg1').show()"/>
+                <br/><br/>
+                <p:dataTable value="#{roleManagedBean.rlsit}" var="item" editable="true" style="margin-bottom: 20px" paginator="true" rows="10">
+                    <p:ajax event="rowEdit" listener="#{roleManagedBean.onRowEditRole}" update=":form:msgs"/>
+                    <p:column headerText="Role ID">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.roleId}"/></f:facet>
+                            <f:facet name="input"><h:outputText value="#{item.roleId}"/> </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Role Name">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.roleName}"/></f:facet>
+                            <f:facet name="input"> <p:inputText id="roleName" value="#{item.roleName}" title="RoleName" required="true" requiredMessage="The RoleName field is required."/> </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column width="35px">
+                        <p:rowEditor/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Delete"/>
+                        </f:facet>
+                        <p:commandLink action="#{roleManagedBean.deleteRole(item.roleId)}" value="Delete" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </f:view>
+    </h:body>
+</html>
+

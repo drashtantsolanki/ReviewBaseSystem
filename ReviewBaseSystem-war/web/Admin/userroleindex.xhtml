@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <f:view>
+
+            <p:dialog header="assign role to user" widgetVar="dg1" minHeight="40">
+                <h:form>
+                    <h1><h:outputText value="Create/Edit"/></h1>
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="UserRoleId:" for="userRoleId" />
+                        <p:inputText id="userRoleId" value="#{userRoleManagedBean.userroleid}" title="UserRoleId" required="true" readonly="#{facesContext.renderResponse}"/>
+                        <p:outputLabel value="UserId:" for="userId" />
+                        <p:selectOneMenu id="userId" value="#{userRoleManagedBean.userid}" required="true" requiredMessage="The UserId field is required.">
+                            <!-- TODO: update below reference to list of available items-->
+                            <f:selectItems value="#{usersManagedBean.ulist}" var="i" itemLabel="#{i.name}" itemValue="#{i.userId}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="RoleId:" for="roleId" />
+                        <p:selectOneMenu id="roleId" value="#{userRoleManagedBean.roleid}" required="true" requiredMessage="The RoleId field is required.">
+                            <!-- TODO: update below reference to list of available items-->
+                            <f:selectItems value="#{roleManagedBean.rlsit}" var="i" itemLabel="#{i.roleName}" itemValue="#{i.roleId}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <div align="center">
+                        <p:commandButton value="Save" action="#{userRoleManagedBean.addUserRole()}" />
+                    </div>
+                </h:form>
+            </p:dialog>
+
+
+
+
+            <h:form id="form">
+                <p:growl id="msgs" showDetail="true"/>
+                <h1><h:outputText value="Role of Users"/></h1>
+                <p:commandButton value="Assign Role TO User" type="button" onclick="PF('dg1').show()" />
+                <br/><br/>
+                <p:dataTable value="#{userRoleManagedBean.userRoleList}" var="item" editable="true" style="margin-bottom: 20px" paginator="true" rows="10">
+                    <p:ajax event="rowEdit" listener="#{userRoleManagedBean.onRowEditRole}" update=":form:msgs"/>
+                    <p:column headerText="UserRoleId">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.userRoleId}"/></f:facet>
+                            <f:facet name="input"><p:inputText id="userRoleId" value="#{item.userRoleId}" title="UserRoleId" required="true" readonly="#{facesContext.renderResponse}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="User">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.userId.name}"/></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu id="userId" value="#{item.userId.userId}" required="true" requiredMessage="The UserId field is required.">
+                                    <!-- TODO: update below reference to list of available items-->
+                                    <f:selectItems value="#{usersManagedBean.ulist}" var="i" itemLabel="#{i.name}" itemValue="#{i.userId}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Role">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.roleId.roleName}"/></f:facet>
+                            <f:facet name="input"> 
+                                <p:selectOneMenu id="roleId" value="#{item.roleId.roleId}" required="true" requiredMessage="The RoleId field is required.">
+                                    <!-- TODO: update below reference to list of available items-->
+                                    <f:selectItems value="#{roleManagedBean.rlsit}" var="i" itemLabel="#{i.roleName}" itemValue="#{i.roleId}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column>
+                        <p:rowEditor/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Delete"/>
+                        </f:facet>
+                        <p:commandLink value="delete" action="#{userRoleManagedBean.deleteUserRole(item.userRoleId)}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </f:view>
+
+    </h:body>
+</html>
+

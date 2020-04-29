@@ -147,17 +147,24 @@ public interface adminejbLocal {
 
     void removeUser(int userId);
 
-    //Role
+    
+    
+    //==========================================Role
+    Collection<Role> getAllRoles();
+    
     Role getRoleById(int roleId);
 
     Role getRoleByName(String roleName);
 
-    void addRole(Role role);
+    void addRole(String rolename);
 
-    void updateRole(int roleId, Role role);
+    void updateRole(int roleId, String rolename);
 
     void removeRole(int roleId);
-
+    //==============================================================
+    
+    
+    
     //Review
     Collection<Reviews> getAllReviews();
 

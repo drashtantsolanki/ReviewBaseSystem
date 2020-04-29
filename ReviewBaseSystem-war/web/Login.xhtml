@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <script type="text/javascript">
+        function redirect(){
+            window.location.href = "http://stackoverflow.com";
+        }
+    </script>
+    <h:body>
+        <div id="top">
+            <ui:insert name="top">
+                <ui:include src="master/Header.xhtml"/>
+            </ui:insert>
+        </div>
+        
+        <div id="content">
+
+            <div class="container">
+                <h:form class="tm-form tm-login-form tm-form-bordered">
+                    <h4>Login</h4>
+                    <!--<button onclick="redirect()">Google</button>-->
+                    <div class="tm-form-inner">
+                        <div class="tm-form-field">
+                            <label for="login-email">Username or email address*</label>
+                            <h:inputText id="email" value="#{loginManagedBean.email}" required="required" />
+                        </div>
+                        <div class="tm-form-field">
+                            <label for="login-password">Password*</label>
+                            <h:inputSecret id="pass" value="#{loginManagedBean.pass}" required="required" />
+                        </div>
+                        <div class="tm-form-field">
+                            <input type="checkbox" name="login-remember" id="login-remember" />
+                            <label for="login-remember">Remember Me</label>
+                        </div>
+                        <div class="tm-form-field">
+                            <!--<button type="submit" class="tm-button">Login <b style="top: 27px; left: 72.6px;"></b></button>-->
+                            <!--<input type="submit" value="LOGIN" style="background-color: #03a9f4;color: white;font-size: 25px;line-height: 46px;letter-spacing: 0.114em;font-weight: 700;"/>-->
+                            <!--<h:commandButton value="LOGIN" action="#{loginManagedBean.value}" style="background-color: #03a9f4;color: white;font-size: 25px;line-height: 46px;letter-spacing: 0.114em;font-weight: 700;"/>-->
+                            <h:commandButton action="#{loginManagedBean.checkLogin()}" value="LOGIN" />
+                        </div>
+                        <h:outputLabel id="msg" value="#{loginManagedBean.message}" style="color: red;"></h:outputLabel>
+                        <div class="tm-form-field">
+                            <a href="#">Forgot your password?</a>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+        <div id="bottom">
+            <ui:insert name="bottom">
+                <ui:include src="master/Footer.xhtml"/>
+            </ui:insert>
+        </div>
+    </h:body>
+    
+</html>
+

@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+
+        <f:view>
+
+            <p:dialog header="Add Category" widgetVar="dlg1" minHeight="40">
+                <h:form >
+                    <h1><h:outputText value="Add User"/></h1>
+                    <p:panelGrid columns="2" style="width: 100%;">
+                        <p:outputLabel value="UserId:" for="userId" />
+                        <p:inputText id="userId" value="#{usersManagedBean.userid}" title="UserId" readonly="#{facesContext.renderResponse}"/>
+                        <p:outputLabel value="Name:" for="name" />
+                        <p:inputText id="name" value="#{usersManagedBean.name}" title="Name" required="true" requiredMessage="The Name field is required."/>
+                        <p:outputLabel value="Email:" for="email" />
+                        <p:inputText id="email" value="#{usersManagedBean.email}" title="Email" required="true" requiredMessage="The Email field is required."/>
+                        <p:outputLabel value="PhoneNumber:" for="phoneNumber" />
+                        <p:inputText id="phoneNumber" value="#{usersManagedBean.phno}" title="PhoneNumber" required="true" requiredMessage="The PhoneNumber field is required."/>
+                        <p:outputLabel value="Interest:" for="interest" />
+                        <p:inputText id="interest" value="#{usersManagedBean.interest}" title="Interest" required="true" requiredMessage="The Interest field is required."/>
+                        <p:outputLabel value="Gender:" for="gender" />
+                        <p:selectOneRadio id="gender" value="#{usersManagedBean.gender}" >
+                            <f:selectItem itemLabel="MALE" itemValue="male" />
+                            <f:selectItem itemLabel="FEMALE" itemValue="female" />
+                        </p:selectOneRadio>
+                        <p:outputLabel value="Birthdate:"/>
+                        <p:calendar id="inline" value="#{usersManagedBean.birthdate}" pattern="MM-dd-yyyy" maxdate="#{usersManagedBean.today}"/>
+                        <p:outputLabel value="City:" for="city" />
+                        <p:inputText id="city" value="#{usersManagedBean.city}" title="City" required="true" requiredMessage="The City field is required."/>
+                        <p:outputLabel value="Password:" for="password" />
+                        <p:password id="password" value="#{usersManagedBean.password}" title="Password" required="true" requiredMessage="The Password field is required."/>
+                    </p:panelGrid>
+                    <div align="center">
+                        <p:commandButton value="Save" action="#{usersManagedBean.addUserByAdmin()}" />
+                    </div>
+                </h:form>
+
+            </p:dialog>
+
+            <div class="container">
+                <div class="row">
+                    <h:form id="form">
+                        <p:growl id="msgs" showDetail="true"/>
+                        <h:commandLink value="LOUOUT" action="#{usersManagedBean.logout()}"/>
+                        &nbsp;
+                        <p:commandButton value="Add User" type="button" onclick="PF('dlg1').show();" />            
+                        <h:outputText  value="#{usersManagedBean.sessionEmail}" />
+                        <p:dataTable value="#{usersManagedBean.ulist}" var="item" editable="true" style="margin-bottom: 20px" paginator="true" rows="10">
+                            <p:ajax event="rowEdit" listener="#{usersManagedBean.onRowEditUser}" update=":form:msgs" />
+                            <p:ajax event="rowEditCancel" listener="#{usersManagedBean.onRowCancelUser}" update=":form:msgs" />
+
+                            <p:column headerText="User Id">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.userId}"/></f:facet>
+                                    <f:facet name="input"> <h:outputText value="#{item.userId}"/> </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Name">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.name}"/></f:facet>
+                                    <f:facet name="input"><p:inputText  value="#{item.name}" title="Name" required="true" requiredMessage="The Name field is required."/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Email">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.email}"/></f:facet>
+                                    <f:facet name="input"><p:inputText  value="#{item.email}" title="Email" required="true" requiredMessage="The Email field is required."/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Phone Number">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.phoneNumber}"/></f:facet>
+                                    <f:facet name="input"> <p:inputText  value="#{item.phoneNumber}" title="PhoneNumber" required="true" requiredMessage="The PhoneNumber field is required."/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Interest">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.interest}"/></f:facet>
+                                    <f:facet name="input"> <p:inputText  value="#{item.interest}" title="Interest" required="true" requiredMessage="The Interest field is required."/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Gender">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.gender}"/></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneRadio  value="#{item.gender}" >
+                                            <f:selectItem itemLabel="MALE" itemValue="male" />
+                                            <f:selectItem itemLabel="FEMALE" itemValue="female" />
+                                        </p:selectOneRadio>
+                                    </f:facet>
+                                    <h:outputText value="#{item.gender}"/>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Birthdate">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{item.birthdate}">
+                                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                                        </h:outputText> 
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:calendar id="inline" value="#{item.birthdate}" pattern="MM-dd-yyyy" maxdate="#{usersManagedBean.today}"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="City">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.city}"/></f:facet>
+                                    <f:facet name="input"> <p:inputText  value="#{item.city}" title="City" required="true" requiredMessage="The City field is required."/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column style="width:35px">
+                                <p:rowEditor />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Delete"/>
+                                </f:facet>
+                                <p:commandLink value="Delete" action="#{usersManagedBean.deleteUser(item.userId)}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </div>
+            </div>
+
+
+        </f:view>
+
+    </h:body>
+</html>
+

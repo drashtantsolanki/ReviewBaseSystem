@@ -4,10 +4,41 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
+    <filter>
+        <filter-name>ProxyFilter</filter-name>
+        <filter-class>filters.ProxyFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>AuthAdminFilter</filter-name>
+        <filter-class>filters.AuthAdminFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>AuthUserFilter</filter-name>
+        <filter-class>filters.AuthUserFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthUserFilter</filter-name>
+        <url-pattern>/User/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthAdminFilter</filter-name>
+        <url-pattern>/Admin/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ProxyFilter</filter-name>
+        <url-pattern>/welcome.xhtml</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </filter-mapping>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>testServlet</servlet-name>
+        <servlet-class>servlets.testServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
@@ -17,12 +48,30 @@
         <param-name>primefaces.THEME</param-name>
         <param-value>nova-light</param-value>
     </context-param>
+    <servlet-mapping>
+        <servlet-name>testServlet</servlet-name>
+        <url-pattern>/testServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+    <security-role>
+        <description/>
+        <role-name>Admin</role-name>
+    </security-role>
+    <security-role>
+        <description/>
+        <role-name>User</role-name>
+    </security-role>
     <welcome-file-list>
-        <welcome-file>faces/adminhome.xhtml</welcome-file>
+        <welcome-file>Login.xhtml</welcome-file>
     </welcome-file-list>
+    <ejb-local-ref>
+        <ejb-ref-name>adminejb</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.adminejbLocal</local>
+        <ejb-link>ReviewBaseSystem-ejb.jar#adminejb</ejb-link>
+    </ejb-local-ref>
 </web-app>

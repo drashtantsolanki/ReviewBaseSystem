@@ -42,6 +42,13 @@ public class adminejb implements adminejbLocal {
 
     // <editor-fold defaultstate="collapsed" desc="Role">
     @Override
+    public Collection<Role> getAllRoles()
+    {
+        return em.createNamedQuery("Role.findAll").getResultList();
+    }
+    
+    
+    @Override
     public Role getRoleById(int roleId) {
         Role role = em.find(Role.class, roleId);
         return role;
@@ -54,16 +61,16 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void addRole(Role role) {
+    public void addRole(String rolename) {
         Role objrole = new Role();
-        objrole.setRoleName(role.getRoleName());
+        objrole.setRoleName(rolename);
         em.persist(objrole);
     }
 
     @Override
-    public void updateRole(int roleId, Role role) {
+    public void updateRole(int roleId, String rolename) {
         Role objrole = em.find(Role.class, roleId);
-        objrole.setRoleName(role.getRoleName());
+        objrole.setRoleName(rolename);
         em.merge(objrole);
 
     }
@@ -205,7 +212,7 @@ public class adminejb implements adminejbLocal {
 
     @Override
     public Userrole getUserRoleById(int userRoleId) {
-        return (Userrole) em.createNamedQuery("Userrole.findByUserRoleId").getSingleResult();
+        return em.find(Userrole.class, userRoleId);
     }
 
     @Override

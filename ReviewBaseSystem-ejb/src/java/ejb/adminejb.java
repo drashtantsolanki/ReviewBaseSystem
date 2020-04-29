@@ -369,11 +369,11 @@ public class adminejb implements adminejbLocal {
         return (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryratingcriteriaId);
     }
 
-    //test baki
     @Override
     public Collection<Categoryratingcriteria> getCategoryRatingCriteriaByCategoryId(int categoryId) {
+        Category c = em.find(Category.class, categoryId);
         Collection<Categoryratingcriteria> categoryratingcriterias = em.createNamedQuery("Categoryratingcriteria.getCategoryRatingCriteriaByCategoryId")
-                .setParameter("categoryId", categoryId)
+                .setParameter("categoryId", c)
                 .getResultList();
 
         return categoryratingcriterias;
@@ -437,24 +437,25 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void removeCategoryRatingCriteria(int categoryRatingCriteriaId, int categoryId, int ratingCriteriaId) {
+    public void removeCategoryRatingCriteria(int categoryRatingCriteriaId) {
         Categoryratingcriteria categoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
-        Category category = (Category) em.find(Category.class, categoryId);
-        Ratingcriterias ratingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
-
-        Collection<Categoryratingcriteria> categoryratingcriterias = category.getCategoryratingcriteriaCollection();
-        Collection<Categoryratingcriteria> categoryratingcriterias1 = ratingcriterias.getCategoryratingcriteriaCollection();
-
-        if (categoryratingcriterias.contains(categoryratingcriteria)) {
-            categoryratingcriterias.remove(categoryratingcriteria);
-            category.setCategoryratingcriteriaCollection(categoryratingcriterias);
-        }
-
-        if (categoryratingcriterias1.contains(categoryratingcriteria)) {
-            categoryratingcriterias1.remove(categoryratingcriteria);
-            ratingcriterias.setCategoryratingcriteriaCollection(categoryratingcriterias);
-            em.remove(categoryratingcriteria);
-        }
+//        Category category = (Category) em.find(Category.class, categoryId);
+//        Ratingcriterias ratingcriterias = (Ratingcriterias) em.find(Ratingcriterias.class, ratingCriteriaId);
+//
+//        Collection<Categoryratingcriteria> categoryratingcriterias = category.getCategoryratingcriteriaCollection();
+//        Collection<Categoryratingcriteria> categoryratingcriterias1 = ratingcriterias.getCategoryratingcriteriaCollection();
+//
+//        if (categoryratingcriterias.contains(categoryratingcriteria)) {
+//            categoryratingcriterias.remove(categoryratingcriteria);
+//            category.setCategoryratingcriteriaCollection(categoryratingcriterias);
+//        }
+//
+//        if (categoryratingcriterias1.contains(categoryratingcriteria)) {
+//            categoryratingcriterias1.remove(categoryratingcriteria);
+//            ratingcriterias.setCategoryratingcriteriaCollection(categoryratingcriterias);
+//            em.remove(categoryratingcriteria);
+//        }
+        em.remove(categoryratingcriteria);
     }
     // </editor-fold>
 
@@ -478,7 +479,6 @@ public class adminejb implements adminejbLocal {
         return products;
     }
 
-    //test baki
     @Override
     public Collection<Product> getProductByCategoryId(int categoryId) {
 
@@ -651,6 +651,8 @@ public class adminejb implements adminejbLocal {
         em.remove(ratingcriterias);
     }
 
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Reviews">   
     @Override
     public Collection<Reviews> getAllReviews() {
         return em.createNamedQuery("Reviews.findAll").getResultList();
@@ -689,17 +691,57 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void addReview(Reviews reviews) {
+    public void addReview(int productId, Date date, int userId) {
+        Product product = em.find(Product.class, productId);
+        Users users = em.find(Users.class, userId);
+
+        Collection<Reviews> reviewses1 = product.getReviewsCollection();
+        Collection<Reviews> reviewses2 = users.getReviewsCollection();
+
+        Reviews reviews = new Reviews();
+        reviews.setProductId(product);
+        reviews.setDate(date);
+        reviews.setUserId(users);
+
+        reviewses1.add(reviews);
+        reviewses2.add(reviews);
+
+        product.setReviewsCollection(reviewses1);
+        users.setReviewsCollection(reviewses2);
+
         em.persist(reviews);
+        em.merge(product);
+        em.merge(users);
     }
 
     @Override
-    public void updateReview(int reviewId, Reviews reviews) {
-        Reviews objReviews = (Reviews) em.find(Reviews.class, reviewId);
-        objReviews.setProductId(reviews.getProductId());
-        objReviews.setDate(reviews.getDate());
-        objReviews.setUserId(reviews.getUserId());
-        em.merge(objReviews);
+    public void updateReview(int reviewId, int productId, Date date, int userId) {
+        Product product = em.find(Product.class, productId);
+        Users users = em.find(Users.class, userId);
+        Reviews reviews = em.find(Reviews.class, reviewId);
+
+        Collection<Reviews> reviewses1 = product.getReviewsCollection();
+        Collection<Reviews> reviewses2 = users.getReviewsCollection();
+
+        if (reviewses1.contains(reviews)) {
+            reviewses1.remove(reviews);
+        }
+
+        if (reviewses2.contains(reviews)) {
+            reviewses2.remove(reviews);
+        }
+
+        reviews.setProductId(product);
+        reviews.setDate(date);
+        reviews.setUserId(users);
+
+        reviewses1.add(reviews);
+        reviewses2.add(reviews);
+
+        product.setReviewsCollection(reviewses1);
+        users.setReviewsCollection(reviewses2);
+
+        em.merge(reviews);
     }
 
     @Override
@@ -708,6 +750,8 @@ public class adminejb implements adminejbLocal {
         em.remove(reviews);
     }
 
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Reviewxcriteria">
     @Override
     public Collection<Reviewxcriteria> getAllReviewxCriteria() {
         return em.createNamedQuery("Reviewxcriteria.findAll").getResultList();
@@ -738,18 +782,59 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void addReviewxCriteria(Reviewxcriteria reviewxcriteria) {
+    public void addReviewxCriteria(float rate, String description, int categoryratingcriteriaid, int reviewid) {
+        Categoryratingcriteria categoryratingcriteria = em.find(Categoryratingcriteria.class, categoryratingcriteriaid);
+        Reviews reviews = em.find(Reviews.class, reviewid);
+
+        Collection<Reviewxcriteria> reviewxcriterias1 = categoryratingcriteria.getReviewxcriteriaCollection();
+        Collection<Reviewxcriteria> reviewxcriterias2 = reviews.getReviewxcriteriaCollection();
+
+        Reviewxcriteria reviewxcriteria = new Reviewxcriteria();
+        reviewxcriteria.setRate(rate);
+        reviewxcriteria.setDescription(description);
+        reviewxcriteria.setCategoryRatingCriteriaId(categoryratingcriteria);
+        reviewxcriteria.setReviewId(reviews);
+
+        reviewxcriterias1.add(reviewxcriteria);
+        reviewxcriterias2.add(reviewxcriteria);
+
+        categoryratingcriteria.setReviewxcriteriaCollection(reviewxcriterias1);
+        reviews.setReviewxcriteriaCollection(reviewxcriterias2);
+
         em.persist(reviewxcriteria);
+        em.merge(categoryratingcriteria);
+        em.merge(reviews);
     }
 
     @Override
-    public void updateReviewxCriteria(int reviewXcriteriaId, Reviewxcriteria reviewxcriteria) {
-        Reviewxcriteria objReviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
-        objReviewxcriteria.setRate(reviewxcriteria.getRate());
-        objReviewxcriteria.setDescription(reviewxcriteria.getDescription());
-        objReviewxcriteria.setCategoryRatingCriteriaId(reviewxcriteria.getCategoryRatingCriteriaId());
-        objReviewxcriteria.setReviewId(reviewxcriteria.getReviewId());
-        em.merge(objReviewxcriteria);
+    public void updateReviewxCriteria(int reviewXcriteriaId, float rate, String description, int categoryratingcriteriaid, int reviewid) {
+        Categoryratingcriteria categoryratingcriteria = em.find(Categoryratingcriteria.class, categoryratingcriteriaid);
+        Reviews reviews = em.find(Reviews.class, reviewid);
+        Reviewxcriteria reviewxcriteria = em.find(Reviewxcriteria.class, reviewXcriteriaId);
+
+        Collection<Reviewxcriteria> reviewxcriterias1 = categoryratingcriteria.getReviewxcriteriaCollection();
+        Collection<Reviewxcriteria> reviewxcriterias2 = reviews.getReviewxcriteriaCollection();
+
+        if (reviewxcriterias1.contains(reviewxcriteria)) {
+            reviewxcriterias1.remove(reviewxcriteria);
+        }
+
+        if (reviewxcriterias2.contains(reviewxcriteria)) {
+            reviewxcriterias2.remove(reviewxcriteria);
+        }
+
+        reviewxcriteria.setRate(rate);
+        reviewxcriteria.setDescription(description);
+        reviewxcriteria.setCategoryRatingCriteriaId(categoryratingcriteria);
+        reviewxcriteria.setReviewId(reviews);
+
+        reviewxcriterias1.add(reviewxcriteria);
+        reviewxcriterias2.add(reviewxcriteria);
+
+        categoryratingcriteria.setReviewxcriteriaCollection(reviewxcriterias1);
+        reviews.setReviewxcriteriaCollection(reviewxcriterias2);
+
+        em.merge(reviewxcriteria);
     }
 
     @Override
@@ -757,6 +842,5 @@ public class adminejb implements adminejbLocal {
         Reviewxcriteria reviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
         em.remove(reviewxcriteria);
     }
-
     // </editor-fold>
 }

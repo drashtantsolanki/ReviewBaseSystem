@@ -1,0 +1,197 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+        <script src="js/addons/rating.js"></script>
+    </h:head>
+    <h:body>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#rateMe2').mdbRate();
+            });
+        </script>
+        <div id="top">
+            <ui:insert name="top">
+                <ui:include src="master/Header.xhtml"/>
+            </ui:insert>
+        </div>
+        <div class="content">
+            <!-- Breadcrumb Area -->
+            <div class="tm-breadcrumb-area tm-padding-section" data-bgimage="assets/images/bg/breadcrumb-bg-2.jpg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="tm-breadcrumb">
+                                <h2>Product Details</h2>
+                                <ul>
+                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="shop.html">Shop</a></li>
+                                    <li>Product Details</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--// Breadcrumb Area -->
+
+            <!-- Main Content -->
+            <main class="main-content">
+
+                <!-- Product Details Area -->
+                <h:form id="form">
+                    <div class="tm-section product-details-area bg-white tm-padding-section">
+                        <div class="container">
+                            <div class="tm-prodetails">
+                                <div class="row">
+                                    <div class="col-lg-5 col-md-6 col-12">
+                                        <!-- Product Details Images -->
+                                        <div class="tm-prodetails-largeimage">                                                
+                                            <img src="images/productimages/#{productManagedBean.productImage}"
+                                                 data-zoom-image="images/productimages/#{productManagedBean.productImage}"/>
+                                            <a href="images/productimages/#{productManagedBean.productImage}"
+                                               class="tm-prodetails-zoomimage">
+                                                <i class="fas fa-search-plus"></i>
+                                            </a>
+                                        </div>
+                                        <!--// Product Details Images -->
+                                    </div>
+
+                                    <div class="col-lg-7 col-md-6 col-12">
+                                        <div class="tm-prodetails-content">
+                                            <h3 class="tm-prodetails-title"><h:outputLabel value="#{productManagedBean.productName}"/></h3>
+                                            <div class="tm-rating">
+                                                <span class="active"><i class="fas fa-star"></i></span>
+                                                <span class="active"><i class="fas fa-star"></i></span>
+                                                <span class="active"><i class="fas fa-star"></i></span>
+                                                <span class="active"><i class="fas fa-star"></i></span>
+                                                <span class="active"><i class="fas fa-star"></i></span>
+                                            </div>
+                                            <p class="tm-prodetails-availability">Availalbe: <span>In Stock</span></p>
+                                            <div class="tm-prodetails-price">
+                                                <span><del>$75.99</del> $59.99</span>
+                                            </div>
+                                            <c:forEach var="item" items="#{productManagedBean.categoryratingcriterias}">
+                                                <div class="tm-prodetails-categories">
+                                                    <h6>#{item.ratingCriteriaId.criteriaName} :</h6>
+                                                    <ul>
+                                                        <span id="rateMe2"  class="empty-stars" value="#{reviewxcriteriaManagedBean.rate}"></span>
+                                                    </ul>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                        <p:commandButton value="Submit" action="#{reviewxcriteriaManagedBean.addReviewxcriteria}"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product Details Description & Review -->
+                            <div class="tm-prodetails-desreview tm-padding-section-sm-top">
+                                <ul class="nav tm-tabgroup2" id="prodetails" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="prodetails-area1-tab" data-toggle="tab" href="#prodetails-area1"
+                                           role="tab" aria-controls="prodetails-area1" aria-selected="true">Description</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="prodetails-area2-tab" data-toggle="tab" href="#prodetails-area2"
+                                           role="tab" aria-controls="prodetails-area2" aria-selected="false">Reviews
+                                            (1)</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="prodetails-content">
+                                    <div class="tab-pane fade show active" id="prodetails-area1" role="tabpanel"
+                                         aria-labelledby="prodetails-area1-tab">
+                                        <div class="tm-prodetails-description">                                            
+                                            <ul>
+                                                <li><b>Brand Name:</b> #{productManagedBean.companyId}</li>
+                                                <li><b>Category:</b> #{productManagedBean.categoryId}</li>
+                                                <li><b>Reference Link:</b>
+                                                    #{productManagedBean.referencelink}</li>
+                                                <li><b>Material:</b> Silica</li>
+                                                <li><b>Author:</b> #{productManagedBean.authorId}</li>
+                                                <li><b>Genre:</b> #{productManagedBean.genreId}</li>
+                                                <li><b>Publisher :</b> #{productManagedBean.publisherId}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="prodetails-area2" role="tabpanel" aria-labelledby="prodetails-area2-tab">
+                                        <div class="tm-prodetails-review">
+                                            <h5 class="text-uppercase">1 Review For Latest Smartwatch H-250 2018</h5>
+                                            <div class="tm-comment-wrapper mb-50">
+                                                <!-- Comment Single -->
+                                                <div class="tm-comment">
+                                                    <div class="tm-comment-thumb">
+                                                        <img src="assets/images/blog/authors/author-image-3.png" alt="author image"/>
+                                                    </div>
+                                                    <div class="tm-comment-content">
+                                                        <h6 class="tm-comment-authorname"><a href="#">Kareem Todd</a></h6>
+                                                        <span class="tm-comment-date">Wednesday, October 17, 2018 at
+                                                            4:00PM.</span>
+                                                        <div class="tm-rating">
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                        </div>
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                                                            sed do
+                                                            eiusmod
+                                                            tempor incididunt ut labore dolore magna aliqua. Ut enim ad
+                                                            minim
+                                                            veniam.</p>
+                                                    </div>
+                                                </div>
+                                                <!--// Comment Single -->
+                                            </div>
+
+                                            <h5 class="text-uppercase">Add a review</h5>
+                                            <form action="#" class="tm-form">
+                                                <div class="tm-form-inner">
+                                                    <div class="tm-form-field">
+                                                        <div class="tm-rating tm-rating-input">
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                            <span class="active"><i class="fas fa-star"></i></span>
+                                                            <span><i class="fas fa-star"></i></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tm-form-field tm-form-fieldhalf">
+                                                        <input type="text" placeholder="Your Name*" required="required"/>
+                                                    </div>
+                                                    <div class="tm-form-field tm-form-fieldhalf">
+                                                        <input type="Email" placeholder="Your Email*" required="required"/>
+                                                    </div>
+                                                    <div class="tm-form-field">
+                                                        <textarea name="product-review" cols="30" rows="5" placeholder="Your Review"></textarea>
+                                                    </div>
+                                                    <div class="tm-form-field">
+                                                        <button type="submit" class="tm-button">Submit <b></b></button>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--// Product Details Description & Review -->
+                        </div>
+                    </div>
+                </h:form>
+            </main>
+        </div>
+        <div id="bottom">
+            <ui:insert name="bottom">
+                <ui:include src="master/Footer.xhtml"/>
+            </ui:insert>
+        </div>
+    </h:body>
+</html>
+

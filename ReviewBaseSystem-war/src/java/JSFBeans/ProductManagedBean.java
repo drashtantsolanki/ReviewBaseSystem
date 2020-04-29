@@ -9,6 +9,7 @@ import client.ProductJerseyClient;
 import ejb.adminejbLocal;
 import entity.Author;
 import entity.Category;
+import entity.Categoryratingcriteria;
 import entity.Product;
 import java.io.File;
 import java.io.IOException;
@@ -23,9 +24,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.ConverterException;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import org.primefaces.event.RowEditEvent;
@@ -49,6 +48,7 @@ public class ProductManagedBean {
     private String productName, referencelink, productImage;
     private UploadedFile file;
     private Collection<Product> productsbycateogry;
+    private Collection<Categoryratingcriteria> categoryratingcriterias;
 
     public ProductManagedBean() {
     }
@@ -165,6 +165,14 @@ public class ProductManagedBean {
         this.productsbycateogry = productsbycateogry;
     }
 
+    public Collection<Categoryratingcriteria> getCategoryratingcriterias() {
+        return categoryratingcriterias;
+    }
+
+    public void setCategoryratingcriterias(Collection<Categoryratingcriteria> categoryratingcriterias) {
+        this.categoryratingcriterias = categoryratingcriterias;
+    }
+
     @PostConstruct
     public void init() {
         Response response = jerseyClient.allProduct(Response.class);
@@ -215,9 +223,9 @@ public class ProductManagedBean {
         publisherId = product.getPublisherId().getPublisherId();
         companyId = product.getCompanyId().getCompanyId();
 
-        System.out.println(categoryId + " " + referencelink + " " + authorId);
+        categoryratingcriterias = admin.getCategoryRatingCriteriaByCategoryId(categoryId);       
 
-        return "addproduct.xhtml?faces-redirect=true";
+        return "productrating.xhtml";
     }
 
     public void handleFileUpload() {
@@ -238,8 +246,8 @@ public class ProductManagedBean {
     }
 
     public void productByCategory(int categoryid) {
-        System.out.println(categoryid);
+        productsbycateogry = null;
+        products = null;
         productsbycateogry = admin.getProductByCategoryId(categoryid);
-        System.out.println(productsbycateogry);
     }
 }

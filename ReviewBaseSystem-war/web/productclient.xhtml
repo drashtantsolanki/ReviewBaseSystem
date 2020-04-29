@@ -5,7 +5,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
@@ -52,19 +53,49 @@
                                         <option value="value">Trending</option>
                                     </select>
                                 </form>
-                                <div class="tm-shop-products">
-
-                                    <div class="row mt-50-reverse">                                   
-                                        <h:form id="productsdata">
+                                <h:form id="productsdata">
+                                    <div class="tm-shop-products">
+                                        <div class="row mt-50-reverse">                                   
                                             <c:if test="${not empty productManagedBean.productsbycateogry}">
-                                                <c:forEach var="pro" items="#{productManagedBean.productsbycateogry}">
+                                                <c:forEach var="pro1" items="#{productManagedBean.productsbycateogry}">
                                                     <!-- Single Product -->
                                                     <div class="col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
                                                         <div class="tm-product">
                                                             <div class="tm-product-image">
-                                                                <a class="tm-product-imagelink" href="product-details.html">                                                                    
-                                                                    <h:graphicImage value="images/productimages/#{pro.productImage}"/>
-                                                                </a>
+                                                                <h:commandLink class="tm-product-imagelink" action="#{productManagedBean.getProduct(pro1.productId)}">                                                                    
+                                                                    <p:graphicImage value="images/productimages/#{pro1.productImage}"/>
+                                                                </h:commandLink>
+                                                                <ul class="tm-product-actions">
+                                                                    <li><a href="cart.html"><i class="fas fa-shopping-cart"></i></a></li>
+                                                                    <li><button type="button" data-toggle="modal" data-target="#tm-product-quickview"><i
+                                                                                class="far fa-eye"></i></button></li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="tm-product-content">
+                                                                <h5 class="tm-product-title"><a href="product-details.html">#{pro1.productName}</a></h5>
+                                                                <div class="tm-product-rating">
+                                                                    <span class="active"><i class="fas fa-star"></i></span>
+                                                                    <span class="active"><i class="fas fa-star"></i></span>
+                                                                    <span class="active"><i class="fas fa-star"></i></span>
+                                                                    <span class="active"><i class="fas fa-star"></i></span>
+                                                                    <span class="active"><i class="fas fa-star"></i></span>
+                                                                </div>
+                                                                <h6 class="tm-product-price">$99.99</h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>                                                    
+                                                    <!--// Single Product -->
+                                                </c:forEach>
+                                            </c:if>
+                                            <c:otherwise>
+                                                <c:forEach var="pro" items="#{productManagedBean.products}">
+                                                    <!-- Single Product -->
+                                                    <div class="col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
+                                                        <div class="tm-product">
+                                                            <div class="tm-product-image">
+                                                                <h:commandLink class="tm-product-imagelink" action="#{productManagedBean.getProduct(pro.productId)}">                                                                    
+                                                                    <p:graphicImage value="images/productimages/#{pro.productImage}"/>
+                                                                </h:commandLink>
                                                                 <ul class="tm-product-actions">
                                                                     <li><a href="cart.html"><i class="fas fa-shopping-cart"></i></a></li>
                                                                     <li><button type="button" data-toggle="modal" data-target="#tm-product-quickview"><i
@@ -86,10 +117,10 @@
                                                     </div>                                                    
                                                     <!--// Single Product -->
                                                 </c:forEach>
-                                            </c:if>
-                                        </h:form>
+                                            </c:otherwise>
+                                        </div>
                                     </div>
-                                </div>
+                                </h:form>
                                 <div class="tm-pagination mt-50">
                                     <ul>
                                         <li class="is-active"><a href="shop.html">1</a></li>

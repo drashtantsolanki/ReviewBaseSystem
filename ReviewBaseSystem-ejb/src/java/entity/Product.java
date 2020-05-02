@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -30,7 +31,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "product")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
     @NamedQuery(name = "Product.findByProductId", query = "SELECT p FROM Product p WHERE p.productId = :productId"),
@@ -161,7 +161,7 @@ public class Product implements Serializable {
         this.categoryId = categoryId;
     }
 
-    @XmlTransient
+    @JsonbTransient
     public Collection<Reviews> getReviewsCollection() {
         return reviewsCollection;
     }
@@ -170,8 +170,8 @@ public class Product implements Serializable {
         this.reviewsCollection = reviewsCollection;
     }
 
-    @XmlTransient
-    public Collection<Advertise> getAdvertiseCollection() {
+    @JsonbTransient
+            public Collection<Advertise> getAdvertiseCollection() {
         return advertiseCollection;
     }
 

@@ -25,7 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "userrole")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Userrole.findAll", query = "SELECT u FROM Userrole u"),
     @NamedQuery(name = "Userrole.findByUserRoleId", query = "SELECT u FROM Userrole u WHERE u.userRoleId = :userRoleId")})

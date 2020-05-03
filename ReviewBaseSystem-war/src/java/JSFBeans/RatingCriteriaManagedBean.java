@@ -7,7 +7,6 @@ package JSFBeans;
 
 import client.RatingCriteriaJerseyClient;
 import ejb.adminejbLocal;
-import entity.Category;
 import entity.Ratingcriterias;
 import java.util.ArrayList;
 import java.util.Collection;

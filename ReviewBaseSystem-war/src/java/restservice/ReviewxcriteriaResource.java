@@ -45,7 +45,7 @@ public class ReviewxcriteriaResource {
 
     @POST
     @Path("addReviewxcriteria/{rate}/{description}/{categoryratingcriteriaid}/{reviewid}")
-    public void addReviewxcriteria(@PathParam("rate") float rate, @PathParam("description") String description, @PathParam("categoryratingcriteriaid") int categoryratingcriteriaid, @PathParam("reviewid") int reviewid) {
+    public void addReviewxcriteria(@PathParam("rate") int rate, @PathParam("description") String description, @PathParam("categoryratingcriteriaid") int categoryratingcriteriaid, @PathParam("reviewid") int reviewid) {
         admin.addReviewxCriteria(rate, description, categoryratingcriteriaid, reviewid);
     }
 
@@ -57,7 +57,7 @@ public class ReviewxcriteriaResource {
 
     @GET
     @Path("getReviewxcriteriaByRate/{rate}")
-    public Reviewxcriteria getReviewxcriteriaByRate(@PathParam("rate") float rate) {
+    public Reviewxcriteria getReviewxcriteriaByRate(@PathParam("rate") int rate) {
         return (Reviewxcriteria) admin.getReviewxCriteriaByRate(rate);
     }
 
@@ -75,7 +75,7 @@ public class ReviewxcriteriaResource {
 
     @POST
     @Path("updateReviewxcriteria/{reviewxcriteriaid}/{rate}/{description}/{categoryratingcriteriaid}/{reviewid}")
-    public void updateAuthor(@PathParam("reviewxcriteriaid") int reviewxcriteriaid, @PathParam("rate") float rate, @PathParam("description") String description, @PathParam("categoryratingcriteriaid") int categoryratingcriteriaid, @PathParam("reviewid") int reviewid) {
+    public void updateAuthor(@PathParam("reviewxcriteriaid") int reviewxcriteriaid, @PathParam("rate") int rate, @PathParam("description") String description, @PathParam("categoryratingcriteriaid") int categoryratingcriteriaid, @PathParam("reviewid") int reviewid) {
         admin.updateReviewxCriteria(reviewxcriteriaid, rate, description, categoryratingcriteriaid, reviewid);
     }
 

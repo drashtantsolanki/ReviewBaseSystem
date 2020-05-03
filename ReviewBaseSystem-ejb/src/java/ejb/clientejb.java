@@ -321,7 +321,7 @@ public class clientejb implements clientejbLocal {
     }
 
     @Override
-    public void addReviewxCriteria(float rate, String description, int categoryRatingCriteriaId, int reviewId) {
+    public void addReviewxCriteria(int rate, String description, int categoryRatingCriteriaId, int reviewId) {
         Categoryratingcriteria categoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
         Reviews reviews = (Reviews) em.find(Reviews.class, reviewId);
 
@@ -345,7 +345,7 @@ public class clientejb implements clientejbLocal {
     }
 
     @Override
-    public void updateReviewxCriteria(int reviewXcriteriaId, float rate, String description, int categoryRatingCriteriaId, int reviewId) {
+    public void updateReviewxCriteria(int reviewXcriteriaId, int rate, String description, int categoryRatingCriteriaId, int reviewId) {
         Reviewxcriteria reviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
         Categoryratingcriteria categoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
         Reviews reviews = (Reviews) em.find(Reviews.class, reviewId);

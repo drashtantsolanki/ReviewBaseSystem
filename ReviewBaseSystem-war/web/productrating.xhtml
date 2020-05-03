@@ -10,11 +10,6 @@
         <script src="js/addons/rating.js"></script>
     </h:head>
     <h:body>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#rateMe2').mdbRate();
-            });
-        </script>
         <div id="top">
             <ui:insert name="top">
                 <ui:include src="master/Header.xhtml"/>
@@ -45,6 +40,7 @@
 
                 <!-- Product Details Area -->
                 <h:form id="form">
+                    <p:growl id="messages" showDetail="true" />
                     <div class="tm-section product-details-area bg-white tm-padding-section">
                         <div class="container">
                             <div class="tm-prodetails">
@@ -65,27 +61,22 @@
                                     <div class="col-lg-7 col-md-6 col-12">
                                         <div class="tm-prodetails-content">
                                             <h3 class="tm-prodetails-title"><h:outputLabel value="#{productManagedBean.productName}"/></h3>
-                                            <div class="tm-rating">
-                                                <span class="active"><i class="fas fa-star"></i></span>
-                                                <span class="active"><i class="fas fa-star"></i></span>
-                                                <span class="active"><i class="fas fa-star"></i></span>
-                                                <span class="active"><i class="fas fa-star"></i></span>
-                                                <span class="active"><i class="fas fa-star"></i></span>
-                                            </div>
                                             <p class="tm-prodetails-availability">Availalbe: <span>In Stock</span></p>
                                             <div class="tm-prodetails-price">
                                                 <span><del>$75.99</del> $59.99</span>
                                             </div>
-                                            <c:forEach var="item" items="#{productManagedBean.categoryratingcriterias}">
-                                                <div class="tm-prodetails-categories">
-                                                    <h6>#{item.ratingCriteriaId.criteriaName} :</h6>
-                                                    <ul>
-                                                        <span id="rateMe2"  class="empty-stars" value="#{reviewxcriteriaManagedBean.rate}"></span>
-                                                    </ul>
-                                                </div>
-                                            </c:forEach>
+                                            <div class="tm-prodetails-categories">                                   
+                                                <c:forEach items="#{productManagedBean.reviewxcriterias}" var="item">
+                                                    <h6>#{item.categoryRatingCriteriaId.ratingCriteriaId.criteriaName}</h6>
+                                                    <p:inputText value="#{item.rate}" />
+                                                    <p:rating value="#{item.rate}">
+                                                        <p:ajax event="rate" listener="#{productManagedBean.onrate}" update="messages" />
+                                                        <p:ajax event="cancel" listener="#{productManagedBean.oncancel}" update="messages" />
+                                                    </p:rating>
+                                                </c:forEach>
+                                            </div>
+                                            <p:commandButton value="Submit" action="#{productManagedBean.addReview(item)}"/>                                            
                                         </div>
-                                        <p:commandButton value="Submit" action="#{reviewxcriteriaManagedBean.addReviewxcriteria}"/>
                                     </div>
                                 </div>
                             </div>

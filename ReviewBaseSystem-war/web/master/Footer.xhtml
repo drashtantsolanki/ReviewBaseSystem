@@ -108,8 +108,8 @@
                                             your problems from our experts.</p>
                                         <form id="tm-mailchimp-form" class="widget-newsletter-form">
                                             <input id="mc-email" type="text" placeholder="Enter email address"/>
-                                                <button id="mc-submit" type="submit" class="tm-button">Subscribe Now
-                                                    <b></b></button>
+                                            <button id="mc-submit" type="submit" class="tm-button">Subscribe Now
+                                                <b></b></button>
                                         </form>
                                         <!-- Mailchimp Alerts -->
                                         <div class="tm-mailchimp-alerts">
@@ -266,22 +266,23 @@
                 </div>
                 <!--// Color Customizer -->
 
-        
 
 
-        <!-- Google Map -->
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgwgIuDRkO7HlxvpWN-vPePnGVWss5r5g"></script>
-        <script src="assets/js/google-map.js"></script>
 
-        <!-- Js Files -->
-        <script src="assets/js/modernizr-3.6.0.min.js"></script>
-        <!--<script src="assets/js/jquery.min.js"></script>-->
-        <script src="assets/js/popper.min.js"></script>
-        <script src="assets/js/bootstrap.min.js"></script>
-        <script src="assets/js/plugins.js"></script>
-        <script src="assets/js/scrollspy.min.js"></script>
-        <script src="assets/js/main.js"></script>
-        </ui:insert>
+                <!-- Google Map -->
+                <!--        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgwgIuDRkO7HlxvpWN-vPePnGVWss5r5g"></script>
+                        <script src="assets/js/google-map.js"></script>-->
+
+                <!-- Js Files -->
+                <!--                <script src="assets/js/jquery.min.js"></script>-->
+                <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+                <script src="assets/js/modernizr-3.6.0.min.js"></script>
+                <script src="assets/js/bootstrap.min.js"></script>
+                <script src="assets/js/popper.min.js"></script>
+                <script src="assets/js/plugins.js"></script>
+                <script src="assets/js/scrollspy.min.js"></script>
+                <script src="assets/js/main.js"></script>
+            </ui:insert>
         </div>
 
     </h:body>

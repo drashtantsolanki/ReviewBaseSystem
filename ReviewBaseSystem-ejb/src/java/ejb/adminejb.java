@@ -457,8 +457,24 @@ public class adminejb implements adminejbLocal {
 //        }
         em.remove(categoryratingcriteria);
     }
-    // </editor-fold>
 
+    @Override
+    public int getCategoryratingcriteria(int categoryId, int ratingCriteriaId) {
+        int id = 0;
+        Category c = em.find(Category.class, categoryId);
+        Ratingcriterias r = em.find(Ratingcriterias.class, ratingCriteriaId);
+        Collection<Categoryratingcriteria> categoryratingcriteriaId = em.createNamedQuery("Categoryratingcriteria.findByCategoryIdAndRatingcriteriaId")
+                .setParameter("categoryId", c).setParameter("ratingCriteriaId", r)
+                .getResultList();
+
+        for (Categoryratingcriteria categoryratingcriteria : categoryratingcriteriaId) {
+            id = categoryratingcriteria.getCategoryRatingCriteriaId();
+        }
+
+        return id;
+    }
+
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Product">
     @Override
     public Collection<Product> getAllProduct() {
@@ -665,8 +681,9 @@ public class adminejb implements adminejbLocal {
 
     @Override
     public Collection<Reviews> getReviewByProductID(int productId) {
+        Product p = em.find(Product.class, productId);
         Collection<Reviews> reviewses = em.createNamedQuery("Reviews.findByProductId")
-                .setParameter("productId", productId)
+                .setParameter("productId", p)
                 .getResultList();
 
         return reviewses;
@@ -750,6 +767,16 @@ public class adminejb implements adminejbLocal {
         em.remove(reviews);
     }
 
+    @Override
+    public Collection<Reviews> getReviewsByProductId(int productId) {
+        Product p = em.find(Product.class, productId);
+        Collection<Reviews> reviewses = em.createNamedQuery("Reviews.findByProductId")
+                .setParameter("productId", p)
+                .getResultList();
+
+        return reviewses;
+    }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Reviewxcriteria">
     @Override
@@ -763,7 +790,7 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public Collection<Reviewxcriteria> getReviewxCriteriaByRate(float rate) {
+    public Collection<Reviewxcriteria> getReviewxCriteriaByRate(int rate) {
         Collection<Reviewxcriteria> reviewxcriterias = em.createNamedQuery("Reviewxcriteria.findByRate")
                 .setParameter("rate", rate)
                 .getResultList();
@@ -777,12 +804,17 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public Reviewxcriteria getReviewxCriteriaByReviewId(int reviewId) {
-        return (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewId);
+    public Collection<Reviewxcriteria> getReviewxCriteriaByReviewId(int reviewId) {
+        Reviews r = em.find(Reviews.class, reviewId);
+        Collection<Reviewxcriteria> reviewxcriterias = em.createNamedQuery("Reviewxcriteria.findByReviewId")
+                .setParameter("reviewId", r)
+                .getResultList();
+
+        return reviewxcriterias;
     }
 
     @Override
-    public void addReviewxCriteria(float rate, String description, int categoryratingcriteriaid, int reviewid) {
+    public void addReviewxCriteria(int rate, String description, int categoryratingcriteriaid, int reviewid) {
         Categoryratingcriteria categoryratingcriteria = em.find(Categoryratingcriteria.class, categoryratingcriteriaid);
         Reviews reviews = em.find(Reviews.class, reviewid);
 
@@ -807,7 +839,7 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void updateReviewxCriteria(int reviewXcriteriaId, float rate, String description, int categoryratingcriteriaid, int reviewid) {
+    public void updateReviewxCriteria(int reviewXcriteriaId, int rate, String description, int categoryratingcriteriaid, int reviewid) {
         Categoryratingcriteria categoryratingcriteria = em.find(Categoryratingcriteria.class, categoryratingcriteriaid);
         Reviews reviews = em.find(Reviews.class, reviewid);
         Reviewxcriteria reviewxcriteria = em.find(Reviewxcriteria.class, reviewXcriteriaId);
@@ -842,5 +874,17 @@ public class adminejb implements adminejbLocal {
         Reviewxcriteria reviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
         em.remove(reviewxcriteria);
     }
+
+    @Override
+    public Collection<Reviewxcriteria> getReviewxCriteriaByCategoryRatingCriteriaIdandReviewId(int categoryRatingCriteriaId, int reviewId) {
+        Categoryratingcriteria c = em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
+        Reviews r = em.find(Reviews.class, reviewId);
+        Collection<Reviewxcriteria> reviewxcriterias = em.createNamedQuery("Reviewxcriteria.findByCategoryRatingCriteriaIdAndReviewId")
+                .setParameter("categoryRatingCriteriaId", c).setParameter("reviewId", r)
+                .getResultList();
+
+        return reviewxcriterias;
+    }
+
     // </editor-fold>
 }

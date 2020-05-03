@@ -30,7 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Reviewxcriteria.findAll", query = "SELECT r FROM Reviewxcriteria r"),
     @NamedQuery(name = "Reviewxcriteria.findByReviewXCriteriaId", query = "SELECT r FROM Reviewxcriteria r WHERE r.reviewXCriteriaId = :reviewXCriteriaId"),
-    @NamedQuery(name = "Reviewxcriteria.findByRate", query = "SELECT r FROM Reviewxcriteria r WHERE r.rate = :rate")})
+    @NamedQuery(name = "Reviewxcriteria.findByRate", query = "SELECT r FROM Reviewxcriteria r WHERE r.rate = :rate"),
+    @NamedQuery(name = "Reviewxcriteria.findByReviewId", query = "SELECT r FROM Reviewxcriteria r WHERE r.reviewId = :reviewId"),
+    @NamedQuery(name = "Reviewxcriteria.findByCategoryRatingCriteriaIdAndReviewId", query = "SELECT r FROM Reviewxcriteria r WHERE r.categoryRatingCriteriaId = :categoryRatingCriteriaId and r.reviewId = :reviewId")})
 public class Reviewxcriteria implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,7 +43,7 @@ public class Reviewxcriteria implements Serializable {
     private Integer reviewXCriteriaId;
     @Basic(optional = false)
     @Column(name = "Rate")
-    private float rate;
+    private int rate;
     @Basic(optional = false)
     @Lob
     @Column(name = "Description")
@@ -60,7 +62,7 @@ public class Reviewxcriteria implements Serializable {
         this.reviewXCriteriaId = reviewXCriteriaId;
     }
 
-    public Reviewxcriteria(Integer reviewXCriteriaId, float rate, String description) {
+    public Reviewxcriteria(Integer reviewXCriteriaId, int rate, String description) {
         this.reviewXCriteriaId = reviewXCriteriaId;
         this.rate = rate;
         this.description = description;
@@ -74,11 +76,11 @@ public class Reviewxcriteria implements Serializable {
         this.reviewXCriteriaId = reviewXCriteriaId;
     }
 
-    public float getRate() {
+    public int getRate() {
         return rate;
     }
 
-    public void setRate(float rate) {
+    public void setRate(int rate) {
         this.rate = rate;
     }
 
@@ -130,5 +132,5 @@ public class Reviewxcriteria implements Serializable {
     public String toString() {
         return "entity.Reviewxcriteria[ reviewXCriteriaId=" + reviewXCriteriaId + " ]";
     }
-    
+
 }

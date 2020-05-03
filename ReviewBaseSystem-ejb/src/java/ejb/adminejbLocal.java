@@ -55,6 +55,8 @@ public interface adminejbLocal {
 
     void removeCategoryRatingCriteria(int categoryRatingCriteriaId);
 
+    int getCategoryratingcriteria(int categoryId, int ratingCriteriaId);
+
     //Product
     Collection<Product> getAllProduct();
 
@@ -179,20 +181,24 @@ public interface adminejbLocal {
 
     void removeReview(int reviewId);
 
+    Collection<Reviews> getReviewsByProductId(int productId);
+
     //ReviewXCriteria
     Collection<Reviewxcriteria> getAllReviewxCriteria();
 
     Reviewxcriteria getReviewxCriteriaById(int reviewXcriteriaId);
 
-    Collection<Reviewxcriteria> getReviewxCriteriaByRate(float rate);
+    Collection<Reviewxcriteria> getReviewxCriteriaByRate(int rate);
 
     Reviewxcriteria getReviewxCriteriaByCategoryRatingCriteriaId(int categoryRatingCriteriaId);
 
-    Reviewxcriteria getReviewxCriteriaByReviewId(int reviewId);
+    Collection<Reviewxcriteria> getReviewxCriteriaByReviewId(int reviewId);
 
-    void addReviewxCriteria(float rate, String description, int categoryratingcriteriaid, int reviewid);
+    void addReviewxCriteria(int rate, String description, int categoryratingcriteriaid, int reviewid);
 
-    void updateReviewxCriteria(int reviewXcriteriaId, float rate, String description, int categoryratingcriteriaid, int reviewid);
+    void updateReviewxCriteria(int reviewXcriteriaId, int rate, String description, int categoryratingcriteriaid, int reviewid);
 
     void removeReviewxCriteria(int reviewXcriteriaId);
+
+    Collection<Reviewxcriteria> getReviewxCriteriaByCategoryRatingCriteriaIdandReviewId(int categoryRatingCriteriaId, int reviewId);
 }

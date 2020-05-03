@@ -7,10 +7,10 @@ package JSFBeans;
 
 import client.ProductJerseyClient;
 import ejb.adminejbLocal;
-import entity.Author;
-import entity.Category;
 import entity.Categoryratingcriteria;
 import entity.Product;
+import entity.Reviews;
+import entity.Reviewxcriteria;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +27,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
+import models.custom;
+import org.primefaces.event.RateEvent;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.file.UploadedFile;
 
@@ -44,11 +46,14 @@ public class ProductManagedBean {
     ProductJerseyClient jerseyClient = new ProductJerseyClient();
 
     private List<Product> products;
-    private int productId, categoryId, authorId, genreId, publisherId, companyId;
+    private int productId, categoryId, authorId, genreId, publisherId, companyId, rate1, rate2;
     private String productName, referencelink, productImage;
     private UploadedFile file;
     private Collection<Product> productsbycateogry;
     private Collection<Categoryratingcriteria> categoryratingcriterias;
+    private Collection<Reviewxcriteria> reviewxcriterias;
+    private Collection<custom> customcollection;
+    private Collection<Reviews> reviewses;
 
     public ProductManagedBean() {
     }
@@ -173,6 +178,46 @@ public class ProductManagedBean {
         this.categoryratingcriterias = categoryratingcriterias;
     }
 
+    public Collection<Reviewxcriteria> getReviewxcriterias() {
+        return reviewxcriterias;
+    }
+
+    public void setReviewxcriterias(Collection<Reviewxcriteria> reviewxcriterias) {
+        this.reviewxcriterias = reviewxcriterias;
+    }
+
+    public int getRate1() {
+        return rate1;
+    }
+
+    public void setRate1(int rate1) {
+        this.rate1 = rate1;
+    }
+
+    public int getRate2() {
+        return rate2;
+    }
+
+    public void setRate2(int rate2) {
+        this.rate2 = rate2;
+    }
+
+    public Collection<custom> getCustomcollection() {
+        return customcollection;
+    }
+
+    public void setCustomcollection(Collection<custom> customcollection) {
+        this.customcollection = customcollection;
+    }
+
+    public Collection<Reviews> getReviewses() {
+        return reviewses;
+    }
+
+    public void setReviewses(Collection<Reviews> reviewses) {
+        this.reviewses = reviewses;
+    }
+
     @PostConstruct
     public void init() {
         Response response = jerseyClient.allProduct(Response.class);
@@ -181,6 +226,16 @@ public class ProductManagedBean {
         };
         arrayList = (ArrayList<Product>) response.readEntity(genericType);
         products = arrayList;
+
+        customcollection = new ArrayList<custom>();
+        reviewses = new ArrayList<Reviews>();
+        reviewxcriterias = new ArrayList<Reviewxcriteria>();
+
+        try {
+            getProduct(String.valueOf(productId));
+        } catch (Exception e) {
+
+        }
     }
 
     public String addProduct() throws IOException {
@@ -208,7 +263,7 @@ public class ProductManagedBean {
         return "productindex.xhtml?faces-redirect=true";
     }
 
-    public String getProduct(String productId) {
+    public String getProduct(String productId) throws IOException {
         Response response = jerseyClient.getProduct(Response.class, productId);
         GenericType<Product> genericType = new GenericType<Product>() {
         };
@@ -223,7 +278,20 @@ public class ProductManagedBean {
         publisherId = product.getPublisherId().getPublisherId();
         companyId = product.getCompanyId().getCompanyId();
 
-        categoryratingcriterias = admin.getCategoryRatingCriteriaByCategoryId(categoryId);       
+        categoryratingcriterias = admin.getCategoryRatingCriteriaByCategoryId(categoryId);
+
+        for (Categoryratingcriteria c : categoryratingcriterias) {
+            int id = admin.getCategoryratingcriteria(categoryId, c.getRatingCriteriaId().getRatingCriteriaId());
+            reviewses = admin.getReviewsByProductId(this.productId);
+
+            for (Reviews r : reviewses) {
+                reviewxcriterias = admin.getReviewxCriteriaByCategoryRatingCriteriaIdandReviewId(id, r.getReviewId());
+                System.out.println("test");
+                for (Reviewxcriteria r1 : reviewxcriterias) {
+                    System.out.println(r1.getRate() + " " + r1.getCategoryRatingCriteriaId().getRatingCriteriaId().getCriteriaName() + " " + r1.getReviewId().getReviewId());
+                }
+            }
+        }
 
         return "productrating.xhtml";
     }
@@ -249,5 +317,22 @@ public class ProductManagedBean {
         productsbycateogry = null;
         products = null;
         productsbycateogry = admin.getProductByCategoryId(categoryid);
+    }
+
+    public void onrate(RateEvent<Integer> rateEvent) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Rate Event", "You rated:" + rateEvent.getRating());
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        System.out.println(rateEvent.getRating());
+    }
+
+    public void oncancel() {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancel Event", "Rate Reset");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void addReview() {
+        for (Reviewxcriteria r : reviewxcriterias) {
+            System.out.println(r.getRate());
+        }
     }
 }

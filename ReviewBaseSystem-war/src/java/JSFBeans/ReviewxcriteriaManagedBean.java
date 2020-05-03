@@ -16,8 +16,11 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
+import org.primefaces.event.RateEvent;
 
 /**
  *
@@ -33,7 +36,7 @@ public class ReviewxcriteriaManagedBean {
     ReviewxcriteriaJerseyClient jerseyClient = new ReviewxcriteriaJerseyClient();
 
     private int reviewxcriteriaId, categoryratingcriteriaId, reviewId;
-    private Integer rate;
+    private Integer rate1, rate2;
     private String description;
     private List<Reviewxcriteria> reviewxcriterias;
 
@@ -80,12 +83,20 @@ public class ReviewxcriteriaManagedBean {
         this.reviewId = reviewId;
     }
 
-    public Integer getRate() {
-        return rate;
+    public Integer getRate1() {
+        return rate1;
     }
 
-    public void setRate(Integer rate) {
-        this.rate = rate;
+    public void setRate1(Integer rate1) {
+        this.rate1 = rate1;
+    }
+
+    public Integer getRate2() {
+        return rate2;
+    }
+
+    public void setRate2(Integer rate2) {
+        this.rate2 = rate2;
     }
 
     public String getDescription() {
@@ -117,7 +128,6 @@ public class ReviewxcriteriaManagedBean {
     public void addReviewxcriteria() {
 //        jerseyClient.addReviewxcriteria(rate + "", description, categoryratingcriteriaId + "", reviewId + "");
 //        return "reviewxcriteriaindex.xhtml?faces-redirect=true";
-        System.out.println(rate);
     }
 
     public String deleteReviewxcriteria(String reviewxcriteriaId) {
@@ -174,5 +184,19 @@ public class ReviewxcriteriaManagedBean {
         categoryratingcriteriaId = reviewxcriteria.getCategoryRatingCriteriaId().getCategoryRatingCriteriaId();
 
         return "addreview.xhtml";
+    }
+
+    public void onrate(RateEvent<Integer> rateEvent) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Rate Event", "You rated:" + rateEvent.getRating());
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void oncancel() {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancel Event", "Rate Reset");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void addRating() {
+        System.out.println(rate1+" "+rate2);
     }
 }

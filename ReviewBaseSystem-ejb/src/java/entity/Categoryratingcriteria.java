@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Categoryratingcriteria.findAll", query = "SELECT c FROM Categoryratingcriteria c"),
     @NamedQuery(name = "Categoryratingcriteria.findByCategoryRatingCriteriaId", query = "SELECT c FROM Categoryratingcriteria c WHERE c.categoryRatingCriteriaId = :categoryRatingCriteriaId"),
-    @NamedQuery(name = "Categoryratingcriteria.getCategoryRatingCriteriaByCategoryId", query = "SELECT c FROM Categoryratingcriteria c WHERE c.categoryId = :categoryId")})
+    @NamedQuery(name = "Categoryratingcriteria.getCategoryRatingCriteriaByCategoryId", query = "SELECT c FROM Categoryratingcriteria c WHERE c.categoryId = :categoryId"),
+    @NamedQuery(name = "Categoryratingcriteria.findByCategoryIdAndRatingcriteriaId", query = "SELECT c FROM Categoryratingcriteria c WHERE c.categoryId = :categoryId and c.ratingCriteriaId = :ratingCriteriaId")})
 public class Categoryratingcriteria implements Serializable {
 
     private static final long serialVersionUID = 1L;

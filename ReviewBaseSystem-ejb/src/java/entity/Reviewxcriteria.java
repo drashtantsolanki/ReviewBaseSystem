@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Reviewxcriteria.findByReviewXCriteriaId", query = "SELECT r FROM Reviewxcriteria r WHERE r.reviewXCriteriaId = :reviewXCriteriaId"),
     @NamedQuery(name = "Reviewxcriteria.findByRate", query = "SELECT r FROM Reviewxcriteria r WHERE r.rate = :rate"),
     @NamedQuery(name = "Reviewxcriteria.findByReviewId", query = "SELECT r FROM Reviewxcriteria r WHERE r.reviewId = :reviewId"),
-    @NamedQuery(name = "Reviewxcriteria.findByCategoryRatingCriteriaIdAndReviewId", query = "SELECT r FROM Reviewxcriteria r WHERE r.categoryRatingCriteriaId = :categoryRatingCriteriaId and r.reviewId = :reviewId")})
+//    @NamedQuery(name = "Reviewxcriteria.findByProductId", query = "SELECT r.productId,rc.categoryRatingCriteriaId,AVG(rc.rate) average FROM Reviewxcriteria rc INNER JOIN rc.reviewId r WHERE r.productId.productId = :productId GROUP BY r.productId.productId,rc.categoryRatingCriteriaId.categoryRatingCriteriaId")
+    @NamedQuery(name = "Reviewxcriteria.findByProductId", query = "SELECT r FROM Reviewxcriteria r WHERE r.reviewId.productId = :productId")})
 public class Reviewxcriteria implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -66,6 +67,11 @@ public class Reviewxcriteria implements Serializable {
         this.reviewXCriteriaId = reviewXCriteriaId;
         this.rate = rate;
         this.description = description;
+    }
+
+    public Reviewxcriteria(Categoryratingcriteria categoryratingcriteriaId, int rate) {
+        this.categoryRatingCriteriaId = categoryratingcriteriaId;
+        this.rate = rate;
     }
 
     public Integer getReviewXCriteriaId() {

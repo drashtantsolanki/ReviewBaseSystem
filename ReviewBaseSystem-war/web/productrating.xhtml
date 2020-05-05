@@ -38,6 +38,18 @@
             <!-- Main Content -->
             <main class="main-content">
 
+                <p:dialog header="Add Rating" widgetVar="dlg1" minHeight="40" showEffect="drop" hideEffect="drop">
+                    <h:form id="dlgform">
+                        <div class="tm-prodetails-categories">                                   
+                            <c:forEach items="#{productManagedBean.customcollection}" var="item">
+                                <h6>#{item.criteriaName}</h6>
+                                <p:rating value="#{item.rate}"/>
+                            </c:forEach>
+                        </div>
+                        <p:commandButton value="Submit" action="#{productManagedBean.addReview()}" />
+                    </h:form>
+                </p:dialog>
+
                 <!-- Product Details Area -->
                 <h:form id="form">
                     <p:growl id="messages" showDetail="true" />
@@ -55,27 +67,15 @@
                                                 <i class="fas fa-search-plus"></i>
                                             </a>
                                         </div>
-                                        <!--// Product Details Images -->
                                     </div>
 
                                     <div class="col-lg-7 col-md-6 col-12">
                                         <div class="tm-prodetails-content">
-                                            <h3 class="tm-prodetails-title"><h:outputLabel value="#{productManagedBean.productName}"/></h3>
-                                            <p class="tm-prodetails-availability">Availalbe: <span>In Stock</span></p>
-                                            <div class="tm-prodetails-price">
-                                                <span><del>$75.99</del> $59.99</span>
-                                            </div>
+                                            <h3 class="tm-prodetails-title">#{productManagedBean.productName}</h3>
                                             <div class="tm-prodetails-categories">                                   
-                                                <c:forEach items="#{productManagedBean.reviewxcriterias}" var="item">
-                                                    <h6>#{item.categoryRatingCriteriaId.ratingCriteriaId.criteriaName}</h6>
-                                                    <p:inputText value="#{item.rate}" />
-                                                    <p:rating value="#{item.rate}">
-                                                        <p:ajax event="rate" listener="#{productManagedBean.onrate}" update="messages" />
-                                                        <p:ajax event="cancel" listener="#{productManagedBean.oncancel}" update="messages" />
-                                                    </p:rating>
-                                                </c:forEach>
+                                                <p:rating value="#{productManagedBean.sum}" cancel="false" readonly="true"/>
                                             </div>
-                                            <p:commandButton value="Submit" action="#{productManagedBean.addReview(item)}"/>                                            
+                                            <p:commandButton value="Add Rating" type="button" onclick="PF('dlg1').show();" />    
                                         </div>
                                     </div>
                                 </div>

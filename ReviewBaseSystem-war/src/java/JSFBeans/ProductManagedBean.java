@@ -14,15 +14,17 @@ import entity.Reviewxcriteria;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.GenericType;
@@ -37,8 +39,8 @@ import org.primefaces.model.file.UploadedFile;
  * @author admin
  */
 @Named(value = "productManagedBean")
-@RequestScoped
-public class ProductManagedBean {
+@SessionScoped
+public class ProductManagedBean implements Serializable {
 
     @EJB
     private adminejbLocal admin;
@@ -46,14 +48,16 @@ public class ProductManagedBean {
     ProductJerseyClient jerseyClient = new ProductJerseyClient();
 
     private List<Product> products;
-    private int productId, categoryId, authorId, genreId, publisherId, companyId, rate1, rate2;
+    private int productId, categoryId, authorId, genreId, publisherId, companyId, categoryratingcriteriaId, sum = 0;
     private String productName, referencelink, productImage;
     private UploadedFile file;
-    private Collection<Product> productsbycateogry;
-    private Collection<Categoryratingcriteria> categoryratingcriterias;
-    private Collection<Reviewxcriteria> reviewxcriterias;
-    private Collection<custom> customcollection;
-    private Collection<Reviews> reviewses;
+    private Collection<Product> productsbycateogry = null;
+    private Collection<Categoryratingcriteria> categoryratingcriterias = null;
+    private Collection<Reviewxcriteria> reviewxcriterias = null;
+    private Collection<custom> customcollection = null;
+    private Collection<Reviews> reviewses = null;
+    private Collection<Object[]> objects = null;
+    private ArrayList<Integer> average = null;
 
     public ProductManagedBean() {
     }
@@ -186,20 +190,12 @@ public class ProductManagedBean {
         this.reviewxcriterias = reviewxcriterias;
     }
 
-    public int getRate1() {
-        return rate1;
+    public int getCategoryratingcriteriaId() {
+        return categoryratingcriteriaId;
     }
 
-    public void setRate1(int rate1) {
-        this.rate1 = rate1;
-    }
-
-    public int getRate2() {
-        return rate2;
-    }
-
-    public void setRate2(int rate2) {
-        this.rate2 = rate2;
+    public void setCategoryratingcriteriaId(int categoryratingcriteriaId) {
+        this.categoryratingcriteriaId = categoryratingcriteriaId;
     }
 
     public Collection<custom> getCustomcollection() {
@@ -218,6 +214,30 @@ public class ProductManagedBean {
         this.reviewses = reviewses;
     }
 
+    public Collection<Object[]> getObjects() {
+        return objects;
+    }
+
+    public void setObjects(Collection<Object[]> objects) {
+        this.objects = objects;
+    }
+
+    public int getSum() {
+        return sum;
+    }
+
+    public void setSum(int sum) {
+        this.sum = sum;
+    }
+
+    public ArrayList<Integer> getAverage() {
+        return average;
+    }
+
+    public void setAverage(ArrayList<Integer> average) {
+        this.average = average;
+    }
+
     @PostConstruct
     public void init() {
         Response response = jerseyClient.allProduct(Response.class);
@@ -230,19 +250,14 @@ public class ProductManagedBean {
         customcollection = new ArrayList<custom>();
         reviewses = new ArrayList<Reviews>();
         reviewxcriterias = new ArrayList<Reviewxcriteria>();
-
-        try {
-            getProduct(String.valueOf(productId));
-        } catch (Exception e) {
-
-        }
+        average = new ArrayList<Integer>();
     }
 
     public String addProduct() throws IOException {
         if (file != null) {
             System.out.println(file.getFileName());
             InputStream input = file.getInputStream();
-            String path = "F:\\Project\\ReviewBaseSystem\\ReviewBaseSystem\\ReviewBaseSystem-war\\web\\images\\productimages";
+            String path = "F:\\Project\\ReviewBaseSystem\\ReviewBaseSystem\\ReviewBaseSystem\\ReviewBaseSystem-war\\web\\images\\productimages";
             Random random = new Random();
             StringBuilder sb = new StringBuilder();
 
@@ -278,22 +293,63 @@ public class ProductManagedBean {
         publisherId = product.getPublisherId().getPublisherId();
         companyId = product.getCompanyId().getCompanyId();
 
+        customcollection.clear();
+
         categoryratingcriterias = admin.getCategoryRatingCriteriaByCategoryId(categoryId);
 
-        for (Categoryratingcriteria c : categoryratingcriterias) {
-            int id = admin.getCategoryratingcriteria(categoryId, c.getRatingCriteriaId().getRatingCriteriaId());
-            reviewses = admin.getReviewsByProductId(this.productId);
-
-            for (Reviews r : reviewses) {
-                reviewxcriterias = admin.getReviewxCriteriaByCategoryRatingCriteriaIdandReviewId(id, r.getReviewId());
-                System.out.println("test");
-                for (Reviewxcriteria r1 : reviewxcriterias) {
-                    System.out.println(r1.getRate() + " " + r1.getCategoryRatingCriteriaId().getRatingCriteriaId().getCriteriaName() + " " + r1.getReviewId().getReviewId());
-                }
-            }
+        for (Categoryratingcriteria ca : categoryratingcriterias) {
+            custom cus = new custom();
+            cus.setRatingcriteriaId(ca.getRatingCriteriaId().getRatingCriteriaId());
+            cus.setCriteriaName(ca.getRatingCriteriaId().getCriteriaName());
+            categoryratingcriteriaId = admin.getCategoryratingcriteria(categoryId, ca.getRatingCriteriaId().getRatingCriteriaId());
+            cus.setCategoryratingcriteriaId(categoryratingcriteriaId);
+            customcollection.add(cus);
         }
 
-        return "productrating.xhtml";
+        reviewses = admin.getReviewsByProductId(this.productId);
+
+        for (Reviews r : reviewses) {
+            reviewxcriterias = admin.getReviewxCriteriaByProductId(this.productId);
+        }
+
+        sum = 0;
+        average.clear();
+
+        for (Reviewxcriteria re : reviewxcriterias) {
+            average.add(re.getRate());
+        }
+        for (int i = 0; i < average.size(); i++) {
+            sum += average.get(i);
+        }
+        sum = sum / average.size();
+
+//        }
+//        Reviewxcriteria re = new Reviewxcriteria();
+//        for (Categoryratingcriteria c : categoryratingcriterias) {
+//            categoryratingcriteriaId = admin.getCategoryratingcriteria(categoryId, c.getRatingCriteriaId().getRatingCriteriaId());
+//            reviewses = admin.getReviewsByProductId(this.productId);
+//
+//            for (Reviews r : reviewses) {
+//                objects = admin.getReviewxCriteriaByProductId(this.productId);
+//
+//                for (Object reviewxcriteria : objects) {
+//                    Object[] fields = (Object[]) reviewxcriteria;
+//                    Product p = (Product) fields[0];
+//                    Categoryratingcriteria ca = (Categoryratingcriteria) fields[1];
+//                    double rate = (double) fields[2];
+//                    reviewxcriterias.add(new Reviewxcriteria(ca, (int) Math.round(rate)));
+//                }
+//            }
+//        }
+//        objects = admin.getReviewxCriteriaByProductId(this.productId);
+//        for (Object reviewxcriteria : objects) {
+//            Object[] fields = (Object[]) reviewxcriteria;
+//            Product p = (Product) fields[0];
+//            Categoryratingcriteria ca = (Categoryratingcriteria) fields[1];
+//            double rate = (double) fields[2];
+//            reviewxcriterias.add(new Reviewxcriteria(ca, (int) Math.round(rate)));
+//        }
+        return "productrating.xhtml?faces-redirect=true";
     }
 
     public void handleFileUpload() {
@@ -330,9 +386,12 @@ public class ProductManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void addReview() {
-        for (Reviewxcriteria r : reviewxcriterias) {
-            System.out.println(r.getRate());
+    public String addReview() {
+        int rid = admin.addReview(productId, new Date(), 1);
+        for (custom c : customcollection) {
+            System.out.println(c.getCriteriaName() + " " + c.getCategoryratingcriteriaId() + " " + c.getRate());
+            admin.addReviewxCriteria(c.getRate(), null, c.getCategoryratingcriteriaId(), rid);
         }
+        return "productrating.xhtml?faces-redirect=true";
     }
 }

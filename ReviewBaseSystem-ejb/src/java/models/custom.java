@@ -11,7 +11,7 @@ package models;
  */
 public class custom {
 
-    private int ratingcriteriaId, rate;
+    private int ratingcriteriaId, rate, categoryratingcriteriaId;
     private String criteriaName;
 
     public custom() {
@@ -39,6 +39,14 @@ public class custom {
 
     public void setCriteriaName(String criteriaName) {
         this.criteriaName = criteriaName;
+    }
+
+    public int getCategoryratingcriteriaId() {
+        return categoryratingcriteriaId;
+    }
+
+    public void setCategoryratingcriteriaId(int categoryratingcriteriaId) {
+        this.categoryratingcriteriaId = categoryratingcriteriaId;
     }
 
 }

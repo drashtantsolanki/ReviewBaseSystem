@@ -20,14 +20,19 @@ import entity.Publisher;
 import entity.Ratingcriterias;
 import entity.Reviews;
 import entity.Reviewxcriteria;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.ListIterator;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import models.custom;
 
 /**
  *
@@ -708,7 +713,7 @@ public class adminejb implements adminejbLocal {
     }
 
     @Override
-    public void addReview(int productId, Date date, int userId) {
+    public int addReview(int productId, Date date, int userId) {
         Product product = em.find(Product.class, productId);
         Users users = em.find(Users.class, userId);
 
@@ -729,6 +734,15 @@ public class adminejb implements adminejbLocal {
         em.persist(reviews);
         em.merge(product);
         em.merge(users);
+
+        em.flush();
+        int rid = reviews.getReviewId();
+//        Reviewxcriteria r = new Reviewxcriteria();
+//        r.setReviewId(new Reviews(rid));
+//        r.set
+        System.out.println("rid" + " " + rid);
+        return rid;
+
     }
 
     @Override
@@ -875,12 +889,30 @@ public class adminejb implements adminejbLocal {
         em.remove(reviewxcriteria);
     }
 
+//    @Override
+//    public Collection<Object[]> getReviewxCriteriaByProductId(int productId) {
+//        Collection<Object[]> reviewxcriterias = em.createNamedQuery("Reviewxcriteria.findByProductId")
+//                .setParameter("productId", productId)
+//                .getResultList();
+//        ListIterator<Object[]> iter = reviewxcriterias.listIterator();
+//        List<custom> refer = new ArrayList<>();
+//
+//        while (iter.hasNext()) {
+//            @SuppressWarnings("unchecked")
+//            custom c = (custom) iter.next();
+//            System.out.println(c.getCategoryratingcriteriaId());
+//        }
+//
+//        for (int i = 0; i < reviewxcriterias.length; i++) {
+//            System.out.println(reviewxcriterias[i]);
+//        }
+//        return reviewxcriterias;
+//    }
     @Override
-    public Collection<Reviewxcriteria> getReviewxCriteriaByCategoryRatingCriteriaIdandReviewId(int categoryRatingCriteriaId, int reviewId) {
-        Categoryratingcriteria c = em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
-        Reviews r = em.find(Reviews.class, reviewId);
-        Collection<Reviewxcriteria> reviewxcriterias = em.createNamedQuery("Reviewxcriteria.findByCategoryRatingCriteriaIdAndReviewId")
-                .setParameter("categoryRatingCriteriaId", c).setParameter("reviewId", r)
+    public Collection<Reviewxcriteria> getReviewxCriteriaByProductId(int productId) {
+        Product p = em.find(Product.class, productId);
+        Collection<Reviewxcriteria> reviewxcriterias = em.createNamedQuery("Reviewxcriteria.findByProductId")
+                .setParameter("productId", p)
                 .getResultList();
 
         return reviewxcriterias;

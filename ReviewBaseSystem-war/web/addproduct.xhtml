@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <div id="top">
+            <ui:insert name="top">
+                <ui:include src="master/Header.xhtml"/>
+            </ui:insert>
+        </div>
+        <!-- Breadcrumb Area -->
+        <div class="tm-breadcrumb-area tm-padding-section" data-bgimage="assets/images/bg/breadcrumb-bg-2.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="tm-breadcrumb">
+                            <h2>Login/Register</h2>
+                            <ul>
+                                <li><a href="index.html">Home</a></li>
+                                <li>Login/Register</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--// Breadcrumb Area -->
+        <!-- Login Register Area -->
+        <div class="tm-section tm-login-register-area bg-white tm-padding-section">
+            <div class="container">
+                <h:form class="tm-form tm-register-form tm-form-bordered">
+                    <h4>Create/Edit Product</h4>
+                    <div class="tm-form-inner">
+                        <div class="tm-form-field">
+                            <h:outputLabel value="ProductId:" for="productId" />
+                            <h:inputText id="productId" value="#{productManagedBean.productId}" title="ProductId" readonly="#{facesContext.renderResponse}"/>
+                        </div>
+                        <div class="tm-form-field">
+                            <h:outputLabel value="ProductName" for="productName" />                                        
+                            <h:inputText id="productName" value="#{productManagedBean.productName}" title="ProductName" required="true" requiredMessage="The ProductName field is required."/>
+                        </div>
+<!--                        <div class="tm-form-field">
+                            <h:outputLabel value="ProductImage" for="ProductImage" />                                        
+                            <h:inputFile required="true" id="productImage" class="form-control" value="#{productManagedBean.file}"></h:inputFile>
+                            <c:if test="#{not empty productManagedBean.productImage}">
+                                <p:graphicImage value="images/productimages/#{productManagedBean.productImage}" height="200px" width="200px"/>
+                            </c:if>
+                        </div>-->
+                        <div class="tm-form-field">
+                            <h:outputLabel value="ReferenceLink" for="referenceLink" />
+                            <h:inputTextarea rows="4" cols="30" id="referenceLink" value="#{productManagedBean.referencelink}" title="ReferenceLink" required="true" requiredMessage="The ReferenceLink field is required."/>
+                        </div>
+                        <div class="tm-form-field">
+                            <h:outputLabel value="Author" for="authorId" />
+                            <h:selectOneMenu id="authorId" value="#{productManagedBean.authorId}" required="true" requiredMessage="The AuthorId field is required.">
+                                <!-- TODO: update below reference to list of available items-->
+                                <f:selectItems value="#{authorManagedBean.allAuthors}" var="item1" itemLabel="#{item1.authorName}" itemValue="#{item1.authorId}" />
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="tm-form-field">
+                            <h:outputLabel value="Company" for="companyId" />
+                            <h:selectOneMenu id="companyId" value="#{productManagedBean.companyId}" required="true" requiredMessage="The CompanyId field is required.">
+                                <!-- TODO: update below reference to list of available items-->
+                                <f:selectItems value="#{companyManagedBean.allCompany}" var="item2" itemLabel="#{item2.companyName}" itemValue="#{item2.companyId}"/>
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="tm-form-field">
+                            <h:outputLabel value="Genre" for="genreId" />
+                            <h:selectOneMenu id="genreId" value="#{productManagedBean.genreId}" required="true" requiredMessage="The GenreId field is required.">
+                                <!-- TODO: update below reference to list of available items-->
+                                <f:selectItems value="#{genreManagedBean.allGenres}" var="item3" itemLabel="#{item3.genreName}" itemValue="#{item3.genreId}"/>
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="tm-form-field">
+                            <h:outputLabel value="Publisher" for="publisherId" />
+                            <h:selectOneMenu id="publisherId" value="#{productManagedBean.publisherId}" required="true" requiredMessage="The PublisherId field is required.">
+                                <!-- TODO: update below reference to list of available items-->
+                                <f:selectItems value="#{publisherManagedBean.allPublisher}" var="item4" itemLabel="#{item4.publisherName}" itemValue="#{item4.publisherId}" />
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="tm-form-field">
+                            <h:outputLabel value="Category" for="categoryId" />
+                            <h:selectOneMenu id="categoryId" value="#{productManagedBean.categoryId}" required="true" requiredMessage="The CategoryId field is required.">
+                                <!-- TODO: update below reference to list of available items-->
+                                <f:selectItems value="#{categoryManagedBean.allCategory}" var="item5" itemLabel="#{item5.categoryName}" itemValue="#{item5.categoryId}" />
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="tm-form-field">
+                            <h:commandButton value="Submit" class="tm-button" action="#{productManagedBean.addProduct()}"/>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </div>           
+        <div id="bottom">
+            <ui:insert name="bottom">
+                <ui:include src="master/Footer.xhtml" />
+            </ui:insert>
+        </div>
+    </h:body>
+</html>
+

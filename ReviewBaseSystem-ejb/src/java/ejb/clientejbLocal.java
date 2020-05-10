@@ -31,9 +31,9 @@ public interface clientejbLocal {
 
     Collection<Users> getUserByCity(String city);
 
-    void addUser(Users objUser);
+    void addUser(String name, String email, String phno, String interest, String gender, Date bdate, String city, String pass);
 
-    void updateUser(Users objUser);
+    void updateUser(int uid, String name, String email, String phno, String interest, String gender, Date bdate, String city);
 
     void removeUser(int userId);
 
@@ -46,12 +46,13 @@ public interface clientejbLocal {
 
     Advertise getAdvertiseByProductId(int productId);
 
-    Advertise getAdvertiseByDate(Date date);
+    Collection<Advertise> getAdvertiseByDate(Date date);
 
+    //Advertise getAdvertiseByDate(Date date);
     //(if advertise is exists between start date and end date)
-    void addAdvertise(Advertise advertise);
+    void addAdvertise(Date startDate, Date endDate, int productId);
 
-    void updateAdvertise(int advertiseId);
+    void updateAdvertise(int advertiseId, Date startDate, Date endDate, int productId);
 
     void removeAdvertise(int advertiseId);
 
@@ -83,9 +84,11 @@ public interface clientejbLocal {
 
     Reviewxcriteria getReviewxCriteriaByReviewId(int reviewId);
 
-    void addReviewxCriteria(float rate, String description, int categoryRatingCriteriaId, int reviewId);
+    void addReviewxCriteria(int rate, String description, int categoryRatingCriteriaId, int reviewId);
 
-    void updateReviewxCriteria(int reviewXcriteriaId, float rate, String description, int categoryRatingCriteriaId, int reviewId);
+    void updateReviewxCriteria(int reviewXcriteriaId, int rate, String description, int categoryRatingCriteriaId, int reviewId);
 
     void removeReviewxCriteria(int reviewXcriteriaId, int categoryRatingCriteriaId, int reviewId);
+
+    public Collection<Advertise> getAdvertiseByDate(String tdate);
 }

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./mainTemplate.xhtml">
+
+            <ui:define name="content">
+                <f:view>
+                    <h:form>
+                        <h1><h:outputText value="Create/Edit RatingCriteria"/></h1>
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="RatingCriteriaId:" for="ratingCriteriaId" />
+                            <p:inputText id="ratingCriteriaId" value="#{ratingCriteriaManagedBean.ratingcriteriaId}" title="RatingCriteriaId" readonly="#{facesContext.renderResponse}"/>
+                            <p:outputLabel value="CriteriaName:" for="criteriaName" />
+                            <p:inputText id="criteriaName" value="#{ratingCriteriaManagedBean.ratingcriteriaName}" title="CriteriaName" required="true" requiredMessage="The CriteriaName field is required."/>
+                        </p:panelGrid>
+                        <p:commandButton value="Save" action="#{ratingCriteriaManagedBean.addRatingCriteria()}" icon="pi pi-check" />
+                    </h:form>
+                </f:view>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

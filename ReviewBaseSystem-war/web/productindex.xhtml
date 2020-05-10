@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <div id="top">
+            <ui:insert name="top">
+                <ui:include src="masterTemplate.xhtml"/>
+            </ui:insert>
+        </div>
+        <style type="text/css">
+            .ui-row-editor .ui-row-editor-pencil {
+                margin-left:8px;
+            }
+        </style>
+        <f:view>
+            <p:dialog header="Add Product" widgetVar="dlg1" minHeight="40" showEffect="drop" hideEffect="drop">
+                <h:form id="dlgform" enctype="multipart/form-data">
+                    <h1><h:outputText value="Create/Edit"/></h1>
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="ProductId:" for="productId" />
+                        <p:inputText id="productId" value="#{productManagedBean.productId}" title="ProductId" readonly="#{facesContext.renderResponse}"/>
+                        <p:outputLabel value="ProductName:" for="productName" />
+                        <p:inputText id="productName" value="#{productManagedBean.productName}" title="ProductName" />
+                        <p:outputLabel value="ProductImage:" />
+                        <p:fileUpload id="addp" value="#{productManagedBean.file}" mode="simple" skinSimple="true"/>
+                        <p:outputLabel value="ReferenceLink:" for="referenceLink" />
+                        <p:inputTextarea rows="4" cols="30" id="referenceLink" value="#{productManagedBean.referencelink}" title="ReferenceLink" />
+                        <p:outputLabel value="AuthorId:" for="authorId" />
+                        <p:selectOneMenu id="authorId" value="#{productManagedBean.authorId}" required="true" requiredMessage="The AuthorId field is required.">
+                            <!-- TODO: update below reference to list of available items-->
+                            <f:selectItems value="#{authorManagedBean.authors}" var="item1" itemLabel="#{item1.authorName}" itemValue="#{item1.authorId}" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="CompanyId:" for="companyId" />
+                        <p:selectOneMenu id="companyId" value="#{productManagedBean.companyId}" required="true" requiredMessage="The CompanyId field is required.">
+                            <!-- TODO: update below reference to list of available items-->
+                            <f:selectItems value="#{companyManagedBean.companys}" var="item2" itemLabel="#{item2.companyName}" itemValue="#{item2.companyId}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="GenreId:" for="genreId" />
+                        <p:selectOneMenu id="genreId" value="#{productManagedBean.genreId}" required="true" requiredMessage="The GenreId field is required.">
+                            <!-- TODO: update below reference to list of available items-->
+                            <f:selectItems value="#{genreManagedBean.genres}" var="item3" itemLabel="#{item3.genreName}" itemValue="#{item3.genreId}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="PublisherId:" for="publisherId" />
+                        <p:selectOneMenu id="publisherId" value="#{productManagedBean.publisherId}" required="true" requiredMessage="The PublisherId field is required.">
+                            <!-- TODO: update below reference to list of available items-->
+                            <f:selectItems value="#{publisherManagedBean.publishers}" var="item4" itemLabel="#{item4.publisherName}" itemValue="#{item4.publisherId}" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="CategoryId:" for="categoryId" />
+                        <p:selectOneMenu id="categoryId" value="#{productManagedBean.categoryId}" required="true" requiredMessage="The CategoryId field is required.">
+                            <!-- TODO: update below reference to list of available items-->
+                            <f:selectItems value="#{categoryManagedBean.categorys}" var="item5" itemLabel="#{item5.categoryName}" itemValue="#{item5.categoryId}" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton ajax="false" value="Submit" action="#{productManagedBean.addProduct()}" />
+                </h:form>
+
+            </p:dialog>           
+
+            <h:form id="form" enctype="multipart/form-data">
+                <p:growl id="msgs" showDetail="true"/>
+
+                <h1><h:outputText value="Product List"/></h1>
+
+                <p:commandButton value="Add" type="button" onclick="PF('dlg1').show();" />    
+
+                <p:dataTable id="products" value="#{productManagedBean.products}" var="item" editable="true" style="margin-bottom: 20px" paginator="true" rows="10">                   
+
+                    <p:ajax event="rowEdit" listener="#{productManagedBean.onRowEdit}" update=":form:msgs" />
+                    <p:ajax event="rowEditCancel" listener="#{productManagedBean.onRowCancel}" update=":form:msgs" />
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="ProductImage"/>
+                        </f:facet>
+                        <p:graphicImage value="images/productimages/#{item.productImage}" height="200px" width="200px"/>
+                        <p:fileUpload id="updatep" value="#{productManagedBean.file}" mode="simple" skinSimple="true"/>
+                        <p:commandButton value="Upload" ajax="false" action="#{productManagedBean.handleFileUpload()}"/>
+                    </p:column>
+
+                    <p:column headerText="ProductName">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.productName}"/></f:facet>
+                            <f:facet name="input"><p:inputText value="${item.productName}" style="width: 100%" label="ProductName"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="ReferenceLink">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.referenceLink}"/></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput" value="${item.referenceLink}" style="width: 100%" label="ReferenceLink"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>   
+
+                    <p:column headerText="Author">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.authorId.authorName}"/></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu value="#{item.authorId.authorId}" style="width: 100%">
+                                    <f:selectItems value="#{authorManagedBean.authors}" var="author" itemLabel="#{author.authorName}" itemValue="#{author.authorId}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Company">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.companyId.companyName}"/></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu value="#{item.companyId.companyId}" style="width: 100%">
+                                    <f:selectItems value="#{companyManagedBean.companys}" var="company" itemLabel="#{company.companyName}" itemValue="#{company.companyId}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Genre">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.genreId.genreName}"/></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu value="#{item.genreId.genreId}" style="width: 100%">
+                                    <f:selectItems value="#{genreManagedBean.genres}" var="genre" itemLabel="#{genre.genreName}" itemValue="#{genre.genreId}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Publisher">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.publisherId.publisherName}"/></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu value="#{item.publisherId.publisherId}" style="width: 100%">
+                                    <f:selectItems value="#{publisherManagedBean.publishers}" var="publisher" itemLabel="#{publisher.publisherName}" itemValue="#{publisher.publisherId}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Category">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.categoryId.categoryName}"/></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu value="#{item.categoryId.categoryId}" style="width: 100%">
+                                    <f:selectItems value="#{categoryManagedBean.categorys}" var="category" itemLabel="#{category.categoryName}" itemValue="#{category.categoryId}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column style="width:35px">
+                        <p:rowEditor />
+                    </p:column>
+
+                    <p:column style="width: 35px">
+                        <p:commandLink value="Delete" action="#{productManagedBean.deleteProduct(item.productId)}"/>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+        </f:view>
+    </h:body>
+</html>
+

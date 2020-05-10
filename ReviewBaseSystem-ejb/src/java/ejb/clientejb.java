@@ -10,6 +10,7 @@ import entity.Categoryratingcriteria;
 import entity.Product;
 import entity.Reviews;
 import entity.Reviewxcriteria;
+import entity.Product;
 import entity.Users;
 import java.security.MessageDigest;
 import java.util.Collection;
@@ -55,30 +56,30 @@ public class clientejb implements clientejbLocal {
     }
 
     @Override
-    public void addUser(Users objUser) {
-        Users obj = new Users();
-        obj.setName(objUser.getName());
-        obj.setEmail(objUser.getEmail());
-        obj.setPhoneNumber(objUser.getPhoneNumber());
-        obj.setInterest(objUser.getInterest());
-        obj.setGender(objUser.getGender());
-        obj.setBirthdate(objUser.getBirthdate());
-        obj.setCity(objUser.getCity());
-        obj.setPassword(objUser.getPassword());
+    public void addUser(String name,String email,String phno,String interest,String gender,Date bdate,String city,String pass) {
+        Users obj=new Users();
+        obj.setName(name);
+        obj.setEmail(email);
+        obj.setPhoneNumber(phno);
+        obj.setInterest(interest);
+        obj.setGender(gender);
+        obj.setBirthdate(bdate);
+        obj.setCity(city);
+        String epass=getEncryptedPassword(pass);
+        obj.setPassword(epass);
         em.persist(obj);
     }
 
     @Override
-    public void updateUser(Users objUser) {
-        Users u = em.find(Users.class, objUser.getUserId());
-        u.setName(objUser.getName());
-        u.setEmail(objUser.getEmail());
-        u.setPhoneNumber(objUser.getPhoneNumber());
-        u.setInterest(objUser.getInterest());
-        u.setGender(objUser.getGender());
-        u.setBirthdate(objUser.getBirthdate());
-        u.setCity(objUser.getCity());
-        u.setPassword(objUser.getPassword());
+    public void updateUser(int uid,String name,String email,String phno,String interest,String gender,Date bdate,String city) {
+        Users u = em.find(Users.class, uid);
+        u.setName(name);
+        u.setEmail(email);
+        u.setPhoneNumber(phno);
+        u.setInterest(interest);
+        u.setGender(gender);
+        u.setBirthdate(bdate);
+        u.setCity(city);
         em.merge(u);
 
     }
@@ -120,32 +121,58 @@ public class clientejb implements clientejbLocal {
 
     @Override
     public Advertise getAdvertiseById(int advertiseId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (Advertise) em.createNamedQuery("Advertise.findByAdvertiseId").getSingleResult();
     }
 
     @Override
     public Advertise getAdvertiseByProductId(int productId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.find(Advertise.class, productId);
     }
 
     @Override
-    public Advertise getAdvertiseByDate(Date date) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Collection<Advertise> getAdvertiseByDate(Date date) {
+        Collection<Advertise> lstAd=em.createNamedQuery("Advertise.findByDate").setParameter("tdate", date).getResultList();
+        return lstAd;
     }
 
     @Override
-    public void addAdvertise(Advertise advertise) {
-        em.persist(advertise);
+    public void addAdvertise(Date startDate,Date endDate,int productId) {
+        Advertise ad=new Advertise();
+        Product p=em.find(Product.class, productId);
+        Collection<Advertise> lstad=p.getAdvertiseCollection();
+        
+        ad.setStartDate(startDate);
+        ad.setEndDate(endDate);
+        ad.setProductId(p);
+        
+        lstad.add(ad);
+        p.setAdvertiseCollection(lstad);
+        em.merge(p);
+        em.persist(ad); 
     }
 
     @Override
-    public void updateAdvertise(int advertiseId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void updateAdvertise(int advertiseId,Date startDate,Date endDate,int productId) {
+        
+        Advertise ad=em.find(Advertise.class, advertiseId);
+        
+        Product p=em.find(Product.class, productId);
+        Collection<Advertise> lstad=p.getAdvertiseCollection();
+        
+        ad.setStartDate(startDate);
+        ad.setEndDate(endDate);
+        ad.setProductId(p);
+        
+        lstad.add(ad);
+        p.setAdvertiseCollection(lstad);
+        em.merge(p);
+        em.merge(ad); 
     }
 
     @Override
     public void removeAdvertise(int advertiseId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Advertise objAddvertise=em.find(Advertise.class,advertiseId);
+        em.remove(objAddvertise);
     }
 
     public void persist(Object object) {
@@ -294,7 +321,7 @@ public class clientejb implements clientejbLocal {
     }
 
     @Override
-    public void addReviewxCriteria(float rate, String description, int categoryRatingCriteriaId, int reviewId) {
+    public void addReviewxCriteria(int rate, String description, int categoryRatingCriteriaId, int reviewId) {
         Categoryratingcriteria categoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
         Reviews reviews = (Reviews) em.find(Reviews.class, reviewId);
 
@@ -318,7 +345,7 @@ public class clientejb implements clientejbLocal {
     }
 
     @Override
-    public void updateReviewxCriteria(int reviewXcriteriaId, float rate, String description, int categoryRatingCriteriaId, int reviewId) {
+    public void updateReviewxCriteria(int reviewXcriteriaId, int rate, String description, int categoryRatingCriteriaId, int reviewId) {
         Reviewxcriteria reviewxcriteria = (Reviewxcriteria) em.find(Reviewxcriteria.class, reviewXcriteriaId);
         Categoryratingcriteria categoryratingcriteria = (Categoryratingcriteria) em.find(Categoryratingcriteria.class, categoryRatingCriteriaId);
         Reviews reviews = (Reviews) em.find(Reviews.class, reviewId);
@@ -369,4 +396,8 @@ public class clientejb implements clientejbLocal {
         }
     }
     // </editor-fold>
+    @Override
+    public Collection<Advertise> getAdvertiseByDate(String tdate) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

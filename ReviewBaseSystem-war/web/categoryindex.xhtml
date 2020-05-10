@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <div id="top">
+            <ui:insert name="top">
+                <ui:include src="masterTemplate.xhtml"/>
+            </ui:insert>
+        </div>
+        <style type="text/css">
+            .ui-row-editor .ui-row-editor-pencil {
+                margin-left:8px;
+            }
+        </style>
+        <f:view>
+
+            <p:dialog header="Add Category" widgetVar="dlg1" minHeight="40">
+                <h:form id="dlgform">
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="CategoryId:" for="categoryId" />
+                        <p:inputText id="categoryId" value="#{categoryManagedBean.categoryId}" title="CategoryId" readonly="#{facesContext.renderResponse}"/>
+                        <p:outputLabel value="CategoryName:" for="categoryName" />
+                        <p:inputText id="categoryName" value="#{categoryManagedBean.categoryName}" title="CategoryName"/>
+                    </p:panelGrid>
+                    <p:commandButton value="Submit" action="#{categoryManagedBean.addCategory()}"/>
+                </h:form>
+            </p:dialog>
+
+            <h:form id="form">
+                <p:growl id="msgs" showDetail="true"/>
+
+                <h1><h:outputText value="Category List"/></h1>
+
+                <p:commandButton value="Add Category" type="button" onclick="PF('dlg1').show();" />                           
+
+                <p:dataTable id="categorys" value="#{categoryManagedBean.categorys}" var="item" editable="true" style="margin-bottom: 20px" paginator="true" rows="10">
+
+                    <p:ajax event="rowEdit" listener="#{categoryManagedBean.onRowEdit}" update=":form:msgs" />
+                    <p:ajax event="rowEditCancel" listener="#{categoryManagedBean.onRowCancel}" update=":form:msgs" />
+
+                    <p:column headerText="CategoryName">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.categoryName}"/></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput" value="${item.categoryName}" style="width: 100%" label="CategoryName"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column style="width:35px">
+                        <p:rowEditor />
+                    </p:column>
+                    <p:column style="width: 35px">
+                        <p:commandLink value="Delete" action="#{categoryManagedBean.deleteCategory(item.categoryId)}"/>
+                    </p:column>
+                </p:dataTable>
+
+            </h:form>
+        </f:view>
+
+    </h:body>
+</html>
+

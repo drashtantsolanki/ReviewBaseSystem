@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,11 +30,12 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "categoryratingcriteria")
-@XmlRootElement
+//@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Categoryratingcriteria.findAll", query = "SELECT c FROM Categoryratingcriteria c"),
     @NamedQuery(name = "Categoryratingcriteria.findByCategoryRatingCriteriaId", query = "SELECT c FROM Categoryratingcriteria c WHERE c.categoryRatingCriteriaId = :categoryRatingCriteriaId"),
-    @NamedQuery(name = "Categoryratingcriteria.getCategoryRatingCriteriaByCategoryId", query = "SELECT c FROM Categoryratingcriteria c WHERE c.categoryId = :categoryId")})
+    @NamedQuery(name = "Categoryratingcriteria.getCategoryRatingCriteriaByCategoryId", query = "SELECT c FROM Categoryratingcriteria c WHERE c.categoryId = :categoryId"),
+    @NamedQuery(name = "Categoryratingcriteria.findByCategoryIdAndRatingcriteriaId", query = "SELECT c FROM Categoryratingcriteria c WHERE c.categoryId = :categoryId and c.ratingCriteriaId = :ratingCriteriaId")})
 public class Categoryratingcriteria implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -82,7 +84,7 @@ public class Categoryratingcriteria implements Serializable {
         this.ratingCriteriaId = ratingCriteriaId;
     }
 
-    @XmlTransient
+    @JsonbTransient
     public Collection<Reviewxcriteria> getReviewxcriteriaCollection() {
         return reviewxcriteriaCollection;
     }

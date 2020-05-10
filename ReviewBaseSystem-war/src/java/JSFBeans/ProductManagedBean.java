@@ -257,7 +257,7 @@ public class ProductManagedBean implements Serializable {
         if (file != null) {
             System.out.println(file.getFileName());
             InputStream input = file.getInputStream();
-            String path = "F:\\Project\\ReviewBaseSystem\\ReviewBaseSystem\\ReviewBaseSystem\\ReviewBaseSystem-war\\web\\images\\productimages";
+            String path = "F:\\Project\\ReviewBaseSystem\\ReviewBaseSystem\\ReviewBaseSystem-war\\web\\images\\productimages";
             Random random = new Random();
             StringBuilder sb = new StringBuilder();
 
